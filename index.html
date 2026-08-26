@@ -13,8 +13,6 @@
     <meta property="og:url" content="https://konseptgelsin.com/">
     <link rel="canonical" href="https://konseptgelsin.com/">
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
-    <link rel="preload" href="assets/fonts/barlow-condensed-900-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="assets/fonts/barlow-condensed-900-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/images/hero-still-life-v2.png" as="image" type="image/png" media="(min-width: 48.0625rem)" fetchpriority="high">
     <link rel="preload" href="assets/images/hero-still-life-mobile-v3.png" as="image" type="image/png" media="(max-width: 48rem)" fetchpriority="high">
     <link rel="stylesheet" href="css/tokens.css">
@@ -33,43 +31,41 @@
         <a class="brand" href="index.html" aria-label="Konsept Gelsin ana sayfa">
           <span class="brand__ink">Konsept</span>
           <span class="brand__accent">Gelsin</span>
+          <svg class="brand__spark" aria-hidden="true"><use href="assets/icons/icons.svg#icon-sparkle"></use></svg>
         </a>
 
         <nav class="desktop-nav" aria-label="Ana navigasyon">
-          <a href="#paketler">Hizmetler</a>
+          <a href="#paketler">Paketler</a>
           <a href="#iletisim">İletişim</a>
         </nav>
 
-        <button class="menu-button" type="button" aria-controls="mobile-menu" aria-expanded="false" aria-label="Menüyü aç">
-          <svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-menu"></use></svg>
-        </button>
       </div>
-
-      <nav class="mobile-menu shell" id="mobile-menu" data-open="false" aria-label="Mobil navigasyon">
-        <a href="#paketler">Hizmetler</a>
-        <a href="#iletisim">İletişim</a>
-      </nav>
     </header>
 
     <main id="main-content">
       <section class="hero" aria-labelledby="hero-title">
         <picture>
-          <source media="(max-width: 48rem)" srcset="assets/images/hero-still-life-mobile-v3.png">
-          <img class="hero__background" src="assets/images/hero-still-life-v2.png" alt="" width="1680" height="945" fetchpriority="high" decoding="async">
+          <source media="(max-width: 48rem)" srcset="assets/images/hero-still-life-mobile-v3.png" width="941" height="1672">
+          <img class="hero__background" src="assets/images/hero-still-life-v2.png" alt="" width="1672" height="941" fetchpriority="high" decoding="async">
         </picture>
         <div class="hero__stage shell">
           <div class="hero__copy">
             <p class="hero__eyebrow">Konsept Gelsin Düğün Deneyimleri</p>
-            <h1 id="hero-title">Düğününüzde herkesin bir anısı kalsın</h1>
-            <p class="hero__lead">Konsept Gelsin, düğünlere anı ve eğlence deneyimi getirir.</p>
+            <h1 id="hero-title">
+              <span>Düğününüz</span>
+              <span>sadece yaşanmasın.</span>
+              <strong>Hatırlansın.</strong>
+            </h1>
+            <p class="hero__lead">Misafirlerinizin fotoğraf, video, sesli mesaj ve anılarını tek bir deneyimde toplayalım. Ömür boyu saklayın.</p>
           </div>
           <div class="hero__actions">
             <a class="button button--hero-primary" href="#paketler">
-              Hizmetleri keşfet
+              Paketleri Keşfet
+              <svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-arrow"></use></svg>
             </a>
             <a class="button button--hero-secondary" href="https://wa.me/905386888306" data-whatsapp-general target="_blank" rel="noopener noreferrer">
               <img src="assets/icons/whatsapp.svg" alt="" width="23" height="23">
-              WhatsApp'tan yazın
+              WhatsApp'tan Bilgi Al
             </a>
           </div>
         </div>
@@ -77,84 +73,153 @@
 
       <section class="packages" id="paketler" aria-labelledby="packages-title">
         <div class="shell">
-          <div class="section-heading">
-            <h2 id="packages-title">Paketlerimiz</h2>
+          <div class="featured-concepts">
+            <div class="section-title-row">
+              <h2 id="packages-title">En Çok Tercih Edilen Konseptler</h2>
+            </div>
+
+            <div class="featured-grid">
+              <article class="featured-card">
+                <div class="featured-card__visual featured-card__visual--qr" role="img" aria-label="Düğün masasında QR kodlu dijital anı albümü kartı"></div>
+                <div class="featured-card__content">
+                  <h3>QR Anı Albümü</h3>
+                  <p>Tüm fotoğraf ve videolar tek albümde toplansın.</p>
+                </div>
+              </article>
+
+              <article class="featured-card">
+                <div class="featured-card__visual featured-card__visual--phone" role="img" aria-label="Düğün masasında sesli anı telefonu"></div>
+                <div class="featured-card__content">
+                  <h3>Sesli Anı Telefonu</h3>
+                  <p>Misafirleriniz sesli mesajlarını bıraksın, siz dinleyin.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="all-packages-heading" id="tum-paketler">
+            <h2>Tüm Paketler</h2>
           </div>
 
           <div class="package-layout">
-            <div class="package package--wide package--sage" id="qr-anı-albumu">
-              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/qr-memory-album-mobile.webp" width="960" height="320"><img src="assets/images/qr-memory-album.webp" alt="QR kodlu dijital anı albümü kartı" width="960" height="960" loading="lazy" decoding="async"></picture></div>
+            <div class="package" id="qr-anı-albumu">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/qr-memory-album-mobile.webp" width="960" height="960"><img src="assets/images/qr-memory-album.webp" alt="QR kodlu dijital anı albümü kartı" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
                 <h3>QR Kodlu Dijital Anı Albümü</h3>
                 <p>Misafirleriniz fotoğraf ve videolarını tek QR kodla özel albümünüze yükler.</p>
               </div>
+              <a class="package__link" href="#iletisim" aria-label="QR Kodlu Dijital Anı Albümü hakkında bilgi alın"><svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-chevron"></use></svg></a>
             </div>
 
-            <div class="package package--compact package--yellow" id="polaroid-hatira-kosesi">
-              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/polaroid-memory-mobile.webp" width="960" height="320"><img src="assets/images/polaroid-memory.webp" alt="Polaroid hatıra köşesi için düğün baskısı" width="960" height="960" loading="lazy" decoding="async"></picture></div>
+            <div class="package" id="polaroid-hatira-kosesi">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/polaroid-memory-mobile.webp" width="960" height="960"><img src="assets/images/polaroid-memory.webp" alt="Polaroid hatıra köşesi için düğün baskısı" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
                 <h3>Polaroid Hatıra Köşesi</h3>
                 <p>Anında baskılar ve misafir notlarıyla dokunulabilir bir düğün hatırası oluşturur.</p>
               </div>
+              <a class="package__link" href="#iletisim" aria-label="Polaroid Hatıra Köşesi hakkında bilgi alın"><svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-chevron"></use></svg></a>
             </div>
 
-            <div class="package package--compact package--ink" id="video-booth">
-              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/video-booth-mobile.webp" width="960" height="320"><img src="assets/images/video-booth.webp" alt="Kısa düğün videoları için Video Booth kamerası" width="960" height="960" loading="lazy" decoding="async"></picture></div>
+            <div class="package" id="video-booth">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/video-booth-mobile.webp" width="960" height="960"><img src="assets/images/video-booth.webp" alt="Kısa düğün videoları için Video Booth kamerası" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
                 <h3>Video Booth</h3>
                 <p>Misafirlerinizin eğlenceli kısa videolarını tek bir dijital koleksiyonda toplar.</p>
               </div>
+              <a class="package__link" href="#iletisim" aria-label="Video Booth hakkında bilgi alın"><svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-chevron"></use></svg></a>
             </div>
 
-            <div class="package package--wide package--paper" id="misafir-roportajlari">
-              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/guest-interviews-mobile.webp" width="960" height="320"><img src="assets/images/guest-interviews.webp" alt="Misafir röportajlarını kaydetmek için mikrofon" width="960" height="960" loading="lazy" decoding="async"></picture></div>
+            <div class="package" id="misafir-roportajlari">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/guest-interviews-mobile.webp" width="960" height="960"><img src="assets/images/guest-interviews.webp" alt="Misafir röportajlarını kaydetmek için mikrofon" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
                 <h3>Misafir Röportajları</h3>
                 <p>Misafirlerinizin samimi, komik ve duygusal mesajlarını sizin için kaydeder.</p>
               </div>
+              <a class="package__link" href="#iletisim" aria-label="Misafir Röportajları hakkında bilgi alın"><svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-chevron"></use></svg></a>
             </div>
 
-            <div class="package package--wide package--orange" id="canli-yayin-paketi">
-              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/live-stream-mobile.webp" width="960" height="320"><img src="assets/images/live-stream.webp" alt="Düğün canlı yayını için profesyonel kamera" width="960" height="960" loading="lazy" decoding="async"></picture></div>
+            <div class="package" id="canli-yayin-paketi">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/live-stream-mobile.webp" width="960" height="960"><img src="assets/images/live-stream.webp" alt="Düğün canlı yayını için profesyonel kamera" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
                 <h3>Canlı Yayın Paketi</h3>
                 <p>Düğüne gelemeyen yakınlarınız özel yayın linkiyle anlara canlı eşlik eder.</p>
               </div>
+              <a class="package__link" href="#iletisim" aria-label="Canlı Yayın Paketi hakkında bilgi alın"><svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-chevron"></use></svg></a>
             </div>
 
-            <div class="package package--compact package--blue" id="sesli-ani-telefonu">
-              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/audio-phone-mobile.webp" width="960" height="320"><img src="assets/images/audio-phone.webp" alt="Sesli anı mesajları için retro turuncu telefon" width="960" height="960" loading="lazy" decoding="async"></picture></div>
+            <div class="package" id="sesli-ani-telefonu">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="assets/images/audio-phone-mobile.webp" width="960" height="960"><img src="assets/images/audio-phone.webp" alt="Sesli anı mesajları için krem renkli retro telefon" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
                 <h3>Sesli Anı Telefonu</h3>
                 <p>Misafirleriniz retro telefondan size kalıcı sesli mesajlar bırakır.</p>
               </div>
+              <a class="package__link" href="#iletisim" aria-label="Sesli Anı Telefonu hakkında bilgi alın"><svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-chevron"></use></svg></a>
             </div>
+          </div>
+
+          <div class="how-it-works" aria-labelledby="process-title">
+            <h2 id="process-title">Nasıl Çalışır?</h2>
+            <ol class="process-list">
+              <li class="process-step">
+                <div class="process-step__top">
+                  <span class="process-step__index" aria-hidden="true">1</span>
+                  <span class="process-step__icon" aria-hidden="true"><svg><use href="assets/icons/icons.svg#icon-bag"></use></svg></span>
+                </div>
+                <h3>Paketinizi seçin</h3>
+                <p>İhtiyacınıza en uygun paketi seçin.</p>
+              </li>
+              <li class="process-step">
+                <div class="process-step__top">
+                  <span class="process-step__index" aria-hidden="true">2</span>
+                  <span class="process-step__icon" aria-hidden="true"><svg><use href="assets/icons/icons.svg#icon-gear"></use></svg></span>
+                </div>
+                <h3>Kurulumu biz yapalım</h3>
+                <p>Ekibimiz her şeyi kurar, siz sadece anın tadını çıkarın.</p>
+              </li>
+              <li class="process-step">
+                <div class="process-step__top">
+                  <span class="process-step__index" aria-hidden="true">3</span>
+                  <span class="process-step__icon" aria-hidden="true"><svg><use href="assets/icons/icons.svg#icon-heart"></use></svg></span>
+                </div>
+                <h3>Anılarınız size kalsın</h3>
+                <p>Tüm anılarınız size özel albümde saklansın.</p>
+              </li>
+            </ol>
           </div>
         </div>
       </section>
 
       <section class="contact-section" id="iletisim" aria-labelledby="contact-title">
         <div class="contact-section__inner shell">
-          <div class="contact-section__copy">
-            <span class="section-kicker">Birlikte seçelim</span>
-            <h2 id="contact-title">Aklınızdaki anıyı anlatın.</h2>
-            <p>Tarihinizi ve fikrinizi paylaşın; size uygun kapsamı birlikte netleştirelim.</p>
-          </div>
-
-          <div class="contact-section__actions">
-            <a class="button button--whatsapp contact-section__button" href="https://wa.me/905386888306" data-whatsapp-general target="_blank" rel="noopener noreferrer">
-              <img src="assets/icons/whatsapp.svg" alt="" width="23" height="23">
-              WhatsApp'tan yazın
+          <div class="contact-banner">
+            <div class="contact-banner__copy">
+              <h2 id="contact-title">Bir geceden,<br>yüzlerce anı.</h2>
+              <svg class="contact-banner__spark" aria-hidden="true"><use href="assets/icons/icons.svg#icon-sparkle"></use></svg>
+            </div>
+            <a class="button contact-banner__button" href="https://wa.me/905386888306" data-whatsapp-general target="_blank" rel="noopener noreferrer">
+              Hemen Bilgi Al
               <svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-arrow"></use></svg>
             </a>
-            <div class="direct-contact" aria-label="Diğer iletişim kanalları">
-              <a href="tel:+905386888306"><svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-phone-call"></use></svg><span><small>Telefon</small>+90 538 688 83 06</span></a>
-              <a href="mailto:info@konseptgelsin.com"><svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-mail"></use></svg><span><small>E-posta</small>info@konseptgelsin.com</span></a>
-            </div>
           </div>
+
+          <address class="contact-section__details" aria-label="Diğer iletişim kanalları">
+            <a href="tel:+905386888306"><svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-phone-call"></use></svg><span><small>Telefon</small>+90 538 688 83 06</span></a>
+            <a href="mailto:info@konseptgelsin.com"><svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-mail"></use></svg><span><small>E-posta</small>info@konseptgelsin.com</span></a>
+          </address>
         </div>
       </section>
     </main>
+
+    <nav class="mobile-action-bar" aria-label="Mobil hızlı işlemler">
+      <a class="mobile-action-bar__packages" href="#paketler">
+        <svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-grid"></use></svg>
+        Paketler
+      </a>
+      <a class="mobile-action-bar__whatsapp" href="https://wa.me/905386888306" data-whatsapp-general target="_blank" rel="noopener noreferrer">
+        <img src="assets/icons/whatsapp.svg" alt="" width="28" height="28">
+        WhatsApp
+      </a>
+    </nav>
 
     <footer class="site-footer">
       <div class="site-footer__inner shell">

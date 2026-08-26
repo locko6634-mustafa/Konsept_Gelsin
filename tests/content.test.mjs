@@ -68,10 +68,7 @@ test("hero yeni görsel kompozisyonu, paket alanı ise altı gerçek hizmet yap�
     assert.match(homeHtml, new RegExp(`(?:src|srcset)="assets/images/${escapeRegExp(heroImage)}"`));
   }
   assert.equal(divClassLists.filter((tokens) => tokens.includes("package")).length, 6);
-  const packageThemes = divClassLists
-    .filter((tokens) => tokens.includes("package"))
-    .map((tokens) => tokens.find((token) => /^package--(?:sage|yellow|ink|paper|orange|blue)$/.test(token)));
-  assert.equal(new Set(packageThemes).size, 6, "her paket benzersiz bir renk teması kullanmalı");
+  assert.doesNotMatch(homeHtml, /\bpackage--(?:wide|compact|sage|yellow|ink|paper|orange|blue)\b/);
 
   for (const service of services) {
     assert.match(homeHtml, new RegExp(`id="${escapeRegExp(service.id)}"`));

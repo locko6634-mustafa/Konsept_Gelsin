@@ -35,7 +35,7 @@
 }
 
 :root {
-  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-display: Georgia, "Times New Roman", serif;
   --font-body: "Onest", "Segoe UI", sans-serif;
 
   --color-paper: hsl(39 100% 97%);
@@ -43,8 +43,8 @@
   --color-paper-muted: hsl(35 35% 95%);
   --color-ink: hsl(17 32% 11%);
   --color-ink-soft: hsl(20 21% 29%);
-  --color-orange: #f27a1a;
-  --color-orange-deep: hsl(27 92% 39%);
+  --color-orange: hsl(24 92% 39%);
+  --color-orange-deep: hsl(24 94% 32%);
   --color-yellow: hsl(41 100% 65%);
   --color-sage: hsl(98 33% 86%);
   --color-sage-deep: hsl(99 22% 34%);
@@ -72,7 +72,7 @@
   --space-9: 6rem;
   --space-10: 8rem;
 
-  --shell: 90rem;
+  --shell: 76rem;
   --header-height: 4.5rem;
   --focus-ring: 0 0 0 0.22rem var(--color-yellow), 0 0 0 0.38rem var(--color-ink);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);

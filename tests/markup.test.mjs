@@ -21,13 +21,12 @@ test("landing page hero, paketler ve WhatsApp iletişimi olmak üzere üç ana s
   assert.match(main[1], /<section\b[^>]*id="iletisim"/);
 });
 
-test("header navigasyonu hizmetler ve iletişim bölümlerine masaüstü ve mobil erişim sağlar", () => {
+test("header navigasyonu hizmetler ve iletişim bölümlerine tüm ekranlarda doğrudan erişim sağlar", () => {
   const header = html.match(/<header\b[^>]*>([\s\S]*?)<\/header>/i);
   assert.ok(header, "header bulunamadı");
-  assert.equal((header[1].match(/href="#paketler"/g) ?? []).length, 2);
-  assert.equal((header[1].match(/href="#iletisim"/g) ?? []).length, 2);
-  assert.match(header[1], /<button\b[^>]*aria-controls="mobile-menu"[^>]*aria-expanded="false"/i);
-  assert.match(header[1], /<nav\b[^>]*id="mobile-menu"[^>]*data-open="false"/i);
+  assert.equal((header[1].match(/href="#paketler"/g) ?? []).length, 1);
+  assert.equal((header[1].match(/href="#iletisim"/g) ?? []).length, 1);
+  assert.doesNotMatch(header[1], /\b(?:menu-button|mobile-menu)\b/i);
   assert.doesNotMatch(header[1], /\bheader-contact\b|data-whatsapp-general/i);
 });
 
@@ -35,10 +34,22 @@ test("kaldırılması istenen hero alt metni görünmez", () => {
   assert.doesNotMatch(html, /6 hizmet\s*·\s*tek güçlü hatıra/i);
 });
 
-test("hero Excel marka sloganını kullanır ve eski memory-machine yapısını içermez", () => {
-  assert.match(html, /<h1[^>]*>Düğününüzde herkesin bir anısı kalsın<\/h1>/i);
+test("hero referans marka sloganını kullanır ve eski memory-machine yapısını içermez", () => {
+  const heroTitle = html.match(/<h1\b[^>]*id="hero-title"[^>]*>([\s\S]*?)<\/h1>/i);
+  assert.ok(heroTitle, "hero başlığı bulunamadı");
+  assert.match(heroTitle[1].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(), /^Düğününüz sadece yaşanmasın\. Hatırlansın\.$/i);
   assert.doesNotMatch(html, /\bmemory-(?:machine|tile)\b/i);
   assert.doesNotMatch(html, /Gece biter|Anılar konuşmaya/i);
+});
+
+test("ortak referans akışı öne çıkanlar, altı paket, üç adım, CTA ve mobil hızlı işlem çubuğu içerir", () => {
+  assert.equal((html.match(/\bclass="[^"]*\bfeatured-card\b[^"]*"/g) ?? []).length, 2);
+  assert.equal((html.match(/\bclass="[^"]*\bpackage__link\b[^"]*"/g) ?? []).length, 6);
+  assert.equal((html.match(/\bclass="[^"]*\bprocess-step\b[^"]*"/g) ?? []).length, 3);
+  assert.match(html, /<div\b[^>]*class="[^"]*\bcontact-banner\b/);
+  assert.match(html, /<nav\b[^>]*class="[^"]*\bmobile-action-bar\b[^>]*aria-label="Mobil hızlı işlemler"/i);
+  assert.doesNotMatch(html, /\b(?:featured-card__badge|package__icon|mobile-reference)\b|Tümünü gör/i);
+  assert.doesNotMatch(html, /mobile-reference\.css/i);
 });
 
 test("iletişim alanı formsuz ve doğrudan WhatsApp odaklıdır", () => {

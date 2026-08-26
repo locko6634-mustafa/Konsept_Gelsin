@@ -195,20 +195,33 @@ function pageAuditExpression() {
       .map(({ element, rect }) => ({ tag: element.tagName, text: nameOf(element).slice(0, 45), width: Math.round(rect.width), height: Math.round(rect.height) }));
     const root = document.documentElement;
     const body = document.body;
-    const mobilePackageCards = [...document.querySelectorAll(".package")].map((card) => {
+    const packageCards = [...document.querySelectorAll(".package")].filter(visible).map((card) => {
       const visual = card.querySelector(".package__visual");
       const content = card.querySelector(".package__content");
+      const link = card.querySelector(".package__link");
       const cardRect = card.getBoundingClientRect();
       const visualRect = visual?.getBoundingClientRect();
       const contentRect = content?.getBoundingClientRect();
+      const linkRect = link?.getBoundingClientRect();
       return {
         cardWidth: cardRect.width,
+        cardHeight: cardRect.height,
         visualWidth: visualRect?.width ?? 0,
         visualHeight: visualRect?.height ?? 0,
-        visualBottom: visualRect?.bottom ?? 0,
-        contentTop: contentRect?.top ?? 0,
+        contentWidth: contentRect?.width ?? 0,
+        linkWidth: linkRect?.width ?? 0,
+        linkHeight: linkRect?.height ?? 0,
       };
     });
+    const visibleRects = (selector) => [...document.querySelectorAll(selector)]
+      .filter(visible)
+      .map((element) => {
+        const rect = element.getBoundingClientRect();
+        return { width: rect.width, height: rect.height, left: rect.left, right: rect.right };
+      });
+    const mobileActionBar = document.querySelector(".mobile-action-bar");
+    const mobileActionBarRect = mobileActionBar?.getBoundingClientRect();
+    const mobileActionBarStyle = mobileActionBar ? getComputedStyle(mobileActionBar) : null;
     const overflowing = [...document.querySelectorAll("body *")]
       .filter(visible)
       .map((element) => ({ element, rect: element.getBoundingClientRect() }))
@@ -226,6 +239,7 @@ function pageAuditExpression() {
       heroImageCount: document.querySelectorAll(".hero__background").length,
       heroImageSource: document.querySelector(".hero__background")?.currentSrc || "",
       heroStageAlignment: getComputedStyle(document.querySelector(".hero__stage")).alignItems,
+      heroActionsPosition: getComputedStyle(document.querySelector(".hero__actions")).position,
       heroActionsBottomGap: (() => {
         const stageRect = document.querySelector(".hero__stage")?.getBoundingClientRect();
         const actionsRect = document.querySelector(".hero__actions")?.getBoundingClientRect();
@@ -243,7 +257,27 @@ function pageAuditExpression() {
       rootScrollWidth: root.scrollWidth,
       bodyScrollWidth: body.scrollWidth,
       viewportWidth: innerWidth,
-      mobilePackageCards,
+      packageCards,
+      featuredCards: visibleRects(".featured-card"),
+      processSteps: visibleRects(".process-step"),
+      packageLinks: visibleRects(".package__link"),
+      visibleHeaderLinks: visibleRects(".desktop-nav a"),
+      featuredGridColumns: (() => {
+        const grid = document.querySelector(".featured-grid");
+        return grid && visible(grid) ? getComputedStyle(grid).gridTemplateColumns.split(" ").length : 0;
+      })(),
+      packageGridColumns: (() => {
+        const grid = document.querySelector(".package-layout");
+        return grid && visible(grid) ? getComputedStyle(grid).gridTemplateColumns.split(" ").length : 0;
+      })(),
+      contactBannerVisible: Boolean(document.querySelector(".contact-banner") && visible(document.querySelector(".contact-banner"))),
+      mobileActionBar: {
+        visible: Boolean(mobileActionBar && visible(mobileActionBar)),
+        position: mobileActionBarStyle?.position ?? "",
+        bottom: mobileActionBarRect?.bottom ?? -1,
+        height: mobileActionBarRect?.height ?? 0,
+      },
+      bodyPaddingBottom: Number.parseFloat(getComputedStyle(body).paddingBottom),
       overflowing,
       ready: root.dataset.ready,
       whatsappLinks: [...document.querySelectorAll("[data-whatsapp-general], [data-whatsapp-service]")].every((link) => link.href.startsWith("https://wa.me/905386888306?text=")),
@@ -343,10 +377,8 @@ async function auditPage({ cdp, origin, page, viewport }) {
     assert(audit.retiredMemoryCount === 0, `${page.name}/${viewport.width}: kaldırılan memory-machine yapısı bulundu.`);
     assert(audit.packageCount === 6, `${page.name}/${viewport.width}: hizmet bloğu sayısı ${audit.packageCount}.`);
     assert(audit.heroImageCount === 1, `${page.name}/${viewport.width}: hero arka plan sayısı ${audit.heroImageCount}.`);
-    const expectedHeroAlignment = viewport.width <= 1024 ? "flex-start" : "center";
-    const expectedHeroActionsGap = viewport.width <= 768 ? 32 : 48;
+    const expectedHeroAlignment = viewport.width <= 768 ? "flex-start" : "center";
     assert(audit.heroStageAlignment === expectedHeroAlignment, `${page.name}/${viewport.width}: hero yazıları eski hizasında değil (${audit.heroStageAlignment}).`);
-    assert(Math.abs(audit.heroActionsBottomGap - expectedHeroActionsGap) <= 1, `${page.name}/${viewport.width}: hero butonları altta değil (${audit.heroActionsBottomGap}px).`);
     assert(audit.packageImageCount === 6, `${page.name}/${viewport.width}: paket WebP sayısı ${audit.packageImageCount}.`);
     assert(audit.uniqueServiceImages.length === 6, `${page.name}/${viewport.width}: benzersiz hizmet görseli sayısı ${audit.uniqueServiceImages.length}.`);
     assert(audit.brokenImages.length === 0, `${page.name}/${viewport.width}: yüklenemeyen görseller ${JSON.stringify(audit.brokenImages)}.`);
@@ -354,43 +386,43 @@ async function auditPage({ cdp, origin, page, viewport }) {
     assert(audit.conceptLineCount === 0, `${page.name}/${viewport.width}: kaldırılan hizmet geçiş çizgisi hâlâ görünüyor.`);
     assert(audit.retiredContactLinks === 0, `${page.name}/${viewport.width}: ayrı iletişim sayfası bağlantısı kaldı.`);
     assert(audit.directContactCta, `${page.name}/${viewport.width}: iletişim alanında doğrudan WhatsApp CTA bulunamadı.`);
-
-    if (viewport.width <= 576) {
-      assert(
-        audit.mobilePackageCards.every((card) => card.visualWidth >= card.cardWidth - 1),
-        `${page.name}/${viewport.width}: mobil paket görseli kartı tam genişlikte doldurmuyor (${JSON.stringify(audit.mobilePackageCards)}).`,
-      );
-      assert(
-        audit.mobilePackageCards.every((card) => {
-          const aspectRatio = card.visualWidth / card.visualHeight;
-          return aspectRatio >= 2.99 && aspectRatio <= 3.01;
-        }),
-        `${page.name}/${viewport.width}: mobil paket görseli 3:1 kompakt oranını korumuyor (${JSON.stringify(audit.mobilePackageCards)}).`,
-      );
-      assert(
-        audit.mobilePackageCards.every((card) => Math.abs(card.contentTop - card.visualBottom) <= 1),
-        `${page.name}/${viewport.width}: mobil paket görseli ile içerik arasında gereksiz boşluk var (${JSON.stringify(audit.mobilePackageCards)}).`,
-      );
-    }
+    assert(audit.heroActionsPosition === "absolute", `${page.name}/${viewport.width}: hero aksiyonları alanın altına sabitlenmedi (${audit.heroActionsPosition}).`);
+    assert(
+      audit.heroActionsBottomGap >= 23 && audit.heroActionsBottomGap <= 65,
+      `${page.name}/${viewport.width}: hero aksiyonlarının alt boşluğu beklenen aralıkta değil (${audit.heroActionsBottomGap}px).`,
+    );
+    assert(audit.featuredCards.length === 2, `${page.name}/${viewport.width}: iki öne çıkan kart görünmüyor.`);
+    assert(audit.processSteps.length === 3, `${page.name}/${viewport.width}: üç süreç adımı görünmüyor.`);
+    assert(audit.packageLinks.length === 6, `${page.name}/${viewport.width}: altı paket bağlantısı görünmüyor.`);
+    assert(audit.visibleHeaderLinks.length === 2, `${page.name}/${viewport.width}: Paketler ve İletişim başlıkta birlikte görünmüyor.`);
+    assert(audit.featuredGridColumns === 2, `${page.name}/${viewport.width}: öne çıkan kartlar iki sütun değil.`);
+    assert(audit.packageGridColumns === 2, `${page.name}/${viewport.width}: paketler iki sütun değil.`);
+    assert(audit.contactBannerVisible, `${page.name}/${viewport.width}: iletişim bannerı görünmüyor.`);
+    assert(
+      audit.packageCards.every((card) => card.cardHeight >= 80),
+      `${page.name}/${viewport.width}: paket kartları yeterince büyük değil (${JSON.stringify(audit.packageCards)}).`,
+    );
+    assert(
+      audit.packageCards.every((card) => Math.abs(card.visualWidth - card.visualHeight) <= 1),
+      `${page.name}/${viewport.width}: paket görselleri kare değil (${JSON.stringify(audit.packageCards)}).`,
+    );
+    assert(
+      audit.packageCards.every((card) => card.contentWidth > 0),
+      `${page.name}/${viewport.width}: paket metni için alan kalmadı (${JSON.stringify(audit.packageCards)}).`,
+    );
+    assert(
+      audit.packageCards.every((card) => Math.abs(card.linkWidth - card.cardWidth) <= 2.1 && Math.abs(card.linkHeight - card.cardHeight) <= 2.1),
+      `${page.name}/${viewport.width}: paket bağlantısı kartın tamamını kaplamıyor (${JSON.stringify(audit.packageCards)}).`,
+    );
 
     if (viewport.width <= 768) {
+      assert(audit.mobileActionBar.visible, `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu görünmüyor.`);
+      assert(audit.mobileActionBar.position === "fixed", `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu sabit değil.`);
+      assert(Math.abs(audit.mobileActionBar.bottom - viewport.height) <= 1, `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu viewport altına oturmuyor (${audit.mobileActionBar.bottom}).`);
+      assert(audit.bodyPaddingBottom >= audit.mobileActionBar.height, `${page.name}/${viewport.width}: alt çubuk için içerik rezervi yetersiz (${audit.bodyPaddingBottom} < ${audit.mobileActionBar.height}).`);
       assert(audit.heroImageSource.endsWith("/assets/images/hero-still-life-mobile-v3.png"), `${page.name}/${viewport.width}: mobil hero görseli yüklenmedi (${audit.heroImageSource}).`);
-      const openedMenu = await evaluate(cdp, sessionId, `(() => {
-        const button = document.querySelector(".menu-button");
-        const menu = document.querySelector(".mobile-menu");
-        button.click();
-        return { expanded: button.getAttribute("aria-expanded"), open: menu.dataset.open };
-      })()`);
-      assert(openedMenu.expanded === "true" && openedMenu.open === "true", `${page.name}/${viewport.width}: mobil navigasyon açılmadı.`);
-
-      const closedMenu = await evaluate(cdp, sessionId, `(() => {
-        const button = document.querySelector(".menu-button");
-        const menu = document.querySelector(".mobile-menu");
-        document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-        return { expanded: button.getAttribute("aria-expanded"), open: menu.dataset.open, focused: document.activeElement === button };
-      })()`);
-      assert(closedMenu.expanded === "false" && closedMenu.open === "false" && closedMenu.focused, `${page.name}/${viewport.width}: mobil navigasyon Escape ile kapanmadı.`);
     } else {
+      assert(!audit.mobileActionBar.visible, `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu masaüstünde görünür.`);
       assert(audit.heroImageSource.endsWith("/assets/images/hero-still-life-v2.png"), `${page.name}/${viewport.width}: masaüstü hero görseli yüklenmedi (${audit.heroImageSource}).`);
     }
 
@@ -409,6 +441,7 @@ async function auditPage({ cdp, origin, page, viewport }) {
       && focusState.outlineWidth !== "0px"
       || focusState.shadow !== "none";
     assert(focusState.focused && focusVisible, `${page.name}/${viewport.width}: klavye odağı görünür değil.`);
+    await evaluate(cdp, sessionId, "document.activeElement?.blur()");
 
     if (viewport.width === 375) {
       const reducedMotion = await evaluate(cdp, sessionId, `(() => {
