@@ -26,6 +26,7 @@ const serviceImages = [
   "live-stream.webp",
   "audio-phone.webp",
 ];
+const heroImages = ["hero-still-life-v2.png", "hero-still-life-mobile-v3.png"];
 const issues = [];
 
 async function walk(directory, extensions) {
@@ -174,8 +175,8 @@ if (!Array.isArray(services) || services.length !== 6) {
 }
 
 const divClasses = [...homeHtml.matchAll(/<div\b[^>]*class="([^"]*)"/g)].map((match) => match[1].split(/\s+/));
-if (divClasses.filter((tokens) => tokens.includes("memory-tile")).length !== 6) {
-  issues.push("index.html: hero tam olarak altı gerçek memory-tile div içermeli");
+if (/\bmemory-(?:machine|tile)\b/.test(homeHtml)) {
+  issues.push("index.html: kaldırılan memory-machine veya memory-tile yapısı bulunmamalı");
 }
 if (divClasses.filter((tokens) => tokens.includes("package")).length !== 6) {
   issues.push("index.html: paket alanı tam olarak altı gerçek package div içermeli");
@@ -193,7 +194,16 @@ for (const imageName of serviceImages) {
   if (!info || info.size <= 1_024) issues.push(`${relativePath}: görsel eksik veya boş`);
   const escapedPath = relativePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const uses = homeHtml.match(new RegExp(`src=["']${escapedPath}["']`, "g")) ?? [];
-  if (uses.length !== 2) issues.push(`${relativePath}: hero ve pakette tam iki kez kullanılmalı`);
+  if (uses.length !== 1) issues.push(`${relativePath}: paket alanında tam bir kez kullanılmalı`);
+}
+
+for (const imageName of heroImages) {
+  const heroImagePath = `assets/images/${imageName}`;
+  const heroImageInfo = await fileInfo(path.join(projectRoot, heroImagePath));
+  if (!heroImageInfo || heroImageInfo.size <= 1_024) issues.push(`${heroImagePath}: hero görseli eksik veya boş`);
+  const escapedHeroImagePath = heroImagePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const heroImageUses = homeHtml.match(new RegExp(`(?:src|srcset)=["']${escapedHeroImagePath}["']`, "g")) ?? [];
+  if (heroImageUses.length !== 1) issues.push(`${heroImagePath}: hero içinde tam bir kez kullanılmalı`);
 }
 
 const main = homeHtml.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
@@ -211,6 +221,6 @@ if (issues.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    `Derleme bütünlüğü geçti (tek landing page, ${cssFiles.length} CSS, ${moduleFiles.length} istemci modülü, ${services.length} hizmet, 6 WebP).`,
+    `Derleme bütünlüğü geçti (tek landing page, ${cssFiles.length} CSS, ${moduleFiles.length} istemci modülü, ${services.length} hizmet, 6 WebP ve 2 hero PNG).`,
   );
 }

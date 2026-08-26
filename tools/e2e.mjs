@@ -185,11 +185,12 @@ function pageAuditExpression() {
       h1Count: document.querySelectorAll("h1").length,
       mainCount: document.querySelectorAll("main").length,
       sectionCount: document.querySelectorAll("main > section").length,
-      memoryTileCount: document.querySelectorAll(".memory-tile").length,
+      retiredMemoryCount: document.querySelectorAll(".memory-machine, .memory-tile").length,
       packageCount: document.querySelectorAll(".package").length,
-      heroImageCount: document.querySelectorAll(".memory-tile img[src^='assets/images/'][src$='.webp']").length,
+      heroImageCount: document.querySelectorAll(".hero__background").length,
+      heroImageSource: document.querySelector(".hero__background")?.currentSrc || "",
       packageImageCount: document.querySelectorAll(".package img[src^='assets/images/'][src$='.webp']").length,
-      uniqueServiceImages: [...new Set([...document.querySelectorAll(".memory-tile img, .package img")].map((image) => image.getAttribute("src")))].sort(),
+      uniqueServiceImages: [...new Set([...document.querySelectorAll(".package img")].map((image) => image.getAttribute("src")))].sort(),
       brokenImages: [...document.images].filter((image) => image.complete && image.naturalWidth === 0).map((image) => image.getAttribute("src")),
       formCount: document.querySelectorAll("form, input, select, textarea").length,
       conceptLineCount: document.querySelectorAll(".concept-line").length,
@@ -286,9 +287,9 @@ async function auditPage({ cdp, origin, page, viewport }) {
     assert(audit.whatsappLinks, `${page.name}/${viewport.width}: WhatsApp bağlantıları hydrate edilmedi.`);
     assert(audit.ready === "true", `${page.name}/${viewport.width}: sayfa bootstrap tamamlanmadı.`);
     assert(audit.sectionCount === 3, `${page.name}/${viewport.width}: ana section sayısı ${audit.sectionCount}.`);
-    assert(audit.memoryTileCount === 6, `${page.name}/${viewport.width}: hero panel sayısı ${audit.memoryTileCount}.`);
+    assert(audit.retiredMemoryCount === 0, `${page.name}/${viewport.width}: kaldırılan memory-machine yapısı bulundu.`);
     assert(audit.packageCount === 6, `${page.name}/${viewport.width}: hizmet bloğu sayısı ${audit.packageCount}.`);
-    assert(audit.heroImageCount === 6, `${page.name}/${viewport.width}: hero WebP sayısı ${audit.heroImageCount}.`);
+    assert(audit.heroImageCount === 1, `${page.name}/${viewport.width}: hero arka plan sayısı ${audit.heroImageCount}.`);
     assert(audit.packageImageCount === 6, `${page.name}/${viewport.width}: paket WebP sayısı ${audit.packageImageCount}.`);
     assert(audit.uniqueServiceImages.length === 6, `${page.name}/${viewport.width}: benzersiz hizmet görseli sayısı ${audit.uniqueServiceImages.length}.`);
     assert(audit.brokenImages.length === 0, `${page.name}/${viewport.width}: yüklenemeyen görseller ${JSON.stringify(audit.brokenImages)}.`);
@@ -298,6 +299,7 @@ async function auditPage({ cdp, origin, page, viewport }) {
     assert(audit.directContactCta, `${page.name}/${viewport.width}: iletişim alanında doğrudan WhatsApp CTA bulunamadı.`);
 
     if (viewport.width <= 768) {
+      assert(audit.heroImageSource.endsWith("/assets/images/hero-still-life-mobile-v3.png"), `${page.name}/${viewport.width}: mobil hero görseli yüklenmedi (${audit.heroImageSource}).`);
       const openedMenu = await evaluate(cdp, sessionId, `(() => {
         const button = document.querySelector(".menu-button");
         const menu = document.querySelector(".mobile-menu");
@@ -313,6 +315,8 @@ async function auditPage({ cdp, origin, page, viewport }) {
         return { expanded: button.getAttribute("aria-expanded"), open: menu.dataset.open, focused: document.activeElement === button };
       })()`);
       assert(closedMenu.expanded === "false" && closedMenu.open === "false" && closedMenu.focused, `${page.name}/${viewport.width}: mobil navigasyon Escape ile kapanmadı.`);
+    } else {
+      assert(audit.heroImageSource.endsWith("/assets/images/hero-still-life-v2.png"), `${page.name}/${viewport.width}: masaüstü hero görseli yüklenmedi (${audit.heroImageSource}).`);
     }
 
     const focusState = await evaluate(cdp, sessionId, `(() => {
@@ -333,8 +337,8 @@ async function auditPage({ cdp, origin, page, viewport }) {
 
     if (viewport.width === 375) {
       const reducedMotion = await evaluate(cdp, sessionId, `(() => {
-        const tile = document.querySelector(".memory-tile") || document.body;
-        return { media: matchMedia("(prefers-reduced-motion: reduce)").matches, duration: getComputedStyle(tile).animationDuration };
+        const heroCopy = document.querySelector(".hero__copy") || document.body;
+        return { media: matchMedia("(prefers-reduced-motion: reduce)").matches, duration: getComputedStyle(heroCopy).animationDuration };
       })()`);
       assert(reducedMotion.media, `${page.name}/375: reduced-motion emülasyonu çalışmadı.`);
       assert(["0s", "0.00001s", "1e-05s"].includes(reducedMotion.duration), `${page.name}/375: animasyon süresi azaltılmadı (${reducedMotion.duration}).`);

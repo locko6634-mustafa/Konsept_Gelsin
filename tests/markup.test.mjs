@@ -34,6 +34,12 @@ test("kaldırılması istenen hero alt metni görünmez", () => {
   assert.doesNotMatch(html, /6 hizmet\s*·\s*tek güçlü hatıra/i);
 });
 
+test("hero Excel marka sloganını kullanır ve eski memory-machine yapısını içermez", () => {
+  assert.match(html, /<h1[^>]*>Düğününüzde herkesin bir anısı kalsın\.<\/h1>/i);
+  assert.doesNotMatch(html, /\bmemory-(?:machine|tile)\b/i);
+  assert.doesNotMatch(html, /Gece biter|Anılar konuşmaya/i);
+});
+
 test("iletişim alanı formsuz ve doğrudan WhatsApp odaklıdır", () => {
   const contactSection = html.match(/<section\b[^>]*id="iletisim"[^>]*>([\s\S]*?)<\/section>/i);
   assert.ok(contactSection, "iletişim section bulunamadı");

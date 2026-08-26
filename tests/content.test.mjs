@@ -11,6 +11,7 @@ const serviceImages = [
   "live-stream.webp",
   "audio-phone.webp",
 ];
+const heroImages = ["hero-still-life-v2.png", "hero-still-life-mobile-v3.png"];
 
 async function readProjectFile(path) {
   return readFile(new URL(path, projectRoot), "utf8");
@@ -57,22 +58,24 @@ test("hizmet veri kaynağı altı eksiksiz ve benzersiz kayıt içerir", () => {
   }
 });
 
-test("hero ve paket alanları altı hizmeti gerçek ve ayrı div yapılarıyla sunar", () => {
+test("hero yeni görsel kompozisyonu, paket alanı ise altı gerçek hizmet yapısını sunar", () => {
   const divClassLists = [...homeHtml.matchAll(/<div\b[^>]*class="([^"]*)"/g)].map((match) =>
     match[1].split(/\s+/),
   );
-  assert.equal(divClassLists.filter((tokens) => tokens.includes("memory-tile")).length, 6);
+  assert.doesNotMatch(homeHtml, /\bmemory-(?:machine|tile)\b/);
+  for (const heroImage of heroImages) {
+    assert.match(homeHtml, new RegExp(`(?:src|srcset)="assets/images/${escapeRegExp(heroImage)}"`));
+  }
   assert.equal(divClassLists.filter((tokens) => tokens.includes("package")).length, 6);
 
   for (const service of services) {
-    assert.match(homeHtml, new RegExp(`href="#${escapeRegExp(service.id)}"`));
     assert.match(homeHtml, new RegExp(`id="${escapeRegExp(service.id)}"`));
     assert.match(homeHtml, new RegExp(`<h3>${escapeRegExp(service.name)}<\\/h3>`));
     assert.match(homeHtml, new RegExp(`data-whatsapp-service="${escapeRegExp(service.name)}"`));
   }
 });
 
-test("imagegen hizmet görselleri WebP olarak hero ve paketlerde yeniden kullanılır", async () => {
+test("imagegen hero görseli ve hizmet WebP görselleri doğru alanlarda kullanılır", async () => {
   const webpFiles = (await readdir(new URL("assets/images/", projectRoot)))
     .filter((name) => name.toLowerCase().endsWith(".webp"))
     .sort();
@@ -84,7 +87,18 @@ test("imagegen hizmet görselleri WebP olarak hero ve paketlerde yeniden kullan�
     const imageStats = await stat(new URL(imagePath, projectRoot));
     assert.ok(imageStats.size > 1_024, `${imagePath} boş veya geçersiz görünüyor`);
     const uses = homeHtml.match(new RegExp(`src="${escapeRegExp(imagePath)}"`, "g")) ?? [];
-    assert.equal(uses.length, 2, `${imagePath} hero ve paket olmak üzere iki kez kullanılmalı`);
+    assert.equal(uses.length, 1, `${imagePath} paket alanında bir kez kullanılmalı`);
+  }
+
+  for (const heroImage of heroImages) {
+    const heroImagePath = `assets/images/${heroImage}`;
+    assert.ok(await projectFileExists(heroImagePath), `${heroImagePath} bulunamadı`);
+    const heroImageStats = await stat(new URL(heroImagePath, projectRoot));
+    assert.ok(heroImageStats.size > 1_024, `${heroImagePath} boş veya geçersiz görünüyor`);
+    assert.equal(
+      (homeHtml.match(new RegExp(`(?:src|srcset)="${escapeRegExp(heroImagePath)}"`, "g")) ?? []).length,
+      1,
+    );
   }
 });
 

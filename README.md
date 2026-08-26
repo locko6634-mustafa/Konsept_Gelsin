@@ -5,11 +5,11 @@ Konsept Gelsin; düğün ve etkinlikler için altı hatıra hizmetini tanıtan, 
 ## Sayfa ve ana akış
 
 - `index.html`: Landing page tam üç ana bölümden oluşur.
-  1. **Hero:** Onaylanan kompozisyonu; solda güçlü mesaj, sağda anı albümü düzeninde altı gerçek HTML hizmet kutusu ile kurar.
+  1. **Hero:** Solda Excel marka kimliğindeki mesajları, sağda ImageGen ile üretilen turuncu retro telefon, kamera, mikrofon ve Polaroid kompozisyonunu kullanır.
   2. **Paketler:** Excel'deki altı hizmeti, her hizmet için ImageGen ile üretilmiş özgün bir görsel ve özelleştirilebilir içerik bloklarıyla açıklar.
   3. **WhatsApp iletişim:** Form göstermeden, ziyaretçiyi doğrudan Konsept Gelsin WhatsApp hattına taşır.
 
-Hero içindeki hizmet kompozisyonu tek bir ekran görüntüsü değildir. Altı ayrı HTML öğesi olarak kurulmuştur; metin, renk, sıra ve responsive davranış kod üzerinden değiştirilebilir. Hero altındaki ayrı hizmet çizgisi/zaman çizelgesi kullanılmaz. Paket görselleri temsili yaratıcı varlıklardır; gerçek müşteri işi veya etkinlik kaydı oldukları iddia edilmez.
+Hero metinleri görselin içine gömülü değildir; erişilebilir HTML olarak yönetilir. ImageGen masaüstü için yatay, mobil için dikey bir arka plan üretir; `picture/source` doğru varyantı seçerken metin ve CTA'lar her iki kırılımda da görselin üstünde kalır. Paket görselleri temsili yaratıcı varlıklardır; gerçek müşteri işi veya etkinlik kaydı oldukları iddia edilmez.
 
 ## Çalıştırma
 
