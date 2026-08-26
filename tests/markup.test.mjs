@@ -28,6 +28,7 @@ test("header navigasyonu hizmetler ve iletişim bölümlerine masaüstü ve mobi
   assert.equal((header[1].match(/href="#iletisim"/g) ?? []).length, 2);
   assert.match(header[1], /<button\b[^>]*aria-controls="mobile-menu"[^>]*aria-expanded="false"/i);
   assert.match(header[1], /<nav\b[^>]*id="mobile-menu"[^>]*data-open="false"/i);
+  assert.doesNotMatch(header[1], /\bheader-contact\b|data-whatsapp-general/i);
 });
 
 test("kaldırılması istenen hero alt metni görünmez", () => {

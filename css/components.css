@@ -70,7 +70,6 @@
   transform-origin: left;
 }
 
-.header-contact,
 .menu-button {
   display: inline-flex;
   min-width: 2.75rem;
@@ -79,26 +78,9 @@
   justify-content: center;
 }
 
-.header-contact {
-  padding: 0;
-  border: 0.1rem solid transparent;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--color-ink);
-  font-size: 0.88rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.header-contact svg,
 .menu-button svg {
   width: 1.35rem;
   height: 1.35rem;
-}
-
-.header-contact:hover {
-  border-color: var(--color-orange);
-  background: var(--color-paper-deep);
 }
 
 .menu-button {
