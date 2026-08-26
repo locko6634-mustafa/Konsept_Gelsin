@@ -225,6 +225,12 @@ function pageAuditExpression() {
       packageCount: document.querySelectorAll(".package").length,
       heroImageCount: document.querySelectorAll(".hero__background").length,
       heroImageSource: document.querySelector(".hero__background")?.currentSrc || "",
+      heroStageAlignment: getComputedStyle(document.querySelector(".hero__stage")).alignItems,
+      heroActionsBottomGap: (() => {
+        const stageRect = document.querySelector(".hero__stage")?.getBoundingClientRect();
+        const actionsRect = document.querySelector(".hero__actions")?.getBoundingClientRect();
+        return stageRect && actionsRect ? stageRect.bottom - actionsRect.bottom : -1;
+      })(),
       packageImageCount: document.querySelectorAll(".package img[src^='assets/images/'][src$='.webp']").length,
       uniqueServiceImages: [...new Set([...document.querySelectorAll(".package img")].map((image) => image.getAttribute("src")))].sort(),
       brokenImages: [...document.images].filter((image) => image.complete && image.naturalWidth === 0).map((image) => image.getAttribute("src")),
@@ -337,6 +343,10 @@ async function auditPage({ cdp, origin, page, viewport }) {
     assert(audit.retiredMemoryCount === 0, `${page.name}/${viewport.width}: kaldırılan memory-machine yapısı bulundu.`);
     assert(audit.packageCount === 6, `${page.name}/${viewport.width}: hizmet bloğu sayısı ${audit.packageCount}.`);
     assert(audit.heroImageCount === 1, `${page.name}/${viewport.width}: hero arka plan sayısı ${audit.heroImageCount}.`);
+    const expectedHeroAlignment = viewport.width <= 1024 ? "flex-start" : "center";
+    const expectedHeroActionsGap = viewport.width <= 768 ? 32 : 48;
+    assert(audit.heroStageAlignment === expectedHeroAlignment, `${page.name}/${viewport.width}: hero yazıları eski hizasında değil (${audit.heroStageAlignment}).`);
+    assert(Math.abs(audit.heroActionsBottomGap - expectedHeroActionsGap) <= 1, `${page.name}/${viewport.width}: hero butonları altta değil (${audit.heroActionsBottomGap}px).`);
     assert(audit.packageImageCount === 6, `${page.name}/${viewport.width}: paket WebP sayısı ${audit.packageImageCount}.`);
     assert(audit.uniqueServiceImages.length === 6, `${page.name}/${viewport.width}: benzersiz hizmet görseli sayısı ${audit.uniqueServiceImages.length}.`);
     assert(audit.brokenImages.length === 0, `${page.name}/${viewport.width}: yüklenemeyen görseller ${JSON.stringify(audit.brokenImages)}.`);
@@ -353,9 +363,9 @@ async function auditPage({ cdp, origin, page, viewport }) {
       assert(
         audit.mobilePackageCards.every((card) => {
           const aspectRatio = card.visualWidth / card.visualHeight;
-          return aspectRatio >= 2.49 && aspectRatio <= 2.51;
+          return aspectRatio >= 2.99 && aspectRatio <= 3.01;
         }),
-        `${page.name}/${viewport.width}: mobil paket görseli 5:2 kompakt oranını korumuyor (${JSON.stringify(audit.mobilePackageCards)}).`,
+        `${page.name}/${viewport.width}: mobil paket görseli 3:1 kompakt oranını korumuyor (${JSON.stringify(audit.mobilePackageCards)}).`,
       );
       assert(
         audit.mobilePackageCards.every((card) => Math.abs(card.contentTop - card.visualBottom) <= 1),

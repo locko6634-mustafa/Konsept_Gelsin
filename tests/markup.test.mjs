@@ -36,7 +36,7 @@ test("kaldırılması istenen hero alt metni görünmez", () => {
 });
 
 test("hero Excel marka sloganını kullanır ve eski memory-machine yapısını içermez", () => {
-  assert.match(html, /<h1[^>]*>Düğününüzde herkesin bir anısı kalsın\.<\/h1>/i);
+  assert.match(html, /<h1[^>]*>Düğününüzde herkesin bir anısı kalsın<\/h1>/i);
   assert.doesNotMatch(html, /\bmemory-(?:machine|tile)\b/i);
   assert.doesNotMatch(html, /Gece biter|Anılar konuşmaya/i);
 });
