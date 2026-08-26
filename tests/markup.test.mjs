@@ -44,6 +44,7 @@ test("iletişim alanı formsuz ve doğrudan WhatsApp odaklıdır", () => {
   const contactSection = html.match(/<section\b[^>]*id="iletisim"[^>]*>([\s\S]*?)<\/section>/i);
   assert.ok(contactSection, "iletişim section bulunamadı");
   assert.doesNotMatch(contactSection[1], /<form\b/i);
+  assert.doesNotMatch(contactSection[1], /\bcontact-card(?:__icon|__kicker)?\b|<h3\b/i);
   assert.doesNotMatch(html, /<(?:input|select|textarea)\b/i);
   assert.match(
     contactSection[1],

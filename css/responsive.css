@@ -1,12 +1,10 @@
 @media (max-width: 70rem) {
-  .contact-section__inner,
   .contact-hero__inner {
     gap: var(--space-7);
   }
 }
 
 @media (max-width: 64rem) {
-  .contact-section__inner,
   .contact-hero__inner {
     grid-template-columns: 1fr;
   }
@@ -51,20 +49,16 @@
     align-self: start;
   }
 
-  .contact-section__copy,
   .contact-hero__copy {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-5) var(--space-7);
   }
 
-  .contact-section__copy h2,
   .contact-hero__copy h1 {
     grid-row: 1 / 3;
   }
 
-  .contact-section__copy > p,
-  .contact-section__copy .contact-list,
   .contact-hero__copy > p,
   .contact-hero__copy .direct-channels {
     grid-column: 2;
@@ -81,6 +75,15 @@
 }
 
 @media (min-width: 48.0625rem) and (max-width: 56rem) {
+  .contact-section__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .contact-section__actions {
+    justify-self: start;
+  }
+
   .section-heading {
     grid-template-columns: 1fr;
   }
@@ -156,9 +159,17 @@
     padding-block: clamp(2.75rem, 7vh, 4rem) var(--space-6);
   }
 
-  .contact-section__copy,
   .contact-hero__copy {
     display: block;
+  }
+
+  .contact-section__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .contact-section__actions {
+    justify-self: start;
   }
 
   .hero__copy {
@@ -204,9 +215,12 @@
     min-width: 0;
   }
 
-  .packages,
-  .contact-section {
+  .packages {
     padding-block: var(--space-9);
+  }
+
+  .contact-section {
+    padding-block: var(--space-7);
   }
 
   .section-heading {
@@ -259,7 +273,6 @@
     width: 100%;
   }
 
-  .contact-section__copy > p,
   .contact-hero__copy > p {
     margin-block-end: var(--space-5);
   }
@@ -293,8 +306,7 @@
 }
 
 @media (max-width: 36rem) {
-  .package-layout,
-  .contact-card {
+  .package-layout {
     grid-template-columns: 1fr;
   }
 
@@ -311,16 +323,6 @@
   .package h3 {
     max-width: 11ch;
     font-size: clamp(2rem, 10vw, 2.75rem);
-  }
-
-  .contact-card__icon {
-    width: 3.25rem;
-    height: 3.25rem;
-  }
-
-  .contact-card__icon img {
-    width: 2.25rem;
-    height: 2.25rem;
   }
 
   .direct-contact {
