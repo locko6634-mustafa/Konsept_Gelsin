@@ -64,11 +64,11 @@ npm run validate
 
 Workflow, GitHub'daki `production` environment'ında şu secret'ları bekler:
 
-- `DEPLOY_HOST`: SSH sunucusu.
-- `DEPLOY_PORT`: SSH portu.
-- `DEPLOY_USER`: Kısıtlı dağıtım kullanıcısı.
-- `DEPLOY_SSH_KEY`: Yalnız bu repo için oluşturulmuş Ed25519 private key'in eksiksiz içeriği.
-- `DEPLOY_KNOWN_HOSTS`: Sunucunun doğrulanmış SSH host key satırı.
+- `SERVER_HOST`: SSH sunucusunun adresi.
+- `SERVER_HOST_FINGERPRINT`: Sunucunun doğrulanmış Ed25519 host key fingerprint değeri (`SHA256:...`).
+- `SERVER_PORT`: SSH portu.
+- `SERVER_SSH_KEY`: Yalnız bu repo için oluşturulmuş Ed25519 private key'in eksiksiz içeriği.
+- `SERVER_USER`: Kısıtlı dağıtım kullanıcısı.
 
 Dağıtıma yalnızca `npm run validate` başarıyla tamamlandıktan sonra geçilir. Başarısız veya çalıştırılmamış kontrol yayın kapısını geçmiş sayılmaz.
 

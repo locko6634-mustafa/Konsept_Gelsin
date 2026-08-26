@@ -15,7 +15,10 @@ test("main push yalnız başarılı kalite kapısından sonra üretime gider", (
   assert.match(workflow, /npm run validate/);
   assert.match(workflow, /environment:\s*\n\s+name: production/);
   assert.match(workflow, /StrictHostKeyChecking=yes/);
-  assert.match(workflow, /DEPLOY_KNOWN_HOSTS/);
+  assert.match(workflow, /SERVER_HOST_FINGERPRINT/);
+  assert.match(workflow, /ssh-keyscan/);
+  assert.match(workflow, /actual_fingerprint/);
+  assert.doesNotMatch(workflow, /DEPLOY_KNOWN_HOSTS/);
   assert.match(workflow, /GITHUB_SHA/);
 });
 
@@ -37,4 +40,3 @@ test("Nginx yalnız statik landing yüzeyini güvenlik başlıklarıyla sunar", 
   assert.match(nginx, /location = \/healthz/);
   assert.match(nginx, /limit_except GET HEAD/);
 });
-

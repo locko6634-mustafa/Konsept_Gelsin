@@ -40,11 +40,11 @@ jobs:
       url: https://konseptgelsin.com
     env:
       DEPLOY_BASE: /home/locko-admin/apps/konsept-gelsin
-      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-      DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
-      DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
-      DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+      SERVER_HOST: ${{ secrets.SERVER_HOST }}
+      SERVER_HOST_FINGERPRINT: ${{ secrets.SERVER_HOST_FINGERPRINT }}
+      SERVER_PORT: ${{ secrets.SERVER_PORT }}
+      SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+      SERVER_USER: ${{ secrets.SERVER_USER }}
     steps:
       - name: Kaynak kodu al
         uses: actions/checkout@v4
@@ -53,15 +53,30 @@ jobs:
         shell: bash
         run: |
           set -Eeuo pipefail
-          case "$DEPLOY_HOST" in ""|*[!A-Za-z0-9.:-]*) echo "DEPLOY_HOST gecersiz." >&2; exit 1;; esac
-          case "$DEPLOY_USER" in ""|*[!A-Za-z0-9._-]*) echo "DEPLOY_USER gecersiz." >&2; exit 1;; esac
-          case "$DEPLOY_PORT" in ""|*[!0-9]*) echo "DEPLOY_PORT gecersiz." >&2; exit 1;; esac
+          case "$SERVER_HOST" in ""|*[!A-Za-z0-9.:-]*) echo "SERVER_HOST gecersiz." >&2; exit 1;; esac
+          case "$SERVER_USER" in ""|*[!A-Za-z0-9._-]*) echo "SERVER_USER gecersiz." >&2; exit 1;; esac
+          case "$SERVER_PORT" in ""|*[!0-9]*) echo "SERVER_PORT gecersiz." >&2; exit 1;; esac
+          case "$SERVER_HOST_FINGERPRINT" in SHA256:*) ;; *) echo "SERVER_HOST_FINGERPRINT gecersiz." >&2; exit 1;; esac
           install -d -m 700 "$HOME/.ssh"
-          printf '%s\n' "$DEPLOY_SSH_KEY" > "$HOME/.ssh/id_ed25519"
-          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          printf '%s\n' "$SERVER_SSH_KEY" > "$HOME/.ssh/id_ed25519"
           chmod 600 "$HOME/.ssh/id_ed25519"
-          chmod 644 "$HOME/.ssh/known_hosts"
           ssh-keygen -y -f "$HOME/.ssh/id_ed25519" > /dev/null
+
+          scan_file="$(mktemp)"
+          trap 'rm -f "$scan_file"' EXIT
+          for attempt in 1 2 3; do
+            if ssh-keyscan -p "$SERVER_PORT" -t ed25519 "$SERVER_HOST" > "$scan_file" 2>/dev/null && [ -s "$scan_file" ]; then
+              break
+            fi
+            [ "$attempt" -lt 3 ] && sleep 2
+          done
+          [ -s "$scan_file" ] || { echo "Sunucu host key alinamadi." >&2; exit 1; }
+          actual_fingerprint="$(ssh-keygen -lf "$scan_file" -E sha256 | awk 'NR == 1 { print $2 }')"
+          if [ "$actual_fingerprint" != "$SERVER_HOST_FINGERPRINT" ]; then
+            echo "Sunucu fingerprint dogrulamasi basarisiz." >&2
+            exit 1
+          fi
+          install -m 644 "$scan_file" "$HOME/.ssh/known_hosts"
 
       - name: Surum paketini sunucuya aktar
         shell: bash
@@ -76,9 +91,9 @@ jobs:
             --exclude=node_modules \
             --exclude=test-results \
             -czf "$ARCHIVE" .
-          TARGET="${DEPLOY_USER}@${DEPLOY_HOST}"
-          SSH_ARGS=(-i "$HOME/.ssh/id_ed25519" -p "$DEPLOY_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
-          SCP_ARGS=(-i "$HOME/.ssh/id_ed25519" -P "$DEPLOY_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
+          TARGET="${SERVER_USER}@${SERVER_HOST}"
+          SSH_ARGS=(-i "$HOME/.ssh/id_ed25519" -p "$SERVER_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
+          SCP_ARGS=(-i "$HOME/.ssh/id_ed25519" -P "$SERVER_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
           ssh "${SSH_ARGS[@]}" "$TARGET" "install -d -m 750 '$DEPLOY_BASE/incoming' '$DEPLOY_BASE/releases'"
           scp "${SCP_ARGS[@]}" "$ARCHIVE" "$TARGET:$DEPLOY_BASE/incoming/$RELEASE_ID.tgz"
 
@@ -87,8 +102,8 @@ jobs:
         run: |
           set -Eeuo pipefail
           RELEASE_ID="${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
-          TARGET="${DEPLOY_USER}@${DEPLOY_HOST}"
-          SSH_ARGS=(-i "$HOME/.ssh/id_ed25519" -p "$DEPLOY_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
+          TARGET="${SERVER_USER}@${SERVER_HOST}"
+          SSH_ARGS=(-i "$HOME/.ssh/id_ed25519" -p "$SERVER_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
           ssh "${SSH_ARGS[@]}" "$TARGET" \
             "BUILD_REVISION='$GITHUB_SHA' RELEASE_ID='$RELEASE_ID' DEPLOY_BASE='$DEPLOY_BASE' bash -s" <<'REMOTE'
           set -Eeuo pipefail
