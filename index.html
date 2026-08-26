@@ -42,10 +42,24 @@
           <span class="brand__accent">Gelsin</span>
         </a>
 
+        <nav class="desktop-nav" aria-label="Ana navigasyon">
+          <a href="#paketler">Hizmetler</a>
+          <a href="#iletisim">İletişim</a>
+        </nav>
+
         <a class="header-contact" href="https://wa.me/905386888306" data-whatsapp-general target="_blank" rel="noopener noreferrer" aria-label="WhatsApp'tan yazın">
           <img src="assets/icons/whatsapp.svg" alt="" width="23" height="23">
         </a>
+
+        <button class="menu-button" type="button" aria-controls="mobile-menu" aria-expanded="false" aria-label="Menüyü aç">
+          <svg aria-hidden="true"><use href="assets/icons/icons.svg#icon-menu"></use></svg>
+        </button>
       </div>
+
+      <nav class="mobile-menu shell" id="mobile-menu" data-open="false" aria-label="Mobil navigasyon">
+        <a href="#paketler">Hizmetler</a>
+        <a href="#iletisim">İletişim</a>
+      </nav>
     </header>
 
     <main id="main-content">
@@ -57,7 +71,6 @@
               <span>Anılar konuşmaya</span>
               <span>devam eder<span class="hero__dot">.</span></span>
             </h1>
-            <p>6 hizmet · tek güçlü hatıra</p>
             <div class="hero__actions">
               <a class="button button--whatsapp" href="https://wa.me/905386888306" data-whatsapp-general target="_blank" rel="noopener noreferrer">
                 <img src="assets/icons/whatsapp.svg" alt="" width="23" height="23">
@@ -71,8 +84,11 @@
           </div>
 
           <div class="memory-machine" aria-label="Konsept Gelsin'in altı düğün hizmeti">
-            <span class="memory-machine__page memory-machine__page--back" aria-hidden="true"></span>
-            <span class="memory-machine__page memory-machine__page--mid" aria-hidden="true"></span>
+            <span class="memory-machine__page memory-machine__page--5" aria-hidden="true"></span>
+            <span class="memory-machine__page memory-machine__page--4" aria-hidden="true"></span>
+            <span class="memory-machine__page memory-machine__page--3" aria-hidden="true"></span>
+            <span class="memory-machine__page memory-machine__page--2" aria-hidden="true"></span>
+            <span class="memory-machine__page memory-machine__page--1" aria-hidden="true"></span>
             <div class="memory-machine__grid">
               <div class="memory-tile memory-tile--sage">
                 <a href="#qr-anı-albumu">
@@ -118,7 +134,11 @@
               </div>
             </div>
             <span class="memory-machine__spine" aria-hidden="true"></span>
-            <span class="memory-machine__crank" aria-hidden="true"><i></i></span>
+            <span class="memory-machine__crank" aria-hidden="true">
+              <i class="memory-machine__axle"></i>
+              <i class="memory-machine__arm"></i>
+              <i class="memory-machine__handle"></i>
+            </span>
           </div>
         </div>
 

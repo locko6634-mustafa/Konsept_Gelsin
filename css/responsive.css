@@ -4,14 +4,6 @@
     gap: var(--space-6);
   }
 
-  .memory-machine {
-    padding-right: 3.6rem;
-  }
-
-  .memory-tile {
-    min-height: 11rem;
-  }
-
   .contact-section__inner,
   .contact-hero__inner {
     gap: var(--space-7);
@@ -37,12 +29,12 @@
   }
 
   .hero h1 {
-    grid-row: 1 / 3;
+    grid-row: auto;
   }
 
-  .hero__copy > p,
   .hero__actions {
     grid-column: 2;
+    align-self: end;
   }
 
   .memory-machine {
@@ -190,11 +182,6 @@
     line-height: 0.86;
   }
 
-  .hero__copy > p {
-    margin-block-end: var(--space-4);
-    font-size: 1rem;
-  }
-
   .hero__actions {
     display: grid;
     grid-template-columns: 1fr;
@@ -206,23 +193,22 @@
   }
 
   .memory-machine {
-    padding: 0.9rem 3rem 0.9rem 0.9rem;
+    aspect-ratio: auto;
+    padding: 0.9rem 5rem 0.9rem 0.9rem;
     transform: rotate(0.35deg);
     border-radius: 1rem;
   }
 
   .memory-machine__grid {
+    height: auto;
+    min-height: 27rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.58rem;
     padding: 0.55rem;
   }
 
-  .memory-tile {
-    min-height: 8.35rem;
-  }
-
   .memory-tile a {
-    padding: 1.05rem 0.55rem 0.55rem;
+    padding: 0.8rem 0.5rem 0.48rem;
   }
 
   .memory-tile__label {
@@ -231,41 +217,14 @@
     font-size: clamp(0.78rem, 3.4vw, 0.98rem);
   }
 
-  .memory-machine__page {
-    inset: 0.8rem 1.3rem 0.8rem 3rem;
-  }
-
-  .memory-machine__page--back {
-    transform: translate(1.6rem, -0.55rem) rotate(1.4deg);
-  }
-
-  .memory-machine__page--mid {
-    transform: translate(0.85rem, -0.3rem) rotate(0.7deg);
-  }
-
   .memory-machine__spine {
-    right: 0.8rem;
-    width: 2rem;
+    right: 0.65rem;
+    width: 2.5rem;
   }
 
   .memory-machine__crank {
-    right: 2rem;
-    width: 2.8rem;
-    height: 2.8rem;
-    border-width: 0.48rem;
-  }
-
-  .memory-machine__crank::after {
-    top: 1.65rem;
-    left: 1.7rem;
-    width: 3rem;
-  }
-
-  .memory-machine__crank i {
-    top: 3.2rem;
-    left: 3.7rem;
-    width: 2rem;
-    height: 0.9rem;
+    right: -2.65rem;
+    transform: translateY(-50%) scale(0.82);
   }
 
   .packages,
@@ -411,11 +370,24 @@
   }
 
   .memory-machine {
-    padding-right: 2.6rem;
+    aspect-ratio: auto;
+    min-height: 27rem;
+    padding: 0.78rem 3.3rem 0.78rem 0.78rem;
   }
 
-  .memory-tile {
-    min-height: 7.75rem;
+  .memory-machine__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+  }
+
+  .memory-machine__page {
+    right: 2.5rem;
+    left: 2.8rem;
+  }
+
+  .memory-machine__crank {
+    right: -3rem;
+    transform: translateY(-50%) scale(0.68);
   }
 
 }
