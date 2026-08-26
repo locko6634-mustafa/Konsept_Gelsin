@@ -297,6 +297,24 @@ async function auditPage({ cdp, origin, page, viewport }) {
     assert(audit.retiredContactLinks === 0, `${page.name}/${viewport.width}: ayrı iletişim sayfası bağlantısı kaldı.`);
     assert(audit.directContactCta, `${page.name}/${viewport.width}: iletişim alanında doğrudan WhatsApp CTA bulunamadı.`);
 
+    if (viewport.width <= 768) {
+      const openedMenu = await evaluate(cdp, sessionId, `(() => {
+        const button = document.querySelector(".menu-button");
+        const menu = document.querySelector(".mobile-menu");
+        button.click();
+        return { expanded: button.getAttribute("aria-expanded"), open: menu.dataset.open };
+      })()`);
+      assert(openedMenu.expanded === "true" && openedMenu.open === "true", `${page.name}/${viewport.width}: mobil navigasyon açılmadı.`);
+
+      const closedMenu = await evaluate(cdp, sessionId, `(() => {
+        const button = document.querySelector(".menu-button");
+        const menu = document.querySelector(".mobile-menu");
+        document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+        return { expanded: button.getAttribute("aria-expanded"), open: menu.dataset.open, focused: document.activeElement === button };
+      })()`);
+      assert(closedMenu.expanded === "false" && closedMenu.open === "false" && closedMenu.focused, `${page.name}/${viewport.width}: mobil navigasyon Escape ile kapanmadı.`);
+    }
+
     const focusState = await evaluate(cdp, sessionId, `(() => {
       const target = document.querySelector("main [data-whatsapp-general]");
       target.focus();

@@ -21,6 +21,19 @@ test("landing page hero, paketler ve WhatsApp iletişimi olmak üzere üç ana s
   assert.match(main[1], /<section\b[^>]*id="iletisim"/);
 });
 
+test("header navigasyonu hizmetler ve iletişim bölümlerine masaüstü ve mobil erişim sağlar", () => {
+  const header = html.match(/<header\b[^>]*>([\s\S]*?)<\/header>/i);
+  assert.ok(header, "header bulunamadı");
+  assert.equal((header[1].match(/href="#paketler"/g) ?? []).length, 2);
+  assert.equal((header[1].match(/href="#iletisim"/g) ?? []).length, 2);
+  assert.match(header[1], /<button\b[^>]*aria-controls="mobile-menu"[^>]*aria-expanded="false"/i);
+  assert.match(header[1], /<nav\b[^>]*id="mobile-menu"[^>]*data-open="false"/i);
+});
+
+test("kaldırılması istenen hero alt metni görünmez", () => {
+  assert.doesNotMatch(html, /6 hizmet\s*·\s*tek güçlü hatıra/i);
+});
+
 test("iletişim alanı formsuz ve doğrudan WhatsApp odaklıdır", () => {
   const contactSection = html.match(/<section\b[^>]*id="iletisim"[^>]*>([\s\S]*?)<\/section>/i);
   assert.ok(contactSection, "iletişim section bulunamadı");
