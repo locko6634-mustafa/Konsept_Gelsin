@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { createServer } from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
@@ -125,19 +126,40 @@ async function waitForHttp(url, child) {
   throw new Error("Yerel sunucu zamanında başlamadı.");
 }
 
-async function devtoolsEndpoint(profileDirectory, chrome) {
-  const portFile = path.join(profileDirectory, "DevToolsActivePort");
-  for (let attempt = 0; attempt < 100; attempt += 1) {
+async function availablePort() {
+  return new Promise((resolve, reject) => {
+    const probe = createServer();
+    probe.unref();
+    probe.once("error", reject);
+    probe.listen(0, "127.0.0.1", () => {
+      const address = probe.address();
+      const port = typeof address === "object" && address ? address.port : 0;
+      probe.close((error) => {
+        if (error) reject(error);
+        else if (port) resolve(port);
+        else reject(new Error("Chrome için boş yerel port ayrılamadı."));
+      });
+    });
+  });
+}
+
+async function devtoolsEndpoint(port, chrome, chromeFailure) {
+  const endpointUrl = `http://127.0.0.1:${port}/json/version`;
+  for (let attempt = 0; attempt < 200; attempt += 1) {
+    if (chromeFailure()) throw new Error(`Chrome başlatılamadı: ${chromeFailure().message}`);
     if (chrome.exitCode !== null) throw new Error(`Chrome erken kapandı (${chrome.exitCode}).`);
     try {
-      const [port, endpointPath] = (await readFile(portFile, "utf8")).trim().split(/\r?\n/);
-      if (port && endpointPath) return `ws://127.0.0.1:${port}${endpointPath}`;
+      const response = await fetch(endpointUrl);
+      if (response.ok) {
+        const version = await response.json();
+        if (version.webSocketDebuggerUrl) return version.webSocketDebuggerUrl;
+      }
     } catch {
-      // Chrome henüz DevTools dosyasını yazmadı.
+      // Chrome henüz DevTools HTTP uç noktasını açmadı.
     }
     await delay(100);
   }
-  throw new Error("Chrome DevTools uç noktası bulunamadı.");
+  throw new Error(`Chrome DevTools uç noktası bulunamadı (${endpointUrl}).`);
 }
 
 async function evaluate(cdp, sessionId, expression) {
@@ -173,6 +195,20 @@ function pageAuditExpression() {
       .map(({ element, rect }) => ({ tag: element.tagName, text: nameOf(element).slice(0, 45), width: Math.round(rect.width), height: Math.round(rect.height) }));
     const root = document.documentElement;
     const body = document.body;
+    const mobilePackageCards = [...document.querySelectorAll(".package")].map((card) => {
+      const visual = card.querySelector(".package__visual");
+      const content = card.querySelector(".package__content");
+      const cardRect = card.getBoundingClientRect();
+      const visualRect = visual?.getBoundingClientRect();
+      const contentRect = content?.getBoundingClientRect();
+      return {
+        cardWidth: cardRect.width,
+        visualWidth: visualRect?.width ?? 0,
+        visualHeight: visualRect?.height ?? 0,
+        visualBottom: visualRect?.bottom ?? 0,
+        contentTop: contentRect?.top ?? 0,
+      };
+    });
     const overflowing = [...document.querySelectorAll("body *")]
       .filter(visible)
       .map((element) => ({ element, rect: element.getBoundingClientRect() }))
@@ -201,6 +237,7 @@ function pageAuditExpression() {
       rootScrollWidth: root.scrollWidth,
       bodyScrollWidth: body.scrollWidth,
       viewportWidth: innerWidth,
+      mobilePackageCards,
       overflowing,
       ready: root.dataset.ready,
       whatsappLinks: [...document.querySelectorAll("[data-whatsapp-general], [data-whatsapp-service]")].every((link) => link.href.startsWith("https://wa.me/905386888306?text=")),
@@ -271,8 +308,18 @@ async function auditPage({ cdp, origin, page, viewport }) {
     assert(!navigation.errorText, `${page.name} yönlendirme hatası: ${navigation.errorText}`);
     await loaded;
     await evaluate(cdp, sessionId, "document.fonts.ready.then(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))");
-    await evaluate(cdp, sessionId, "window.scrollTo(0, document.documentElement.scrollHeight)");
-    await delay(350);
+    await evaluate(cdp, sessionId, `(async () => {
+      for (const image of document.querySelectorAll(".package img")) {
+        image.scrollIntoView({ block: "center" });
+        await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+        if (!image.complete) {
+          await new Promise((resolve) => {
+            image.addEventListener("load", resolve, { once: true });
+            image.addEventListener("error", resolve, { once: true });
+          });
+        }
+      }
+    })()`);
     await evaluate(cdp, sessionId, "window.scrollTo(0, 0)");
     await delay(800);
 
@@ -297,6 +344,24 @@ async function auditPage({ cdp, origin, page, viewport }) {
     assert(audit.conceptLineCount === 0, `${page.name}/${viewport.width}: kaldırılan hizmet geçiş çizgisi hâlâ görünüyor.`);
     assert(audit.retiredContactLinks === 0, `${page.name}/${viewport.width}: ayrı iletişim sayfası bağlantısı kaldı.`);
     assert(audit.directContactCta, `${page.name}/${viewport.width}: iletişim alanında doğrudan WhatsApp CTA bulunamadı.`);
+
+    if (viewport.width <= 576) {
+      assert(
+        audit.mobilePackageCards.every((card) => card.visualWidth >= card.cardWidth - 1),
+        `${page.name}/${viewport.width}: mobil paket görseli kartı tam genişlikte doldurmuyor (${JSON.stringify(audit.mobilePackageCards)}).`,
+      );
+      assert(
+        audit.mobilePackageCards.every((card) => {
+          const aspectRatio = card.visualWidth / card.visualHeight;
+          return aspectRatio >= 2.49 && aspectRatio <= 2.51;
+        }),
+        `${page.name}/${viewport.width}: mobil paket görseli 5:2 kompakt oranını korumuyor (${JSON.stringify(audit.mobilePackageCards)}).`,
+      );
+      assert(
+        audit.mobilePackageCards.every((card) => Math.abs(card.contentTop - card.visualBottom) <= 1),
+        `${page.name}/${viewport.width}: mobil paket görseli ile içerik arasında gereksiz boşluk var (${JSON.stringify(audit.mobilePackageCards)}).`,
+      );
+    }
 
     if (viewport.width <= 768) {
       assert(audit.heroImageSource.endsWith("/assets/images/hero-still-life-mobile-v3.png"), `${page.name}/${viewport.width}: mobil hero görseli yüklenmedi (${audit.heroImageSource}).`);
@@ -384,6 +449,7 @@ const profileDirectory = await mkdtemp(path.join(os.tmpdir(), "konsept-gelsin-ch
 let server;
 let chrome;
 let cdp;
+let chromeSpawnFailure;
 
 try {
   await mkdir(resultDirectory, { recursive: true });
@@ -397,6 +463,7 @@ try {
   const retiredContactResponse = await fetch(`${origin}/iletisim.html`);
   assert(retiredContactResponse.status === 404, `Kaldırılan iletişim sayfası ${retiredContactResponse.status} döndürdü.`);
 
+  const chromePort = await availablePort();
   const chromeArgs = [
     "--headless=new",
     "--disable-background-networking",
@@ -408,14 +475,18 @@ try {
     "--hide-scrollbars",
     "--no-default-browser-check",
     "--no-first-run",
-    "--remote-debugging-port=0",
+    "--remote-debugging-address=127.0.0.1",
+    `--remote-debugging-port=${chromePort}`,
     `--user-data-dir=${profileDirectory}`,
     "about:blank",
   ];
 
   chrome = spawn(chromePath, chromeArgs, { stdio: "ignore", windowsHide: true });
+  chrome.once("error", (error) => {
+    chromeSpawnFailure = error;
+  });
 
-  cdp = await CdpConnection.connect(await devtoolsEndpoint(profileDirectory, chrome));
+  cdp = await CdpConnection.connect(await devtoolsEndpoint(chromePort, chrome, () => chromeSpawnFailure));
   const results = [];
   for (const page of pages) {
     for (const viewport of viewports) {

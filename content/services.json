@@ -4,6 +4,7 @@
     "number": "01",
     "name": "QR Kodlu Dijital Anı Albümü",
     "shortName": "QR Anı Albümü",
+    "summary": "Misafirleriniz fotoğraf ve videolarını tek QR kodla özel albümünüze yükler.",
     "description": "Misafirler düğün boyunca kendi telefonlarıyla çektikleri fotoğraf ve videoları QR kod üzerinden çiftin özel albümüne yükler.",
     "promise": "Düğününüzü sadece profesyonel kameradan değil, misafirlerinizin gözünden de görün.",
     "contents": [
@@ -19,6 +20,7 @@
     "number": "02",
     "name": "Polaroid Hatıra Köşesi",
     "shortName": "Polaroid Hatırası",
+    "summary": "Anında baskılar ve misafir notlarıyla dokunulabilir bir düğün hatırası oluşturur.",
     "description": "Misafirler Polaroid fotoğraf çektirir, anı defterine yapıştırır ve çift için küçük notlar yazar.",
     "promise": "Düğünden sonra elinizde sadece dijital dosya değil, dokunabileceğiniz gerçek bir hatıra kalsın.",
     "contents": [
@@ -36,6 +38,7 @@
     "number": "03",
     "name": "Video Booth",
     "shortName": "Video Booth",
+    "summary": "Misafirlerinizin eğlenceli kısa videolarını tek bir dijital koleksiyonda toplar.",
     "description": "Misafirler kısa, eğlenceli videolar çeker. Bunlar çift için dijital olarak teslim edilir. İstenirse sosyal medya formatında hazırlanır.",
     "promise": "Misafirleriniz sadece izleyici olmasın, gecenin eğlencesine dahil olsun.",
     "contents": [
@@ -53,6 +56,7 @@
     "number": "04",
     "name": "Misafir Röportajları",
     "shortName": "Misafir Röportajı",
+    "summary": "Misafirlerinizin samimi, komik ve duygusal mesajlarını sizin için kaydeder.",
     "description": "Düğün sırasında misafirlere kısa sorular sorulur. Komik, duygusal ve samimi cevaplar alınır. Sonrasında çift için video haline getirilir.",
     "promise": "Yıllar sonra izlediğinizde hem güleceğiniz hem duygulanacağınız gerçek mesajlar kalsın.",
     "contents": [
@@ -68,6 +72,7 @@
     "number": "05",
     "name": "Canlı Yayın Paketi",
     "shortName": "Canlı Yayın",
+    "summary": "Düğüne gelemeyen yakınlarınız özel yayın linkiyle anlara canlı eşlik eder.",
     "description": "Düğüne gelemeyen akrabalar veya şehir dışındaki yakınlar için özel canlı yayın linki oluşturulur.",
     "promise": "Düğüne gelemeyen sevdikleriniz de özel anlarınıza canlı olarak eşlik etsin.",
     "contents": [
@@ -83,6 +88,7 @@
     "number": "06",
     "name": "Sesli Anı Telefonu",
     "shortName": "Sesli Anı Telefonu",
+    "summary": "Misafirleriniz retro telefondan size kalıcı sesli mesajlar bırakır.",
     "description": "Eski tip şık bir telefon konsepti kurulur. Misafirler ahizeyi kaldırıp çifte sesli mesaj bırakır.",
     "promise": "Sevdiklerinizin sesinden size özel anılar kalsın.",
     "contents": [

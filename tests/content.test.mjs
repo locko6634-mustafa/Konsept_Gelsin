@@ -47,7 +47,7 @@ test("hizmet veri kaynağı altı eksiksiz ve benzersiz kayıt içerir", () => {
 
   for (const service of services) {
     assert.match(service.id, /^[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*$/u);
-    for (const field of ["name", "shortName", "description", "promise"]) {
+    for (const field of ["name", "shortName", "summary", "description", "promise"]) {
       assert.equal(typeof service[field], "string", `${service.id}.${field} metin olmalı`);
       assert.ok(service[field].trim().length > 2, `${service.id}.${field} boş bırakılamaz`);
       assert.doesNotMatch(service[field], /(?:lorem ipsum|todo|\[[^\]]+\])/i);
@@ -71,8 +71,11 @@ test("hero yeni görsel kompozisyonu, paket alanı ise altı gerçek hizmet yap�
   for (const service of services) {
     assert.match(homeHtml, new RegExp(`id="${escapeRegExp(service.id)}"`));
     assert.match(homeHtml, new RegExp(`<h3>${escapeRegExp(service.name)}<\\/h3>`));
-    assert.match(homeHtml, new RegExp(`data-whatsapp-service="${escapeRegExp(service.name)}"`));
+    assert.match(homeHtml, new RegExp(`<p>${escapeRegExp(service.summary)}<\\/p>`));
   }
+  const packageSection = homeHtml.match(/<section\b[^>]*id="paketler"[^>]*>([\s\S]*?)<\/section>/i);
+  assert.ok(packageSection, "paket alanı bulunamadı");
+  assert.doesNotMatch(packageSection[1], /<(?:blockquote|details)\b|\bpackage__cta\b|data-whatsapp-service/i);
 });
 
 test("imagegen hero görseli ve hizmet WebP görselleri doğru alanlarda kullanılır", async () => {

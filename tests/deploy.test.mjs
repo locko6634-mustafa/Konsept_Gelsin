@@ -24,6 +24,9 @@ test("main push yalnız başarılı kalite kapısından sonra üretime gider", (
   assert.match(e2e, /process\.platform === "linux"/);
   assert.match(e2e, /--disable-dev-shm-usage/);
   assert.match(e2e, /--no-sandbox/);
+  assert.match(e2e, /remote-debugging-address=127\.0\.0\.1/);
+  assert.match(e2e, /\/json\/version/);
+  assert.doesNotMatch(e2e, /remote-debugging-port=0|DevToolsActivePort/);
 });
 
 test("üretim containerı yetkileri daraltılmış ve healthchecklidir", () => {

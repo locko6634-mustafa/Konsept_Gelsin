@@ -154,7 +154,7 @@ if (!Array.isArray(services) || services.length !== 6) {
 } else {
   const ids = new Set();
   for (const [index, service] of services.entries()) {
-    const requiredKeys = ["id", "number", "name", "shortName", "description", "promise", "contents"];
+    const requiredKeys = ["id", "number", "name", "shortName", "summary", "description", "promise", "contents"];
     for (const key of requiredKeys) {
       if (!(key in service)) issues.push(`content/services.json: ${index + 1}. kayıtta ${key} eksik`);
     }
@@ -168,10 +168,12 @@ if (!Array.isArray(services) || services.length !== 6) {
     }
     if (!homeHtml.includes(`id="${service.id}"`)) issues.push(`index.html: hizmet id eksik (${service.id})`);
     if (!homeHtml.includes(`<h3>${service.name}</h3>`)) issues.push(`index.html: hizmet başlığı eksik (${service.name})`);
-    if (!homeHtml.includes(`data-whatsapp-service="${service.name}"`)) {
-      issues.push(`index.html: hizmet WhatsApp CTA'sı eksik (${service.name})`);
-    }
+    if (!homeHtml.includes(`<p>${service.summary}</p>`)) issues.push(`index.html: hizmet özeti eksik (${service.name})`);
   }
+}
+
+if (/\bpackage__cta\b|data-whatsapp-service/.test(homeHtml)) {
+  issues.push("index.html: paket alanında kaldırılan WhatsApp CTA'sı bulunmamalı");
 }
 
 const divClasses = [...homeHtml.matchAll(/<div\b[^>]*class="([^"]*)"/g)].map((match) => match[1].split(/\s+/));
