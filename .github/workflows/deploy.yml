@@ -19,9 +19,9 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Kaynak kodu al
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Node.js 22 kullan
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: ""
@@ -47,7 +47,7 @@ jobs:
       SERVER_USER: ${{ secrets.SERVER_USER }}
     steps:
       - name: Kaynak kodu al
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: SSH baglantisini hazirla
         shell: bash
