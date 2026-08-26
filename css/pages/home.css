@@ -337,24 +337,6 @@
   flex-direction: column;
 }
 
-.package__number {
-  display: block;
-  margin-block-end: var(--space-3);
-  color: var(--color-ink-soft);
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-variant-numeric: tabular-nums;
-  font-weight: 750;
-}
-
-.package--orange .package__number {
-  color: var(--color-ink);
-}
-
-.package--ink .package__number {
-  color: var(--color-yellow);
-}
-
 .package h3 {
   max-width: 13ch;
   font-size: clamp(2rem, 3vw, 2.8rem);
@@ -459,13 +441,11 @@
   width: 4rem;
   height: 4rem;
   place-items: center;
-  border: 0.12rem solid currentColor;
-  border-radius: 50%;
 }
 
-.contact-card__icon svg {
-  width: 2rem;
-  height: 2rem;
+.contact-card__icon img {
+  width: 2.75rem;
+  height: 2.75rem;
 }
 
 .contact-card__kicker {

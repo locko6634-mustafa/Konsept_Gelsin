@@ -382,9 +382,9 @@
     height: 3.25rem;
   }
 
-  .contact-card__icon svg {
-    width: 1.65rem;
-    height: 1.65rem;
+  .contact-card__icon img {
+    width: 2.25rem;
+    height: 2.25rem;
   }
 
   .direct-contact {
