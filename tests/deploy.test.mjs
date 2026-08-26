@@ -2,11 +2,12 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-const [workflow, compose, dockerfile, nginx] = await Promise.all([
+const [workflow, compose, dockerfile, nginx, e2e] = await Promise.all([
   readFile(".github/workflows/deploy.yml", "utf8"),
   readFile("deploy/compose.production.yaml", "utf8"),
   readFile("deploy/Dockerfile", "utf8"),
   readFile("deploy/nginx.conf", "utf8"),
+  readFile("tools/e2e.mjs", "utf8"),
 ]);
 
 test("main push yalnız başarılı kalite kapısından sonra üretime gider", () => {
@@ -20,6 +21,9 @@ test("main push yalnız başarılı kalite kapısından sonra üretime gider", (
   assert.match(workflow, /actual_fingerprint/);
   assert.doesNotMatch(workflow, /DEPLOY_KNOWN_HOSTS/);
   assert.match(workflow, /GITHUB_SHA/);
+  assert.match(e2e, /process\.platform === "linux"/);
+  assert.match(e2e, /--disable-dev-shm-usage/);
+  assert.match(e2e, /--no-sandbox/);
 });
 
 test("üretim containerı yetkileri daraltılmış ve healthchecklidir", () => {

@@ -58,10 +58,24 @@ class CdpConnection {
     return new CdpConnection(socket);
   }
 
-  send(method, params = {}, sessionId) {
+  send(method, params = {}, sessionId, timeoutMs = 15_000) {
     const id = ++this.nextId;
     return new Promise((resolve, reject) => {
-      this.pending.set(id, { method, reject, resolve });
+      const timeout = setTimeout(() => {
+        this.pending.delete(id);
+        reject(new Error(`${method} komutu zaman aşımına uğradı.`));
+      }, timeoutMs);
+      this.pending.set(id, {
+        method,
+        reject: (error) => {
+          clearTimeout(timeout);
+          reject(error);
+        },
+        resolve: (result) => {
+          clearTimeout(timeout);
+          resolve(result);
+        },
+      });
       this.socket.send(JSON.stringify({ id, method, params, ...(sessionId ? { sessionId } : {}) }));
     });
   }
@@ -361,20 +375,23 @@ try {
   const retiredContactResponse = await fetch(`${origin}/iletisim.html`);
   assert(retiredContactResponse.status === 404, `Kaldırılan iletişim sayfası ${retiredContactResponse.status} döndürdü.`);
 
-  chrome = spawn(chromePath, [
+  const chromeArgs = [
     "--headless=new",
     "--disable-background-networking",
     "--disable-component-update",
     "--disable-default-apps",
     "--disable-extensions",
     "--disable-gpu",
+    ...(process.platform === "linux" ? ["--disable-dev-shm-usage", "--no-sandbox"] : []),
     "--hide-scrollbars",
     "--no-default-browser-check",
     "--no-first-run",
     "--remote-debugging-port=0",
     `--user-data-dir=${profileDirectory}`,
     "about:blank",
-  ], { stdio: "ignore", windowsHide: true });
+  ];
+
+  chrome = spawn(chromePath, chromeArgs, { stdio: "ignore", windowsHide: true });
 
   cdp = await CdpConnection.connect(await devtoolsEndpoint(profileDirectory, chrome));
   const results = [];
