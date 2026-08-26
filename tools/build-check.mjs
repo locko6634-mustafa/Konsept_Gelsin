@@ -26,6 +26,7 @@ const serviceImages = [
   "live-stream.webp",
   "audio-phone.webp",
 ];
+const serviceMobileImages = serviceImages.map((imageName) => imageName.replace(".webp", "-mobile.webp"));
 const heroImages = ["hero-still-life-v2.png", "hero-still-life-mobile-v3.png"];
 const issues = [];
 
@@ -187,8 +188,8 @@ if (divClasses.filter((tokens) => tokens.includes("package")).length !== 6) {
 const webpFiles = (await readdir(path.join(projectRoot, "assets", "images")))
   .filter((name) => name.toLowerCase().endsWith(".webp"))
   .sort();
-if (JSON.stringify(webpFiles) !== JSON.stringify([...serviceImages].sort())) {
-  issues.push(`assets/images: beklenen altı WebP ile eşleşmiyor (${webpFiles.join(", ")})`);
+if (JSON.stringify(webpFiles) !== JSON.stringify([...serviceImages, ...serviceMobileImages].sort())) {
+  issues.push(`assets/images: beklenen masaüstü ve mobil WebP görselleriyle eşleşmiyor (${webpFiles.join(", ")})`);
 }
 for (const imageName of serviceImages) {
   const relativePath = `assets/images/${imageName}`;
@@ -197,6 +198,14 @@ for (const imageName of serviceImages) {
   const escapedPath = relativePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const uses = homeHtml.match(new RegExp(`src=["']${escapedPath}["']`, "g")) ?? [];
   if (uses.length !== 1) issues.push(`${relativePath}: paket alanında tam bir kez kullanılmalı`);
+}
+for (const imageName of serviceMobileImages) {
+  const relativePath = `assets/images/${imageName}`;
+  const info = await fileInfo(path.join(projectRoot, relativePath));
+  if (!info || info.size <= 1_024) issues.push(`${relativePath}: mobil görsel eksik veya boş`);
+  const escapedPath = relativePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const uses = homeHtml.match(new RegExp(`srcset=["']${escapedPath}["']`, "g")) ?? [];
+  if (uses.length !== 1) issues.push(`${relativePath}: mobil paket alanında tam bir kez kullanılmalı`);
 }
 
 for (const imageName of heroImages) {
@@ -223,6 +232,6 @@ if (issues.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    `Derleme bütünlüğü geçti (tek landing page, ${cssFiles.length} CSS, ${moduleFiles.length} istemci modülü, ${services.length} hizmet, 6 WebP ve 2 hero PNG).`,
+    `Derleme bütünlüğü geçti (tek landing page, ${cssFiles.length} CSS, ${moduleFiles.length} istemci modülü, ${services.length} hizmet, 12 WebP ve 2 hero PNG).`,
   );
 }

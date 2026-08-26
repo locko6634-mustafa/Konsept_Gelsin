@@ -11,6 +11,7 @@ const serviceImages = [
   "live-stream.webp",
   "audio-phone.webp",
 ];
+const serviceMobileImages = serviceImages.map((imageName) => imageName.replace(".webp", "-mobile.webp"));
 const heroImages = ["hero-still-life-v2.png", "hero-still-life-mobile-v3.png"];
 
 async function readProjectFile(path) {
@@ -86,7 +87,7 @@ test("imagegen hero görseli ve hizmet WebP görselleri doğru alanlarda kullan�
   const webpFiles = (await readdir(new URL("assets/images/", projectRoot)))
     .filter((name) => name.toLowerCase().endsWith(".webp"))
     .sort();
-  assert.deepEqual(webpFiles, [...serviceImages].sort());
+  assert.deepEqual(webpFiles, [...serviceImages, ...serviceMobileImages].sort());
 
   for (const imageName of serviceImages) {
     const imagePath = `assets/images/${imageName}`;
@@ -95,6 +96,15 @@ test("imagegen hero görseli ve hizmet WebP görselleri doğru alanlarda kullan�
     assert.ok(imageStats.size > 1_024, `${imagePath} boş veya geçersiz görünüyor`);
     const uses = homeHtml.match(new RegExp(`src="${escapeRegExp(imagePath)}"`, "g")) ?? [];
     assert.equal(uses.length, 1, `${imagePath} paket alanında bir kez kullanılmalı`);
+  }
+
+  for (const imageName of serviceMobileImages) {
+    const imagePath = `assets/images/${imageName}`;
+    assert.ok(await projectFileExists(imagePath), `${imagePath} bulunamadı`);
+    const imageStats = await stat(new URL(imagePath, projectRoot));
+    assert.ok(imageStats.size > 1_024, `${imagePath} boş veya geçersiz görünüyor`);
+    const uses = homeHtml.match(new RegExp(`srcset="${escapeRegExp(imagePath)}"`, "g")) ?? [];
+    assert.equal(uses.length, 1, `${imagePath} mobil paket alanında bir kez kullanılmalı`);
   }
 
   for (const heroImage of heroImages) {

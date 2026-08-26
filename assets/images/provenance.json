@@ -34,11 +34,41 @@
       "file": "audio-phone.webp",
       "source": "C:/Users/Mustafa/.codex/generated_images/01a03db1-ff1f-71f1-93ab-ce00fd680a11/exec-afbeeff4-5011-4bcf-9bfd-42d928477e28.png",
       "subject": "Mandarin-orange retro rotary telephone on layered ivory and sage paper with brass details."
+    },
+    {
+      "file": "qr-memory-album-mobile.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03f94-e80e-7d12-9c31-732c5dc7b7af/exec-d5f988d8-dfc4-41a6-912d-00abc53377a2.png",
+      "subject": "Landscape mobile variant of the QR memory-album card, recomposed to preserve the complete subject in a wide package visual."
+    },
+    {
+      "file": "polaroid-memory-mobile.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03f94-e80e-7d12-9c31-732c5dc7b7af/exec-f36d9606-3fce-4354-83cd-d461da61e718.png",
+      "subject": "Landscape mobile variant of the Polaroid memory album, recomposed to preserve the complete subject in a wide package visual."
+    },
+    {
+      "file": "video-booth-mobile.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03f94-e80e-7d12-9c31-732c5dc7b7af/exec-9c0b66d4-a5a0-4913-b055-7fa3e8f245dd.png",
+      "subject": "Landscape mobile variant of the Video Booth camera, recomposed to preserve the complete subject in a wide package visual."
+    },
+    {
+      "file": "guest-interviews-mobile.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03f94-e80e-7d12-9c31-732c5dc7b7af/exec-8732f53d-6de7-40dc-8604-dd44fe01cbb6.png",
+      "subject": "Landscape mobile variant of the guest-interview microphone, recomposed to preserve the complete subject in a wide package visual."
+    },
+    {
+      "file": "live-stream-mobile.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03f94-e80e-7d12-9c31-732c5dc7b7af/exec-4ef09960-97bc-4eac-a875-a502d1641cd3.png",
+      "subject": "Landscape mobile variant of the live-stream camera, recomposed to preserve the complete subject in a wide package visual."
+    },
+    {
+      "file": "audio-phone-mobile.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03f94-e80e-7d12-9c31-732c5dc7b7af/exec-2cfdcc54-3c50-413f-9510-7cec84797856.png",
+      "subject": "Landscape mobile variant of the audio-memory telephone, recomposed to preserve the complete subject in a wide package visual."
     }
   ],
   "processing": {
-    "operation": "Mechanical delivery optimization only",
-    "output": "960x960 WebP, quality 82",
-    "creativeChangesAfterGeneration": false
+    "operation": "Responsive art direction plus mechanical delivery optimization",
+    "output": "Desktop 960x960 WebP, quality 82; mobile 960x320 WebP, quality 84",
+    "creativeChangesAfterGeneration": true
   }
 }
