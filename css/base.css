@@ -1,0 +1,138 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+  scrollbar-color: var(--color-orange) var(--color-paper-deep);
+  scrollbar-width: thin;
+}
+
+body {
+  min-width: 20rem;
+  margin: 0;
+  overflow-x: clip;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-yellow);
+  color: var(--color-ink);
+}
+
+::-webkit-scrollbar {
+  width: 0.72rem;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-paper-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 0.16rem solid var(--color-paper-deep);
+  border-radius: 1rem;
+  background: var(--color-orange);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.22em;
+}
+
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+h1,
+h2,
+h3,
+p,
+blockquote {
+  margin-block-start: 0;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+
+h2 {
+  max-width: 15ch;
+  margin-block-end: var(--space-5);
+  font-size: clamp(3rem, 6vw, 5.6rem);
+}
+
+h3 {
+  margin-block-end: var(--space-4);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+}
+
+p {
+  max-width: 70ch;
+}
+
+.shell {
+  width: min(calc(100% - 3rem), var(--shell));
+  margin-inline: auto;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 1000;
+  inset: var(--space-3) auto auto var(--space-3);
+  padding: 0.75rem 1rem;
+  transform: translateY(-180%);
+  border-radius: var(--radius-sm);
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-weight: 700;
+  transition: transform 180ms var(--ease-out);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+[id] {
+  scroll-margin-top: calc(var(--header-height) + var(--space-4));
+}

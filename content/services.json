@@ -1,0 +1,96 @@
+[
+  {
+    "id": "qr-anı-albumu",
+    "number": "01",
+    "name": "QR Kodlu Dijital Anı Albümü",
+    "shortName": "QR Anı Albümü",
+    "description": "Misafirler düğün boyunca kendi telefonlarıyla çektikleri fotoğraf ve videoları QR kod üzerinden çiftin özel albümüne yükler.",
+    "promise": "Düğününüzü sadece profesyonel kameradan değil, misafirlerinizin gözünden de görün.",
+    "contents": [
+      "Çifte özel dijital albüm linki",
+      "Masa veya giriş alanı için QR kartları",
+      "Misafirlerin fotoğraf/video yükleme alanı",
+      "Düğün sonrası tüm içeriklerin tek linkte teslimi",
+      "İsteğe bağlı kapak görseli / çift ismi / tarih"
+    ]
+  },
+  {
+    "id": "polaroid-hatira-kosesi",
+    "number": "02",
+    "name": "Polaroid Hatıra Köşesi",
+    "shortName": "Polaroid Hatırası",
+    "description": "Misafirler Polaroid fotoğraf çektirir, anı defterine yapıştırır ve çift için küçük notlar yazar.",
+    "promise": "Düğünden sonra elinizde sadece dijital dosya değil, dokunabileceğiniz gerçek bir hatıra kalsın.",
+    "contents": [
+      "Polaroid kamera",
+      "Anı defteri",
+      "Fotoğraf yapıştırma alanı",
+      "Kalemler / sticker / mini dekor",
+      "Belirli adet Polaroid baskı",
+      "Kurulum masası",
+      "İsteğe bağlı görevli personel"
+    ]
+  },
+  {
+    "id": "video-booth",
+    "number": "03",
+    "name": "Video Booth",
+    "shortName": "Video Booth",
+    "description": "Misafirler kısa, eğlenceli videolar çeker. Bunlar çift için dijital olarak teslim edilir. İstenirse sosyal medya formatında hazırlanır.",
+    "promise": "Misafirleriniz sadece izleyici olmasın, gecenin eğlencesine dahil olsun.",
+    "contents": [
+      "Video çekim alanı",
+      "Işık kurulumu",
+      "Telefon/kamera sistemi",
+      "Eğlenceli aksesuarlar",
+      "Kısa video kayıtları",
+      "Düğün sonrası toplu teslim",
+      "İsteğe bağlı reels formatında kurgu"
+    ]
+  },
+  {
+    "id": "misafir-roportajlari",
+    "number": "04",
+    "name": "Misafir Röportajları",
+    "shortName": "Misafir Röportajı",
+    "description": "Düğün sırasında misafirlere kısa sorular sorulur. Komik, duygusal ve samimi cevaplar alınır. Sonrasında çift için video haline getirilir.",
+    "promise": "Yıllar sonra izlediğinizde hem güleceğiniz hem duygulanacağınız gerçek mesajlar kalsın.",
+    "contents": [
+      "Muhabir/görevli personel",
+      "Mikrofonlu kısa çekimler",
+      "Misafirlere özel sorular",
+      "Duygusal ve eğlenceli mesajlar",
+      "Düğün sonrası video teslimi"
+    ]
+  },
+  {
+    "id": "canli-yayin-paketi",
+    "number": "05",
+    "name": "Canlı Yayın Paketi",
+    "shortName": "Canlı Yayın",
+    "description": "Düğüne gelemeyen akrabalar veya şehir dışındaki yakınlar için özel canlı yayın linki oluşturulur.",
+    "promise": "Düğüne gelemeyen sevdikleriniz de özel anlarınıza canlı olarak eşlik etsin.",
+    "contents": [
+      "Sabit kamera kurulumu",
+      "Canlı yayın linki",
+      "Nikah / ilk dans / pasta / takı gibi önemli anların yayını",
+      "Teknik takip",
+      "İsteğe bağlı kayıt teslimi"
+    ]
+  },
+  {
+    "id": "sesli-ani-telefonu",
+    "number": "06",
+    "name": "Sesli Anı Telefonu",
+    "shortName": "Sesli Anı Telefonu",
+    "description": "Eski tip şık bir telefon konsepti kurulur. Misafirler ahizeyi kaldırıp çifte sesli mesaj bırakır.",
+    "promise": "Sevdiklerinizin sesinden size özel anılar kalsın.",
+    "contents": [
+      "Dekoratif telefon kurulumu",
+      "Sesli mesaj kayıt sistemi",
+      "Masa/karşılama alanı kurulumu",
+      "Düğün sonrası tüm ses kayıtlarının teslimi",
+      "İsteğe bağlı tek video/slayt haline getirme"
+    ]
+  }
+]

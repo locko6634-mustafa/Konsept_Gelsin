@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-26",
+  "generator": "OpenAI ImageGen",
+  "sharedReference": ".impeccable/mocks/homepage-comp-01.png",
+  "sharedDirection": "Warm tactile editorial product photography in a premium paper-craft wedding world; ivory, ink brown, sage and mandarin orange; no readable words, logos, watermarks, borders or UI.",
+  "assets": [
+    {
+      "file": "qr-memory-album.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03db1-ff1f-71f1-93ab-ce00fd680a11/exec-51f7c6ba-2c99-493b-8a6e-c5fe505fb68f.png",
+      "subject": "Elegant upright QR memory-album card on a marble plinth with layered ivory paper, sage backing, brass pin and orange edge."
+    },
+    {
+      "file": "polaroid-memory.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03db1-ff1f-71f1-93ab-ce00fd680a11/exec-50a864a1-1ae4-497a-a4f5-8642b2528707.png",
+      "subject": "Polaroid-style wedding photograph attached to a layered ivory memory page with a brass pin and orange album edge."
+    },
+    {
+      "file": "video-booth.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03db1-ff1f-71f1-93ab-ce00fd680a11/exec-239dcedc-e39d-46c5-95c8-b1142168d19b.png",
+      "subject": "Compact premium video booth camera with a small wedding image screen and recording light on layered sage and ivory paper."
+    },
+    {
+      "file": "guest-interviews.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03db1-ff1f-71f1-93ab-ce00fd680a11/exec-cd827334-9981-4027-a11f-5498ef1d99dd.png",
+      "subject": "Vintage broadcast microphone over a warm ochre paper card with an embossed audio waveform and brass pin."
+    },
+    {
+      "file": "live-stream.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03db1-ff1f-71f1-93ab-ce00fd680a11/exec-e35cc17c-994e-410c-8714-8ff91094c864.png",
+      "subject": "Professional mirrorless live-stream camera on a compact tripod over layered sage, ivory and orange paper."
+    },
+    {
+      "file": "audio-phone.webp",
+      "source": "C:/Users/Mustafa/.codex/generated_images/01a03db1-ff1f-71f1-93ab-ce00fd680a11/exec-afbeeff4-5011-4bcf-9bfd-42d928477e28.png",
+      "subject": "Mandarin-orange retro rotary telephone on layered ivory and sage paper with brass details."
+    }
+  ],
+  "processing": {
+    "operation": "Mechanical delivery optimization only",
+    "output": "960x960 WebP, quality 82",
+    "creativeChangesAfterGeneration": false
+  }
+}

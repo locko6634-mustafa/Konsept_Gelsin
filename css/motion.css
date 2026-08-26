@@ -1,0 +1,62 @@
+@keyframes tile-settle {
+  from {
+    clip-path: inset(0 0 18% 0 round 0.72rem);
+    filter: blur(0.18rem);
+    transform: translateY(0.9rem) rotate(1.5deg);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 0.72rem);
+    filter: blur(0);
+    transform: translateY(0) rotate(0);
+  }
+}
+
+html[data-ready="true"] .memory-tile {
+  animation: tile-settle 620ms var(--ease-out) both;
+}
+
+html[data-ready="true"] .memory-tile:nth-child(2) {
+  animation-delay: 55ms;
+}
+
+html[data-ready="true"] .memory-tile:nth-child(3) {
+  animation-delay: 110ms;
+}
+
+html[data-ready="true"] .memory-tile:nth-child(4) {
+  animation-delay: 165ms;
+}
+
+html[data-ready="true"] .memory-tile:nth-child(5) {
+  animation-delay: 220ms;
+}
+
+html[data-ready="true"] .memory-tile:nth-child(6) {
+  animation-delay: 275ms;
+}
+
+.memory-tile a {
+  transition: transform 220ms var(--ease-out), filter 220ms var(--ease-out);
+}
+
+.memory-tile a:hover,
+.memory-tile a:focus-visible {
+  filter: saturate(1.08);
+  transform: translateY(-0.22rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

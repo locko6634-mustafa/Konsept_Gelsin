@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="icon-qr" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 8h18v18H8zM38 8h18v18H38zM8 38h18v18H8z"/>
+      <path d="M14 14h6v6h-6zM44 14h6v6h-6zM14 44h6v6h-6zM38 36h8v8h10v12H44v-6h-6zM50 34h6"/>
+    </g>
+  </symbol>
+  <symbol id="icon-polaroid" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="10" y="6" width="44" height="52" rx="3"/>
+      <path d="M16 14h32v25H16zM16 46h20"/>
+      <path d="M24 30l7-7 7 7 5-5 5 5"/>
+    </g>
+  </symbol>
+  <symbol id="icon-video" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="7" y="13" width="50" height="38" rx="5"/>
+      <path d="M27 24l14 8-14 8zM7 21h7M7 32h7M7 43h7M50 21h7M50 32h7M50 43h7"/>
+    </g>
+  </symbol>
+  <symbol id="icon-mic" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="22" y="7" width="20" height="34" rx="10"/>
+      <path d="M14 31v2c0 10 8 18 18 18s18-8 18-18v-2M32 51v7M23 58h18"/>
+    </g>
+  </symbol>
+  <symbol id="icon-live" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="13" y="17" width="38" height="31" rx="5"/>
+      <circle cx="32" cy="32" r="8"/>
+      <path d="M22 17l4-7h12l4 7M6 23a16 16 0 000 18M58 23a16 16 0 010 18"/>
+    </g>
+  </symbol>
+  <symbol id="icon-phone" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 18c4-7 12-11 19-11s15 4 19 11l-8 7-7-5h-8l-7 5z"/>
+      <path d="M18 28h28l6 11v18H12V39z"/>
+      <circle cx="32" cy="42" r="8"/>
+      <path d="M32 34v5M39 42h-5M32 50v-5M25 42h5"/>
+    </g>
+  </symbol>
+  <symbol id="icon-chat" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 11.5a8 8 0 11-3.2-6.4A7.9 7.9 0 0120 11.5z"/>
+      <path d="M8.2 8.2c.3 3.2 2.4 5.3 5.6 5.6l1.3-1.7-2.2-1-1 1c-1.1-.5-2-1.4-2.5-2.5l1-1-1-2.2zM6.5 18.1L5 20l3-.7"/>
+    </g>
+  </symbol>
+  <symbol id="icon-arrow" viewBox="0 0 24 24">
+    <path d="M5 12h14M14 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="icon-menu" viewBox="0 0 24 24">
+    <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icon-phone-call" viewBox="0 0 24 24">
+    <path d="M8.5 3H5.8A2.8 2.8 0 003 5.8C3 14.2 9.8 21 18.2 21a2.8 2.8 0 002.8-2.8v-2.7l-5-1.2-1.3 2.4a12.2 12.2 0 01-7.4-7.4L9.7 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="icon-mail" viewBox="0 0 24 24">
+    <path d="M3 5h18v14H3zM3 6l9 7 9-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+</svg>

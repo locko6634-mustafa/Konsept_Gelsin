@@ -1,0 +1,12 @@
+.git
+.github
+.impeccable
+.codex
+node_modules
+test-results
+tests
+tools
+*.md
+PRODUCT.md
+content
+

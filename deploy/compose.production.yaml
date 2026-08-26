@@ -1,0 +1,58 @@
+name: konsept-gelsin
+
+services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+      args:
+        BUILD_REVISION: ${BUILD_REVISION:-unknown}
+    image: konsept-gelsin-frontend:${BUILD_REVISION:-local}
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m,mode=1777
+      - /var/cache/nginx:rw,noexec,nosuid,nodev,size=16m,mode=1777
+      - /var/run:rw,noexec,nosuid,nodev,size=4m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 100
+    mem_limit: 128m
+    cpus: 0.50
+    networks:
+      - edge_proxy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=edge_proxy
+      - traefik.http.routers.konsept-gelsin.rule=Host(`konseptgelsin.com`)
+      - traefik.http.routers.konsept-gelsin.entrypoints=websecure
+      - traefik.http.routers.konsept-gelsin.tls=true
+      - traefik.http.routers.konsept-gelsin.tls.certresolver=mytlschallenge
+      - traefik.http.routers.konsept-gelsin.middlewares=konsept-gelsin-compress
+      - traefik.http.routers.konsept-gelsin.service=konsept-gelsin
+      - traefik.http.routers.konsept-gelsin-www.rule=Host(`www.konseptgelsin.com`)
+      - traefik.http.routers.konsept-gelsin-www.entrypoints=websecure
+      - traefik.http.routers.konsept-gelsin-www.tls=true
+      - traefik.http.routers.konsept-gelsin-www.tls.certresolver=mytlschallenge
+      - traefik.http.routers.konsept-gelsin-www.middlewares=konsept-gelsin-www-redirect
+      - traefik.http.routers.konsept-gelsin-www.service=konsept-gelsin
+      - traefik.http.services.konsept-gelsin.loadbalancer.server.port=8080
+      - traefik.http.middlewares.konsept-gelsin-www-redirect.redirectregex.regex=^https://www\.konseptgelsin\.com/(.*)
+      - traefik.http.middlewares.konsept-gelsin-www-redirect.redirectregex.replacement=https://konseptgelsin.com/$${1}
+      - traefik.http.middlewares.konsept-gelsin-www-redirect.redirectregex.permanent=true
+      - traefik.http.middlewares.konsept-gelsin-compress.compress=true
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
+
+networks:
+  edge_proxy:
+    external: true
+    name: edge_proxy
+
