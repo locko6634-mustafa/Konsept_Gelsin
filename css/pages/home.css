@@ -142,6 +142,10 @@
   --package-background: var(--color-sage);
 }
 
+.package--blue {
+  --package-background: var(--color-blue);
+}
+
 .package--yellow {
   --package-background: var(--color-yellow);
 }

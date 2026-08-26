@@ -43,11 +43,12 @@
   --color-paper-muted: hsl(35 35% 95%);
   --color-ink: hsl(17 32% 11%);
   --color-ink-soft: hsl(20 21% 29%);
-  --color-orange: hsl(16 100% 56%);
-  --color-orange-deep: hsl(15 88% 43%);
+  --color-orange: #f27a1a;
+  --color-orange-deep: hsl(27 92% 39%);
   --color-yellow: hsl(41 100% 65%);
   --color-sage: hsl(98 33% 86%);
   --color-sage-deep: hsl(99 22% 34%);
+  --color-blue: hsl(202 72% 84%);
   --color-whatsapp: hsl(148 68% 29%);
   --color-white: hsl(0 0% 100%);
   --color-error: hsl(3 72% 39%);
