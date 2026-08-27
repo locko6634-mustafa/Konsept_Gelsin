@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { createServer as createNetServer } from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
@@ -137,20 +138,41 @@ async function waitForHttp(url, child) {
   throw new Error("Yerel sunucu zamanında başlamadı.");
 }
 
-async function devtoolsEndpoint(profileDirectory, chrome, chromeFailure) {
-  const portFile = path.join(profileDirectory, "DevToolsActivePort");
-  for (let attempt = 0; attempt < 200; attempt += 1) {
+async function availablePort() {
+  const probe = createNetServer();
+  await new Promise((resolve, reject) => {
+    const fail = (error) => reject(error);
+    probe.once("error", fail);
+    probe.listen(0, "127.0.0.1", () => {
+      probe.off("error", fail);
+      resolve();
+    });
+  });
+  const address = probe.address();
+  await new Promise((resolve, reject) => probe.close((error) => error ? reject(error) : resolve()));
+  if (!address || typeof address === "string") throw new Error("Chrome için geçici debug portu ayrılamadı.");
+  return address.port;
+}
+
+async function devtoolsEndpoint(port, chrome, chromeFailure, chromeDiagnostics) {
+  const versionUrl = `http://127.0.0.1:${port}/json/version`;
+  for (let attempt = 0; attempt < 300; attempt += 1) {
     if (chromeFailure()) throw new Error(`Chrome başlatılamadı: ${chromeFailure().message}`);
-    if (chrome.exitCode !== null) throw new Error(`Chrome erken kapandı (${chrome.exitCode}).`);
     try {
-      const [port, endpointPath] = (await readFile(portFile, "utf8")).trim().split(/\r?\n/);
-      if (port && endpointPath) return `ws://127.0.0.1:${port}${endpointPath}`;
+      const response = await fetch(versionUrl, { signal: AbortSignal.timeout(1_000) });
+      if (response.ok) {
+        const version = await response.json();
+        if (version.webSocketDebuggerUrl) return version.webSocketDebuggerUrl;
+      }
     } catch {
-      // Chrome henüz atomik olarak ayırdığı DevTools portunu yazmadı.
+      // Chrome henüz DevTools HTTP yüzeyini açmadı.
+    }
+    if (chrome.exitCode !== null) {
+      throw new Error(`Chrome erken kapandı (${chrome.exitCode}). ${chromeDiagnostics().trim()}`.trim());
     }
     await delay(100);
   }
-  throw new Error(`Chrome DevTools port dosyası bulunamadı (${portFile}).`);
+  throw new Error(`Chrome DevTools yüzeyi zamanında açılmadı (${versionUrl}). ${chromeDiagnostics().trim()}`.trim());
 }
 
 async function evaluate(cdp, sessionId, expression) {
@@ -519,6 +541,7 @@ let server;
 let chrome;
 let cdp;
 let chromeSpawnFailure;
+let chromeDiagnostics = "";
 
 try {
   await mkdir(resultDirectory, { recursive: true });
@@ -536,6 +559,7 @@ try {
   const retiredContactResponse = await fetch(`${origin}/iletisim.html`);
   assert(retiredContactResponse.status === 404, `Kaldırılan iletişim sayfası ${retiredContactResponse.status} döndürdü.`);
 
+  const devtoolsPort = await availablePort();
   const chromeArgs = [
     "--headless=new",
     "--disable-background-networking",
@@ -548,17 +572,23 @@ try {
     "--no-default-browser-check",
     "--no-first-run",
     "--remote-debugging-address=127.0.0.1",
-    "--remote-debugging-port=0",
+    `--remote-debugging-port=${devtoolsPort}`,
     `--user-data-dir=${profileDirectory}`,
     "about:blank",
   ];
 
-  chrome = spawn(chromePath, chromeArgs, { stdio: "ignore", windowsHide: true });
+  chrome = spawn(chromePath, chromeArgs, { stdio: ["ignore", "ignore", "pipe"], windowsHide: true });
+  chrome.stderr?.setEncoding("utf8");
+  chrome.stderr?.on("data", (chunk) => {
+    chromeDiagnostics = `${chromeDiagnostics}${chunk}`.slice(-8_000);
+  });
   chrome.once("error", (error) => {
     chromeSpawnFailure = error;
   });
 
-  cdp = await CdpConnection.connect(await devtoolsEndpoint(profileDirectory, chrome, () => chromeSpawnFailure));
+  cdp = await CdpConnection.connect(
+    await devtoolsEndpoint(devtoolsPort, chrome, () => chromeSpawnFailure, () => chromeDiagnostics),
+  );
   const results = [];
   for (const page of pages) {
     for (const viewport of viewports) {
