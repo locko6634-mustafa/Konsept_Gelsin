@@ -2,9 +2,11 @@ import { access, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { pageNames } from "./page-manifest.mjs";
+
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
 const sourceDirectories = ["content", "css", "js", "tests", "tools"];
-const rootFiles = [".gitignore", "README.md", "PRODUCT.md", "index.html", "package.json"];
+const rootFiles = [".gitignore", "README.md", "PRODUCT.md", "package.json", ...pageNames];
 const textExtensions = new Set([".css", ".html", ".js", ".json", ".md", ".mjs"]);
 
 async function walk(directory) {

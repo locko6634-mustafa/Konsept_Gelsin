@@ -4,12 +4,14 @@ import { createServer } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { pageNames } from "./page-manifest.mjs";
+
 const projectRoot = await realpath(fileURLToPath(new URL("../", import.meta.url)));
 const host = process.env.HOST?.trim() || "127.0.0.1";
 const port = Number.parseInt(process.env.PORT || "4173", 10);
 const publicDirectories = new Set(["assets", "css", "js"]);
 const mediaRoot = path.join(projectRoot, "storage", "public-media");
-const publicRootFiles = new Set(["index.html"]);
+const publicRootFiles = new Set(pageNames);
 const mimeTypes = new Map([
   [".avif", "image/avif"],
   [".css", "text/css; charset=utf-8"],

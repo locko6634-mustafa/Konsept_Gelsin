@@ -8,7 +8,14 @@ LABEL org.opencontainers.image.revision="${BUILD_REVISION}"
 RUN rm -rf /usr/share/nginx/html/*
 
 COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
-COPY index.html /usr/share/nginx/html/index.html
+COPY index.html \
+     qr-kodlu-dijital-ani-albumu.html \
+     polaroid-hatira-kosesi.html \
+     video-booth.html \
+     misafir-roportajlari.html \
+     canli-yayin-paketi.html \
+     sesli-ani-telefonu.html \
+     /usr/share/nginx/html/
 COPY css /usr/share/nginx/html/css
 COPY js /usr/share/nginx/html/js
 COPY assets/fonts /usr/share/nginx/html/assets/fonts

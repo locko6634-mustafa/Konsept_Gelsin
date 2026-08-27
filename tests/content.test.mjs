@@ -38,6 +38,11 @@ const [servicesSource, homeHtml] = await Promise.all([
   readProjectFile("index.html"),
 ]);
 const services = JSON.parse(servicesSource);
+const packagePages = new Map(
+  await Promise.all(
+    services.map(async ({ page }) => [page, await readProjectFile(page)]),
+  ),
+);
 
 test("hizmet veri kaynağı altı eksiksiz ve benzersiz kayıt içerir", () => {
   assert.equal(services.length, 6);
@@ -47,10 +52,14 @@ test("hizmet veri kaynağı altı eksiksiz ve benzersiz kayıt içerir", () => {
   );
   assert.equal(new Set(services.map(({ id }) => id)).size, services.length);
   assert.equal(new Set(services.map(({ name }) => name)).size, services.length);
+  assert.equal(new Set(services.map(({ page }) => page)).size, services.length);
 
   for (const service of services) {
     assert.match(service.id, /^[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*$/u);
-    for (const field of ["name", "shortName", "summary", "description", "promise"]) {
+    assert.match(service.page, /^[a-z0-9]+(?:-[a-z0-9]+)*\.html$/);
+    assert.match(service.image, /^[a-z0-9]+(?:-[a-z0-9]+)*\.webp$/);
+    assert.match(service.mobileImage, /^[a-z0-9]+(?:-[a-z0-9]+)*\.webp$/);
+    for (const field of ["name", "shortName", "summary", "description", "promise", "imageAlt"]) {
       assert.equal(typeof service[field], "string", `${service.id}.${field} metin olmalı`);
       assert.ok(service[field].trim().length > 2, `${service.id}.${field} boş bırakılamaz`);
       assert.doesNotMatch(service[field], /(?:lorem ipsum|todo|\[[^\]]+\])/i);
@@ -76,6 +85,7 @@ test("hero yeni görsel kompozisyonu, paket alanı ise altı gerçek hizmet yap�
     assert.match(homeHtml, new RegExp(`id="${escapeRegExp(service.id)}"`));
     assert.match(homeHtml, new RegExp(`<h3>${escapeRegExp(service.name)}<\\/h3>`));
     assert.match(homeHtml, new RegExp(`<p>${escapeRegExp(service.summary)}<\\/p>`));
+    assert.match(homeHtml, new RegExp(`href="${escapeRegExp(service.page)}"`));
   }
   const packageSection = homeHtml.match(/<section\b[^>]*id="paketler"[^>]*>([\s\S]*?)<\/section>/i);
   assert.ok(packageSection, "paket alanı bulunamadı");
@@ -121,7 +131,21 @@ test("imagegen hero görseli ve hizmet WebP görselleri doğru alanlarda kullan�
   }
 });
 
-test("ürün yalnız tek landing page olarak kalır", async () => {
+test("landing page altı ayrı paket detayına bağlanır ve iletişim aynı sayfada kalır", async () => {
   assert.equal(await projectFileExists("iletisim.html"), false);
   assert.doesNotMatch(homeHtml, /(?:href|src)=["'][^"']*iletisim\.html/i);
+
+  assert.deepEqual([...packagePages.keys()], services.map(({ page }) => page));
+  for (const service of services) {
+    assert.equal(await projectFileExists(service.page), true, `${service.page} bulunamadı`);
+    const detailHtml = packagePages.get(service.page);
+    assert.match(detailHtml, new RegExp(`<h1[^>]*>${escapeRegExp(service.name)}<\\/h1>`));
+    assert.match(detailHtml, new RegExp(escapeRegExp(service.description)));
+    assert.match(detailHtml, new RegExp(escapeRegExp(service.promise)));
+    assert.match(detailHtml, new RegExp(`data-whatsapp-service="${escapeRegExp(service.name)}"`));
+    assert.match(detailHtml, new RegExp(`src="${escapeRegExp(imageUrl + service.image)}"`));
+    for (const item of service.contents) {
+      assert.match(detailHtml, new RegExp(`<li>${escapeRegExp(item)}<\\/li>`));
+    }
+  }
 });

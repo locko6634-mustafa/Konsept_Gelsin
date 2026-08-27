@@ -155,12 +155,21 @@
 }
 
 .featured-card {
+  display: block;
   overflow: hidden;
   min-width: 0;
   border: 0.0625rem solid hsl(31 25% 87% / 0.7);
   border-radius: 1rem;
   background: var(--color-white);
   box-shadow: var(--shadow-raised);
+  color: var(--color-ink);
+  text-decoration: none;
+  transition: box-shadow 180ms var(--ease-out), transform 180ms var(--ease-out);
+}
+
+.featured-card:hover {
+  box-shadow: var(--shadow-paper);
+  transform: translateY(-0.12rem);
 }
 
 .featured-card__visual {

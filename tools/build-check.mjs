@@ -3,20 +3,24 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { validateMarkup } from "./markup-check.mjs";
+import { packagePageNames, pageNames } from "./page-manifest.mjs";
 
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
-const pageNames = ["index.html"];
 const requiredFiles = [
   "content/services.json",
   "css/base.css",
   "css/components.css",
   "css/motion.css",
   "css/pages/home.css",
+  "css/pages/package-detail.css",
   "css/responsive.css",
   "css/tokens.css",
   "js/home/app.js",
+  "js/package/app.js",
   "js/shared/contact.js",
   "js/shared/site.js",
+  "tools/page-manifest.mjs",
+  "tools/render-package-pages.mjs",
 ];
 const serviceImages = [
   "qr-memory-album.webp",
@@ -116,7 +120,7 @@ const pages = new Map(
 
 for (const [pageName, html] of pages) {
   issues.push(...validateMarkup(pageName, html, pages));
-  for (const match of html.matchAll(/\b(?:href|src)=["']([^"']+)["']/gi)) {
+  for (const match of html.matchAll(/\b(?:href|poster|src|srcset)=["']([^"']+)["']/gi)) {
     await verifyReference(pageName, match[1], projectRoot);
   }
 }
@@ -157,7 +161,20 @@ if (!Array.isArray(services) || services.length !== 6) {
 } else {
   const ids = new Set();
   for (const [index, service] of services.entries()) {
-    const requiredKeys = ["id", "number", "name", "shortName", "summary", "description", "promise", "contents"];
+    const requiredKeys = [
+      "id",
+      "number",
+      "page",
+      "image",
+      "mobileImage",
+      "imageAlt",
+      "name",
+      "shortName",
+      "summary",
+      "description",
+      "promise",
+      "contents",
+    ];
     for (const key of requiredKeys) {
       if (!(key in service)) issues.push(`content/services.json: ${index + 1}. kayıtta ${key} eksik`);
     }
@@ -172,6 +189,30 @@ if (!Array.isArray(services) || services.length !== 6) {
     if (!homeHtml.includes(`id="${service.id}"`)) issues.push(`index.html: hizmet id eksik (${service.id})`);
     if (!homeHtml.includes(`<h3>${service.name}</h3>`)) issues.push(`index.html: hizmet başlığı eksik (${service.name})`);
     if (!homeHtml.includes(`<p>${service.summary}</p>`)) issues.push(`index.html: hizmet özeti eksik (${service.name})`);
+    if (!homeHtml.includes(`href="${service.page}"`)) issues.push(`index.html: paket detay bağlantısı eksik (${service.page})`);
+
+    const detailHtml = pages.get(service.page);
+    if (!detailHtml) {
+      issues.push(`paket detay sayfası eksik: ${service.page}`);
+      continue;
+    }
+    for (const expected of [
+      `<h1 id="package-title">${service.name}</h1>`,
+      service.description,
+      service.promise,
+      `data-whatsapp-service="${service.name}"`,
+      `/media/images/${service.image}`,
+      `/media/images/${service.mobileImage}`,
+    ]) {
+      if (!detailHtml.includes(expected)) issues.push(`${service.page}: hizmet içeriği eksik (${expected})`);
+    }
+    for (const item of service.contents) {
+      if (!detailHtml.includes(`<li>${item}</li>`)) issues.push(`${service.page}: kapsam maddesi eksik (${item})`);
+    }
+  }
+
+  if (JSON.stringify(services.map(({ page }) => page)) !== JSON.stringify(packagePageNames)) {
+    issues.push("paket sayfa manifesti içerik kaynağıyla eşleşmiyor");
   }
 }
 
@@ -236,6 +277,6 @@ if (issues.length > 0) {
   process.exitCode = 1;
 } else {
   console.log(
-    `Derleme bütünlüğü geçti (tek landing page, ${cssFiles.length} CSS, ${moduleFiles.length} istemci modülü, ${services.length} hizmet, 12 WebP ve 2 hero PNG).`,
+    `Derleme bütünlüğü geçti (${pages.size} sayfa, ${cssFiles.length} CSS, ${moduleFiles.length} istemci modülü, ${services.length} hizmet, 12 WebP ve 2 hero PNG).`,
   );
 }

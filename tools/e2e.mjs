@@ -4,6 +4,8 @@ import os from "node:os";
 import path from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 
+import { services } from "./page-manifest.mjs";
+
 const projectRoot = process.cwd();
 const chromePath = process.env.CHROME_PATH || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const resultDirectory = path.join(projectRoot, "test-results");
@@ -13,7 +15,17 @@ const viewports = [
   { width: 768, height: 1024 },
   { width: 1440, height: 900 },
 ];
-const pages = [{ name: "home", pathname: "/" }];
+const pages = [
+  { kind: "home", name: "home", pathname: "/" },
+  ...services.map((service) => ({
+    image: service.image,
+    kind: "detail",
+    mobileImage: service.mobileImage,
+    name: service.page.replace(/\.html$/, ""),
+    pathname: `/${service.page}`,
+    serviceName: service.name,
+  })),
+];
 
 class CdpConnection {
   constructor(socket) {
@@ -201,6 +213,10 @@ function pageAuditExpression() {
     const mobileActionBar = document.querySelector(".mobile-action-bar");
     const mobileActionBarRect = mobileActionBar?.getBoundingClientRect();
     const mobileActionBarStyle = mobileActionBar ? getComputedStyle(mobileActionBar) : null;
+    const heroStage = document.querySelector(".hero__stage");
+    const heroActions = document.querySelector(".hero__actions");
+    const detailHeroGrid = document.querySelector(".package-detail-hero__inner");
+    const detailMediaGrid = document.querySelector(".package-media__grid");
     const overflowing = [...document.querySelectorAll("body *")]
       .filter(visible)
       .map((element) => ({ element, rect: element.getBoundingClientRect() }))
@@ -209,6 +225,7 @@ function pageAuditExpression() {
       .slice(0, 12);
     return {
       title: document.title,
+      pageKind: body.classList.contains("package-detail-page") ? "detail" : "home",
       lang: root.lang,
       h1Count: document.querySelectorAll("h1").length,
       mainCount: document.querySelectorAll("main").length,
@@ -217,11 +234,11 @@ function pageAuditExpression() {
       packageCount: document.querySelectorAll(".package").length,
       heroImageCount: document.querySelectorAll(".hero__background").length,
       heroImageSource: document.querySelector(".hero__background")?.currentSrc || "",
-      heroStageAlignment: getComputedStyle(document.querySelector(".hero__stage")).alignItems,
-      heroActionsPosition: getComputedStyle(document.querySelector(".hero__actions")).position,
+      heroStageAlignment: heroStage ? getComputedStyle(heroStage).alignItems : "",
+      heroActionsPosition: heroActions ? getComputedStyle(heroActions).position : "",
       heroActionsBottomGap: (() => {
-        const stageRect = document.querySelector(".hero__stage")?.getBoundingClientRect();
-        const actionsRect = document.querySelector(".hero__actions")?.getBoundingClientRect();
+        const stageRect = heroStage?.getBoundingClientRect();
+        const actionsRect = heroActions?.getBoundingClientRect();
         return stageRect && actionsRect ? stageRect.bottom - actionsRect.bottom : -1;
       })(),
       packageImageCount: document.querySelectorAll(".package img[src^='/media/images/'][src$='.webp']").length,
@@ -230,7 +247,15 @@ function pageAuditExpression() {
       formCount: document.querySelectorAll("form, input, select, textarea").length,
       conceptLineCount: document.querySelectorAll(".concept-line").length,
       retiredContactLinks: [...document.querySelectorAll("a[href]")].filter((link) => /iletisim\\.html/i.test(link.getAttribute("href"))).length,
-      directContactCta: document.querySelector("#iletisim [data-whatsapp-general]")?.href.startsWith("https://wa.me/905386888306?text=") ?? false,
+      directContactCta: document.querySelector("#iletisim [data-whatsapp-general], #iletisim [data-whatsapp-service]")?.href.startsWith("https://wa.me/905386888306?text=") ?? false,
+      detailHeroCount: document.querySelectorAll(".package-detail-hero").length,
+      detailHeroImageSource: document.querySelector(".package-detail-hero__media img")?.currentSrc || "",
+      detailHeroGridColumns: detailHeroGrid && visible(detailHeroGrid) ? getComputedStyle(detailHeroGrid).gridTemplateColumns.split(" ").length : 0,
+      detailMediaGridColumns: detailMediaGrid && visible(detailMediaGrid) ? getComputedStyle(detailMediaGrid).gridTemplateColumns.split(" ").length : 0,
+      detailPlaceholderCount: document.querySelectorAll(".package-video-placeholder").length,
+      detailScopeItems: document.querySelectorAll(".package-scope li").length,
+      detailServiceCtas: document.querySelectorAll("[data-whatsapp-service]").length,
+      videoElementCount: document.querySelectorAll("video, iframe").length,
       missingNames,
       smallTargets,
       rootScrollWidth: root.scrollWidth,
@@ -328,7 +353,7 @@ async function auditPage({ cdp, origin, page, viewport }) {
     await loaded;
     await evaluate(cdp, sessionId, "document.fonts.ready.then(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))");
     await evaluate(cdp, sessionId, `(async () => {
-      for (const image of document.querySelectorAll(".package img")) {
+      for (const image of document.querySelectorAll("img[loading='lazy']")) {
         image.scrollIntoView({ block: "center" });
         await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
         if (!image.complete) {
@@ -337,6 +362,7 @@ async function auditPage({ cdp, origin, page, viewport }) {
             image.addEventListener("error", resolve, { once: true });
           });
         }
+        if (typeof image.decode === "function") await image.decode().catch(() => {});
       }
     })()`);
     await evaluate(cdp, sessionId, "window.scrollTo(0, 0)");
@@ -352,61 +378,82 @@ async function auditPage({ cdp, origin, page, viewport }) {
     assert(audit.smallTargets.length === 0, `${page.name}/${viewport.width}: 44px altı hedefler ${JSON.stringify(audit.smallTargets)}.`);
     assert(audit.whatsappLinks, `${page.name}/${viewport.width}: WhatsApp bağlantıları hydrate edilmedi.`);
     assert(audit.ready === "true", `${page.name}/${viewport.width}: sayfa bootstrap tamamlanmadı.`);
-    assert(audit.sectionCount === 3, `${page.name}/${viewport.width}: ana section sayısı ${audit.sectionCount}.`);
+    assert(audit.pageKind === page.kind, `${page.name}/${viewport.width}: sayfa türü ${audit.pageKind}.`);
     assert(audit.retiredMemoryCount === 0, `${page.name}/${viewport.width}: kaldırılan memory-machine yapısı bulundu.`);
-    assert(audit.packageCount === 6, `${page.name}/${viewport.width}: hizmet bloğu sayısı ${audit.packageCount}.`);
-    assert(audit.heroImageCount === 1, `${page.name}/${viewport.width}: hero arka plan sayısı ${audit.heroImageCount}.`);
-    const expectedHeroAlignment = viewport.width <= 768 ? "flex-start" : "center";
-    assert(audit.heroStageAlignment === expectedHeroAlignment, `${page.name}/${viewport.width}: hero yazıları eski hizasında değil (${audit.heroStageAlignment}).`);
-    assert(audit.packageImageCount === 6, `${page.name}/${viewport.width}: paket WebP sayısı ${audit.packageImageCount}.`);
-    assert(audit.uniqueServiceImages.length === 6, `${page.name}/${viewport.width}: benzersiz hizmet görseli sayısı ${audit.uniqueServiceImages.length}.`);
     assert(audit.brokenImages.length === 0, `${page.name}/${viewport.width}: yüklenemeyen görseller ${JSON.stringify(audit.brokenImages)}.`);
-    assert(audit.formCount === 0, `${page.name}/${viewport.width}: landing page form alanı içeriyor.`);
+    assert(audit.formCount === 0, `${page.name}/${viewport.width}: sayfa form alanı içeriyor.`);
     assert(audit.conceptLineCount === 0, `${page.name}/${viewport.width}: kaldırılan hizmet geçiş çizgisi hâlâ görünüyor.`);
     assert(audit.retiredContactLinks === 0, `${page.name}/${viewport.width}: ayrı iletişim sayfası bağlantısı kaldı.`);
     assert(audit.directContactCta, `${page.name}/${viewport.width}: iletişim alanında doğrudan WhatsApp CTA bulunamadı.`);
-    assert(audit.heroActionsPosition === "absolute", `${page.name}/${viewport.width}: hero aksiyonları alanın altına sabitlenmedi (${audit.heroActionsPosition}).`);
-    assert(
-      audit.heroActionsBottomGap >= 23 && audit.heroActionsBottomGap <= 65,
-      `${page.name}/${viewport.width}: hero aksiyonlarının alt boşluğu beklenen aralıkta değil (${audit.heroActionsBottomGap}px).`,
-    );
-    assert(audit.featuredCards.length === 2, `${page.name}/${viewport.width}: iki öne çıkan kart görünmüyor.`);
-    assert(audit.processSteps.length === 3, `${page.name}/${viewport.width}: üç süreç adımı görünmüyor.`);
-    assert(audit.packageLinks.length === 6, `${page.name}/${viewport.width}: altı paket bağlantısı görünmüyor.`);
     assert(audit.visibleHeaderLinks.length === 2, `${page.name}/${viewport.width}: Paketler ve İletişim başlıkta birlikte görünmüyor.`);
-    assert(audit.featuredGridColumns === 2, `${page.name}/${viewport.width}: öne çıkan kartlar iki sütun değil.`);
-    assert(audit.packageGridColumns === 2, `${page.name}/${viewport.width}: paketler iki sütun değil.`);
-    assert(audit.contactBannerVisible, `${page.name}/${viewport.width}: iletişim bannerı görünmüyor.`);
-    assert(
-      audit.packageCards.every((card) => card.cardHeight >= 80),
-      `${page.name}/${viewport.width}: paket kartları yeterince büyük değil (${JSON.stringify(audit.packageCards)}).`,
-    );
-    assert(
-      audit.packageCards.every((card) => Math.abs(card.visualWidth - card.visualHeight) <= 1),
-      `${page.name}/${viewport.width}: paket görselleri kare değil (${JSON.stringify(audit.packageCards)}).`,
-    );
-    assert(
-      audit.packageCards.every((card) => card.contentWidth > 0),
-      `${page.name}/${viewport.width}: paket metni için alan kalmadı (${JSON.stringify(audit.packageCards)}).`,
-    );
-    assert(
-      audit.packageCards.every((card) => Math.abs(card.linkWidth - card.cardWidth) <= 2.1 && Math.abs(card.linkHeight - card.cardHeight) <= 2.1),
-      `${page.name}/${viewport.width}: paket bağlantısı kartın tamamını kaplamıyor (${JSON.stringify(audit.packageCards)}).`,
-    );
+
+    if (page.kind === "home") {
+      assert(audit.sectionCount === 3, `${page.name}/${viewport.width}: ana section sayısı ${audit.sectionCount}.`);
+      assert(audit.packageCount === 6, `${page.name}/${viewport.width}: hizmet bloğu sayısı ${audit.packageCount}.`);
+      assert(audit.heroImageCount === 1, `${page.name}/${viewport.width}: hero arka plan sayısı ${audit.heroImageCount}.`);
+      const expectedHeroAlignment = viewport.width <= 768 ? "flex-start" : "center";
+      assert(audit.heroStageAlignment === expectedHeroAlignment, `${page.name}/${viewport.width}: hero yazıları eski hizasında değil (${audit.heroStageAlignment}).`);
+      assert(audit.packageImageCount === 6, `${page.name}/${viewport.width}: paket WebP sayısı ${audit.packageImageCount}.`);
+      assert(audit.uniqueServiceImages.length === 6, `${page.name}/${viewport.width}: benzersiz hizmet görseli sayısı ${audit.uniqueServiceImages.length}.`);
+      assert(audit.heroActionsPosition === "absolute", `${page.name}/${viewport.width}: hero aksiyonları alanın altına sabitlenmedi (${audit.heroActionsPosition}).`);
+      assert(
+        audit.heroActionsBottomGap >= 23 && audit.heroActionsBottomGap <= 65,
+        `${page.name}/${viewport.width}: hero aksiyonlarının alt boşluğu beklenen aralıkta değil (${audit.heroActionsBottomGap}px).`,
+      );
+      assert(audit.featuredCards.length === 2, `${page.name}/${viewport.width}: iki öne çıkan kart görünmüyor.`);
+      assert(audit.processSteps.length === 3, `${page.name}/${viewport.width}: üç süreç adımı görünmüyor.`);
+      assert(audit.packageLinks.length === 6, `${page.name}/${viewport.width}: altı paket bağlantısı görünmüyor.`);
+      assert(audit.featuredGridColumns === 2, `${page.name}/${viewport.width}: öne çıkan kartlar iki sütun değil.`);
+      assert(audit.packageGridColumns === 2, `${page.name}/${viewport.width}: paketler iki sütun değil.`);
+      assert(audit.contactBannerVisible, `${page.name}/${viewport.width}: iletişim bannerı görünmüyor.`);
+      assert(
+        audit.packageCards.every((card) => card.cardHeight >= 80),
+        `${page.name}/${viewport.width}: paket kartları yeterince büyük değil (${JSON.stringify(audit.packageCards)}).`,
+      );
+      assert(
+        audit.packageCards.every((card) => Math.abs(card.visualWidth - card.visualHeight) <= 1),
+        `${page.name}/${viewport.width}: paket görselleri kare değil (${JSON.stringify(audit.packageCards)}).`,
+      );
+      assert(
+        audit.packageCards.every((card) => card.contentWidth > 0),
+        `${page.name}/${viewport.width}: paket metni için alan kalmadı (${JSON.stringify(audit.packageCards)}).`,
+      );
+      assert(
+        audit.packageCards.every((card) => Math.abs(card.linkWidth - card.cardWidth) <= 2.1 && Math.abs(card.linkHeight - card.cardHeight) <= 2.1),
+        `${page.name}/${viewport.width}: paket bağlantısı kartın tamamını kaplamıyor (${JSON.stringify(audit.packageCards)}).`,
+      );
+    } else {
+      const expectedColumns = viewport.width <= 768 ? 1 : 2;
+      const expectedDetailImage = viewport.width <= 576 ? page.mobileImage : page.image;
+      assert(audit.sectionCount === 4, `${page.name}/${viewport.width}: detay section sayısı ${audit.sectionCount}.`);
+      assert(audit.packageCount === 0, `${page.name}/${viewport.width}: ana sayfa paket kartları detay sayfasına taşındı.`);
+      assert(audit.detailHeroCount === 1, `${page.name}/${viewport.width}: paket hero alanı bulunamadı.`);
+      assert(audit.detailHeroImageSource.endsWith(`/media/images/${expectedDetailImage}`), `${page.name}/${viewport.width}: doğru paket görseli yüklenmedi (${audit.detailHeroImageSource}).`);
+      assert(audit.detailHeroGridColumns === expectedColumns, `${page.name}/${viewport.width}: hero sütun sayısı ${audit.detailHeroGridColumns}.`);
+      assert(audit.detailMediaGridColumns === expectedColumns, `${page.name}/${viewport.width}: medya sütun sayısı ${audit.detailMediaGridColumns}.`);
+      assert(audit.detailPlaceholderCount === 1, `${page.name}/${viewport.width}: geçici video alanı sayısı ${audit.detailPlaceholderCount}.`);
+      assert(audit.detailScopeItems >= 5, `${page.name}/${viewport.width}: paket kapsamı eksik (${audit.detailScopeItems}).`);
+      assert(audit.detailServiceCtas === 3, `${page.name}/${viewport.width}: hizmete özel CTA sayısı ${audit.detailServiceCtas}.`);
+      assert(audit.videoElementCount === 0, `${page.name}/${viewport.width}: kaynaksız video/iframe bulunuyor.`);
+    }
 
     if (viewport.width <= 768) {
       assert(audit.mobileActionBar.visible, `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu görünmüyor.`);
       assert(audit.mobileActionBar.position === "fixed", `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu sabit değil.`);
       assert(Math.abs(audit.mobileActionBar.bottom - viewport.height) <= 1, `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu viewport altına oturmuyor (${audit.mobileActionBar.bottom}).`);
       assert(audit.bodyPaddingBottom >= audit.mobileActionBar.height, `${page.name}/${viewport.width}: alt çubuk için içerik rezervi yetersiz (${audit.bodyPaddingBottom} < ${audit.mobileActionBar.height}).`);
-      assert(audit.heroImageSource.endsWith("/media/images/hero-still-life-mobile-v3.png"), `${page.name}/${viewport.width}: mobil hero görseli yüklenmedi (${audit.heroImageSource}).`);
+      if (page.kind === "home") {
+        assert(audit.heroImageSource.endsWith("/media/images/hero-still-life-mobile-v3.png"), `${page.name}/${viewport.width}: mobil hero görseli yüklenmedi (${audit.heroImageSource}).`);
+      }
     } else {
       assert(!audit.mobileActionBar.visible, `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu masaüstünde görünür.`);
-      assert(audit.heroImageSource.endsWith("/media/images/hero-still-life-v2.png"), `${page.name}/${viewport.width}: masaüstü hero görseli yüklenmedi (${audit.heroImageSource}).`);
+      if (page.kind === "home") {
+        assert(audit.heroImageSource.endsWith("/media/images/hero-still-life-v2.png"), `${page.name}/${viewport.width}: masaüstü hero görseli yüklenmedi (${audit.heroImageSource}).`);
+      }
     }
 
     const focusState = await evaluate(cdp, sessionId, `(() => {
-      const target = document.querySelector("main [data-whatsapp-general]");
+      const target = document.querySelector("main [data-whatsapp-general], main [data-whatsapp-service]");
       target.focus();
       const style = getComputedStyle(target);
       return {
@@ -424,7 +471,7 @@ async function auditPage({ cdp, origin, page, viewport }) {
 
     if (viewport.width === 375) {
       const reducedMotion = await evaluate(cdp, sessionId, `(() => {
-        const heroCopy = document.querySelector(".hero__copy") || document.body;
+        const heroCopy = document.querySelector(".hero__copy, .package-detail-hero__copy") || document.body;
         return { media: matchMedia("(prefers-reduced-motion: reduce)").matches, duration: getComputedStyle(heroCopy).animationDuration };
       })()`);
       assert(reducedMotion.media, `${page.name}/375: reduced-motion emülasyonu çalışmadı.`);
@@ -482,6 +529,10 @@ try {
     windowsHide: true,
   });
   await waitForHttp(`${origin}/`, server);
+  for (const page of pages) {
+    const response = await fetch(`${origin}${page.pathname}`);
+    assert(response.status === 200, `${page.pathname} ${response.status} döndürdü.`);
+  }
   const retiredContactResponse = await fetch(`${origin}/iletisim.html`);
   assert(retiredContactResponse.status === 404, `Kaldırılan iletişim sayfası ${retiredContactResponse.status} döndürdü.`);
 
@@ -516,8 +567,9 @@ try {
     }
   }
 
-  assert(results.length === 4, "Dört responsive landing page senaryosu tamamlanmadı.");
-  console.log(`E2E geçti: ${results.length} landing page senaryosu, 4 ekran görüntüsü, yatay taşma ve erişilebilirlik kontrolleri.`);
+  const expectedScenarioCount = pages.length * viewports.length;
+  assert(results.length === expectedScenarioCount, `${expectedScenarioCount} responsive sayfa senaryosu tamamlanmadı.`);
+  console.log(`E2E geçti: ${results.length} sayfa senaryosu, ${results.length} ekran görüntüsü, yatay taşma ve erişilebilirlik kontrolleri.`);
 } finally {
   cdp?.close();
   if (chrome && chrome.exitCode === null) chrome.kill();

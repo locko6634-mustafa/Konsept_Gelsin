@@ -1,6 +1,6 @@
 # Konsept Gelsin
 
-Konsept Gelsin; düğün ve etkinlikler için altı hatıra hizmetini tanıtan, ziyaretçiyi doğrudan WhatsApp görüşmesine yönlendiren tek sayfalık statik bir landing page'dir. Vanilla HTML5, CSS ve JavaScript ES Modules kullanır; form, ayrı iletişim sayfası, backend, üyelik ve ödeme sistemi içermez.
+Konsept Gelsin; düğün ve etkinlikler için altı hatıra hizmetini tanıtan, ziyaretçiyi doğrudan WhatsApp görüşmesine yönlendiren çok sayfalı statik bir web sitesidir. Vanilla HTML5, CSS ve JavaScript ES Modules kullanır; form, ayrı iletişim sayfası, backend, üyelik ve ödeme sistemi içermez.
 
 ## Sayfa ve ana akış
 
@@ -8,6 +8,7 @@ Konsept Gelsin; düğün ve etkinlikler için altı hatıra hizmetini tanıtan, 
   1. **Hero:** Solda marka mesajını, sağda ImageGen ile üretilen çiçekli ve mum ışıklı düğün masası ile Polaroid çift kompozisyonunu kullanır.
   2. **Paketler:** Öne çıkan iki konsepti, altı büyük hizmet kartını ve üç adımlı çalışma akışını hem masaüstünde hem mobilde aynı içerik sırasıyla sunar.
   3. **WhatsApp iletişim:** Form göstermeden, ziyaretçiyi doğrudan Konsept Gelsin WhatsApp hattına taşır.
+- Altı paket detay sayfası: Her hizmet için tanıtım yazısı, kapsam listesi, mevcut temsili görseller, geçici video ön izleme alanı ve hizmete özel WhatsApp CTA'sı sunar.
 
 Hero metinleri görselin içine gömülü değildir; erişilebilir HTML olarak yönetilir. ImageGen masaüstü için yatay, mobil için dikey bir arka plan üretir; `picture/source` doğru varyantı seçerken metin ve CTA'lar her iki kırılımda da görselin üstünde kalır. Paket kartları logo kullanmaz ve yeni, sıcak düğün fotoğraflarını kare kompozisyonda gösterir. Mobilde yalnız hızlı işlem çubuğu cihaza özgüdür; ana sayfa yapısı ve görsel dili masaüstüyle ortaktır. Görseller temsili yaratıcı varlıklardır; gerçek müşteri işi veya etkinlik kaydı oldukları iddia edilmez.
 
@@ -23,7 +24,9 @@ Komut, yerel statik geliştirme sunucusunu başlatır. Terminalde gösterilen ye
 
 ## İçerik yönetimi
 
-Altı hizmete ait ad, açıklama, vaat ve kapsam maddelerinin içerik otoritesi `content/services.json` dosyasıdır. Hizmet içeriği değiştirildiğinde önce bu dosya güncellenmeli; HTML ile içerik kaynağı arasındaki uyum yayın öncesi doğrulama kapısıyla kontrol edilmelidir.
+Altı hizmete ait ad, açıklama, vaat, medya eşlemesi ve kapsam maddelerinin içerik otoritesi `content/services.json` dosyasıdır. Hizmet içeriği değiştirildiğinde önce bu dosya güncellenmeli, ardından `npm run content:sync` çalıştırılmalıdır. `npm run content:check`, üretilen detay sayfalarıyla içerik kaynağı arasındaki sapmayı yayın öncesi engeller.
+
+Depoda henüz gerçek paket videosu bulunmadığı için detay sayfalarında mevcut görsellerle açıkça etiketlenmiş video ön izleme alanları kullanılır. Bu alanlar gerçek çekimler hazır olduğunda erişilebilir, kontrollü video bileşenleriyle değiştirilmelidir.
 
 ## WhatsApp iletişimi
 
@@ -40,7 +43,7 @@ tests/               İçerik, iletişim ve tarayıcı doğrulamaları
 tools/               Yerel sunucu ve kalite kontrol araçları
 deploy/              Nginx, Docker ve Traefik üretim tanımları
 storage/public-media Sunucuda /media URL alanından sunulan görseller
-index.html            Tek landing page
+*.html                Landing page ve altı paket detay sayfası
 ```
 
 ## Kalite ve testler

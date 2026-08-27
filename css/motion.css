@@ -13,7 +13,8 @@
   }
 }
 
-html[data-ready="true"] .hero__copy {
+html[data-ready="true"] .hero__copy,
+html[data-ready="true"] .package-detail-hero__copy {
   animation: hero-copy-arrive 720ms var(--ease-out) both;
 }
 

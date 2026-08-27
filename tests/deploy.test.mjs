@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
+import { packagePageNames } from "../tools/page-manifest.mjs";
+
 const [workflow, compose, dockerfile, nginx, e2e] = await Promise.all([
   readFile(".github/workflows/deploy.yml", "utf8"),
   readFile("deploy/compose.production.yaml", "utf8"),
@@ -32,6 +34,7 @@ test("main push yalnız başarılı kalite kapısından sonra üretime gider", (
 test("üretim containerı yetkileri daraltılmış ve healthchecklidir", () => {
   assert.match(dockerfile, /^FROM\s+nginx:[^\s]+@sha256:[a-f0-9]{64}/m);
   assert.match(dockerfile, /USER nginx/);
+  for (const pageName of packagePageNames) assert.match(dockerfile, new RegExp(pageName.replace(".", "\\.")));
   assert.match(compose, /read_only:\s*true/);
   assert.match(compose, /no-new-privileges:true/);
   assert.match(compose, /cap_drop:\s*\n\s+- ALL/);
@@ -43,7 +46,7 @@ test("üretim containerı yetkileri daraltılmış ve healthchecklidir", () => {
   assert.doesNotMatch(dockerfile, /COPY assets(?:\s|$)/);
 });
 
-test("Nginx yalnız statik landing yüzeyini güvenlik başlıklarıyla sunar", () => {
+test("Nginx çok sayfalı statik yüzeyi güvenlik başlıklarıyla sunar", () => {
   assert.match(nginx, /Content-Security-Policy/);
   assert.match(nginx, /Strict-Transport-Security/);
   assert.match(nginx, /X-Content-Type-Options/);

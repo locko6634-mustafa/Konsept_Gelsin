@@ -2,8 +2,9 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+import { pageNames } from "./page-manifest.mjs";
+
 const projectRoot = fileURLToPath(new URL("../", import.meta.url));
-const pageNames = ["index.html"];
 
 function withoutComments(html) {
   return html.replace(/<!--[\s\S]*?-->/g, "");
