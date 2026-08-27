@@ -1,6 +1,5 @@
 import { spawn } from "node:child_process";
-import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
-import { createServer } from "node:net";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
@@ -126,40 +125,20 @@ async function waitForHttp(url, child) {
   throw new Error("Yerel sunucu zamanında başlamadı.");
 }
 
-async function availablePort() {
-  return new Promise((resolve, reject) => {
-    const probe = createServer();
-    probe.unref();
-    probe.once("error", reject);
-    probe.listen(0, "127.0.0.1", () => {
-      const address = probe.address();
-      const port = typeof address === "object" && address ? address.port : 0;
-      probe.close((error) => {
-        if (error) reject(error);
-        else if (port) resolve(port);
-        else reject(new Error("Chrome için boş yerel port ayrılamadı."));
-      });
-    });
-  });
-}
-
-async function devtoolsEndpoint(port, chrome, chromeFailure) {
-  const endpointUrl = `http://127.0.0.1:${port}/json/version`;
+async function devtoolsEndpoint(profileDirectory, chrome, chromeFailure) {
+  const portFile = path.join(profileDirectory, "DevToolsActivePort");
   for (let attempt = 0; attempt < 200; attempt += 1) {
     if (chromeFailure()) throw new Error(`Chrome başlatılamadı: ${chromeFailure().message}`);
     if (chrome.exitCode !== null) throw new Error(`Chrome erken kapandı (${chrome.exitCode}).`);
     try {
-      const response = await fetch(endpointUrl);
-      if (response.ok) {
-        const version = await response.json();
-        if (version.webSocketDebuggerUrl) return version.webSocketDebuggerUrl;
-      }
+      const [port, endpointPath] = (await readFile(portFile, "utf8")).trim().split(/\r?\n/);
+      if (port && endpointPath) return `ws://127.0.0.1:${port}${endpointPath}`;
     } catch {
-      // Chrome henüz DevTools HTTP uç noktasını açmadı.
+      // Chrome henüz atomik olarak ayırdığı DevTools portunu yazmadı.
     }
     await delay(100);
   }
-  throw new Error(`Chrome DevTools uç noktası bulunamadı (${endpointUrl}).`);
+  throw new Error(`Chrome DevTools port dosyası bulunamadı (${portFile}).`);
 }
 
 async function evaluate(cdp, sessionId, expression) {
@@ -506,7 +485,6 @@ try {
   const retiredContactResponse = await fetch(`${origin}/iletisim.html`);
   assert(retiredContactResponse.status === 404, `Kaldırılan iletişim sayfası ${retiredContactResponse.status} döndürdü.`);
 
-  const chromePort = await availablePort();
   const chromeArgs = [
     "--headless=new",
     "--disable-background-networking",
@@ -519,7 +497,7 @@ try {
     "--no-default-browser-check",
     "--no-first-run",
     "--remote-debugging-address=127.0.0.1",
-    `--remote-debugging-port=${chromePort}`,
+    "--remote-debugging-port=0",
     `--user-data-dir=${profileDirectory}`,
     "about:blank",
   ];
@@ -529,7 +507,7 @@ try {
     chromeSpawnFailure = error;
   });
 
-  cdp = await CdpConnection.connect(await devtoolsEndpoint(chromePort, chrome, () => chromeSpawnFailure));
+  cdp = await CdpConnection.connect(await devtoolsEndpoint(profileDirectory, chrome, () => chromeSpawnFailure));
   const results = [];
   for (const page of pages) {
     for (const viewport of viewports) {
