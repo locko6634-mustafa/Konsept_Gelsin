@@ -38,6 +38,9 @@ test("üretim containerı yetkileri daraltılmış ve healthchecklidir", () => {
   assert.match(compose, /healthcheck:/);
   assert.match(compose, /name: edge_proxy/);
   assert.match(compose, /Host\(`konseptgelsin\.com`\)/);
+  assert.match(compose, /source: \$\{PUBLIC_MEDIA_DIR:-\.\.\/storage\/public-media\}/);
+  assert.match(compose, /target: \/srv\/konsept-gelsin-media/);
+  assert.doesNotMatch(dockerfile, /COPY assets(?:\s|$)/);
 });
 
 test("Nginx yalnız statik landing yüzeyini güvenlik başlıklarıyla sunar", () => {
@@ -45,5 +48,7 @@ test("Nginx yalnız statik landing yüzeyini güvenlik başlıklarıyla sunar", 
   assert.match(nginx, /Strict-Transport-Security/);
   assert.match(nginx, /X-Content-Type-Options/);
   assert.match(nginx, /location = \/healthz/);
+  assert.match(nginx, /location \^~ \/media\/images\//);
+  assert.match(nginx, /alias \/srv\/konsept-gelsin-media\/images\//);
   assert.match(nginx, /limit_except GET HEAD/);
 });

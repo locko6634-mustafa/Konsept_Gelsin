@@ -171,11 +171,11 @@
 }
 
 .featured-card__visual--qr {
-  background-image: url("../../assets/images/qr-memory-album.webp");
+  background-image: url("/media/images/qr-memory-album.webp");
 }
 
 .featured-card__visual--phone {
-  background-image: url("../../assets/images/audio-phone.webp");
+  background-image: url("/media/images/audio-phone.webp");
 }
 
 .featured-card__content {
@@ -424,7 +424,7 @@
   background-color: var(--color-orange);
   background-image:
     linear-gradient(90deg, hsl(24 92% 39% / 0.08) 0%, hsl(24 92% 39% / 0.84) 46%, var(--color-orange) 74%),
-    url("../../assets/images/live-stream.webp");
+    url("/media/images/live-stream.webp");
   background-position: center, left center;
   background-size: cover, 62% auto;
   background-repeat: no-repeat;

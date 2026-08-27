@@ -79,7 +79,9 @@ async function verifyReference(sourceFile, rawReference, baseDirectory) {
     return;
   }
 
-  const absolutePath = path.resolve(baseDirectory, decodedPath.replace(/^\/+/, ""));
+  const absolutePath = decodedPath.startsWith("/media/")
+    ? path.resolve(projectRoot, "storage", "public-media", decodedPath.slice("/media/".length))
+    : path.resolve(baseDirectory, decodedPath.replace(/^\/+/, ""));
   const relativeToRoot = path.relative(projectRoot, absolutePath);
   if (relativeToRoot.startsWith("..") || path.isAbsolute(relativeToRoot)) {
     issues.push(`${sourceFile}: proje dışına çıkan adres (${reference})`);
@@ -185,34 +187,36 @@ if (divClasses.filter((tokens) => tokens.includes("package")).length !== 6) {
   issues.push("index.html: paket alanı tam olarak altı gerçek package div içermeli");
 }
 
-const webpFiles = (await readdir(path.join(projectRoot, "assets", "images")))
+const imageDirectory = path.join(projectRoot, "storage", "public-media", "images");
+const publicImageUrl = "/media/images/";
+const webpFiles = (await readdir(imageDirectory))
   .filter((name) => name.toLowerCase().endsWith(".webp"))
   .sort();
 if (JSON.stringify(webpFiles) !== JSON.stringify([...serviceImages, ...serviceMobileImages].sort())) {
-  issues.push(`assets/images: beklenen masaüstü ve mobil WebP görselleriyle eşleşmiyor (${webpFiles.join(", ")})`);
+  issues.push(`storage/public-media/images: beklenen masaüstü ve mobil WebP görselleriyle eşleşmiyor (${webpFiles.join(", ")})`);
 }
 for (const imageName of serviceImages) {
-  const relativePath = `assets/images/${imageName}`;
+  const relativePath = `storage/public-media/images/${imageName}`;
   const info = await fileInfo(path.join(projectRoot, relativePath));
   if (!info || info.size <= 1_024) issues.push(`${relativePath}: görsel eksik veya boş`);
-  const escapedPath = relativePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const escapedPath = `${publicImageUrl}${imageName}`.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const uses = homeHtml.match(new RegExp(`src=["']${escapedPath}["']`, "g")) ?? [];
   if (uses.length !== 1) issues.push(`${relativePath}: paket alanında tam bir kez kullanılmalı`);
 }
 for (const imageName of serviceMobileImages) {
-  const relativePath = `assets/images/${imageName}`;
+  const relativePath = `storage/public-media/images/${imageName}`;
   const info = await fileInfo(path.join(projectRoot, relativePath));
   if (!info || info.size <= 1_024) issues.push(`${relativePath}: mobil görsel eksik veya boş`);
-  const escapedPath = relativePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const escapedPath = `${publicImageUrl}${imageName}`.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const uses = homeHtml.match(new RegExp(`srcset=["']${escapedPath}["']`, "g")) ?? [];
   if (uses.length !== 1) issues.push(`${relativePath}: mobil paket alanında tam bir kez kullanılmalı`);
 }
 
 for (const imageName of heroImages) {
-  const heroImagePath = `assets/images/${imageName}`;
+  const heroImagePath = `storage/public-media/images/${imageName}`;
   const heroImageInfo = await fileInfo(path.join(projectRoot, heroImagePath));
   if (!heroImageInfo || heroImageInfo.size <= 1_024) issues.push(`${heroImagePath}: hero görseli eksik veya boş`);
-  const escapedHeroImagePath = heroImagePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const escapedHeroImagePath = `${publicImageUrl}${imageName}`.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const heroImageUses = homeHtml.match(new RegExp(`(?:src|srcset)=["']${escapedHeroImagePath}["']`, "g")) ?? [];
   if (heroImageUses.length !== 1) issues.push(`${heroImagePath}: hero içinde tam bir kez kullanılmalı`);
 }

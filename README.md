@@ -32,13 +32,14 @@ Sayfadaki WhatsApp bağlantıları `wa.me` üzerinden doğrudan **+90 538 688 83
 ## Klasör yapısı
 
 ```text
-assets/              Yerel fontlar, ikonlar ve ImageGen paket görselleri
+assets/              Yerel fontlar ve lisans metinleri
 content/             Hizmet içeriklerinin tek kaynağı
 css/                 Token, temel, bileşen, sayfa, responsive ve motion stilleri
 js/                  Sayfa girişi ile ortak WhatsApp modülleri
 tests/               İçerik, iletişim ve tarayıcı doğrulamaları
 tools/               Yerel sunucu ve kalite kontrol araçları
 deploy/              Nginx, Docker ve Traefik üretim tanımları
+storage/public-media Sunucuda /media URL alanından sunulan görseller
 index.html            Tek landing page
 ```
 
@@ -60,7 +61,7 @@ npm run validate
 
 ## Otomatik üretim dağıtımı
 
-`.github/workflows/deploy.yml`, `main` dalına gelen ilk ve sonraki her push'ta önce `npm run validate` çalıştırır. Kapı başarılı olursa exact commit SHA ile sürümlü bir paket oluşturur, paketi SSH üzerinden `/home/locko-admin/apps/konsept-gelsin` altına aktarır ve mevcut `edge_proxy` ağına bağlı, yetkileri daraltılmış Nginx container'ını başlatır. Yeni container healthcheck'i geçmezse önceki başarılı sürüm yeniden etkinleştirilir.
+`.github/workflows/deploy.yml`, `main` dalına gelen ilk ve sonraki her push'ta önce `npm run validate` çalıştırır. Kapı başarılı olursa exact commit SHA ile sürümlü bir paket oluşturur, paketi SSH üzerinden `/home/locko-admin/apps/konsept-gelsin` altına aktarır ve mevcut `edge_proxy` ağına bağlı, yetkileri daraltılmış Nginx container'ını başlatır. `storage/public-media` görselleri container'a salt okunur bağlanır ve `/media/images/...` URL'lerinden sunulur. Yeni container healthcheck'i geçmezse önceki başarılı sürüm yeniden etkinleştirilir.
 
 Workflow, GitHub'daki `production` environment'ında şu secret'ları bekler:
 

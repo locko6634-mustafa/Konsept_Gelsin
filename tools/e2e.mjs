@@ -245,7 +245,7 @@ function pageAuditExpression() {
         const actionsRect = document.querySelector(".hero__actions")?.getBoundingClientRect();
         return stageRect && actionsRect ? stageRect.bottom - actionsRect.bottom : -1;
       })(),
-      packageImageCount: document.querySelectorAll(".package img[src^='assets/images/'][src$='.webp']").length,
+      packageImageCount: document.querySelectorAll(".package img[src^='/media/images/'][src$='.webp']").length,
       uniqueServiceImages: [...new Set([...document.querySelectorAll(".package img")].map((image) => image.getAttribute("src")))].sort(),
       brokenImages: [...document.images].filter((image) => image.complete && image.naturalWidth === 0).map((image) => image.getAttribute("src")),
       formCount: document.querySelectorAll("form, input, select, textarea").length,
@@ -420,10 +420,10 @@ async function auditPage({ cdp, origin, page, viewport }) {
       assert(audit.mobileActionBar.position === "fixed", `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu sabit değil.`);
       assert(Math.abs(audit.mobileActionBar.bottom - viewport.height) <= 1, `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu viewport altına oturmuyor (${audit.mobileActionBar.bottom}).`);
       assert(audit.bodyPaddingBottom >= audit.mobileActionBar.height, `${page.name}/${viewport.width}: alt çubuk için içerik rezervi yetersiz (${audit.bodyPaddingBottom} < ${audit.mobileActionBar.height}).`);
-      assert(audit.heroImageSource.endsWith("/assets/images/hero-still-life-mobile-v3.png"), `${page.name}/${viewport.width}: mobil hero görseli yüklenmedi (${audit.heroImageSource}).`);
+      assert(audit.heroImageSource.endsWith("/media/images/hero-still-life-mobile-v3.png"), `${page.name}/${viewport.width}: mobil hero görseli yüklenmedi (${audit.heroImageSource}).`);
     } else {
       assert(!audit.mobileActionBar.visible, `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu masaüstünde görünür.`);
-      assert(audit.heroImageSource.endsWith("/assets/images/hero-still-life-v2.png"), `${page.name}/${viewport.width}: masaüstü hero görseli yüklenmedi (${audit.heroImageSource}).`);
+      assert(audit.heroImageSource.endsWith("/media/images/hero-still-life-v2.png"), `${page.name}/${viewport.width}: masaüstü hero görseli yüklenmedi (${audit.heroImageSource}).`);
     }
 
     const focusState = await evaluate(cdp, sessionId, `(() => {

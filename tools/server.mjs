@@ -8,6 +8,7 @@ const projectRoot = await realpath(fileURLToPath(new URL("../", import.meta.url)
 const host = process.env.HOST?.trim() || "127.0.0.1";
 const port = Number.parseInt(process.env.PORT || "4173", 10);
 const publicDirectories = new Set(["assets", "css", "js"]);
+const mediaRoot = path.join(projectRoot, "storage", "public-media");
 const publicRootFiles = new Set(["index.html"]);
 const mimeTypes = new Map([
   [".avif", "image/avif"],
@@ -74,6 +75,7 @@ function requestedPath(requestUrl) {
   const segments = relativePath.split("/").filter(Boolean);
   if (segments.length === 0 || segments.some((segment) => segment.startsWith("."))) return null;
   if (segments.length === 1) return publicRootFiles.has(relativePath) ? relativePath : null;
+  if (segments[0] === "media" && segments[1] === "images") return relativePath;
   return publicDirectories.has(segments[0]) ? relativePath : null;
 }
 
@@ -81,15 +83,18 @@ async function fileForRequest(requestUrl) {
   const relativePath = requestedPath(requestUrl);
   if (!relativePath) return null;
 
-  const candidate = path.resolve(projectRoot, relativePath);
-  const relativeToRoot = path.relative(projectRoot, candidate);
+  const isMedia = relativePath.startsWith("media/");
+  const servingRoot = isMedia ? mediaRoot : projectRoot;
+  const servedPath = isMedia ? relativePath.slice("media/".length) : relativePath;
+  const candidate = path.resolve(servingRoot, servedPath);
+  const relativeToRoot = path.relative(servingRoot, candidate);
   if (relativeToRoot.startsWith("..") || path.isAbsolute(relativeToRoot)) return null;
 
   try {
     const fileInfo = await stat(candidate);
     if (!fileInfo.isFile()) return null;
     const resolvedFile = await realpath(candidate);
-    const resolvedRelative = path.relative(projectRoot, resolvedFile);
+    const resolvedRelative = path.relative(servingRoot, resolvedFile);
     if (resolvedRelative.startsWith("..") || path.isAbsolute(resolvedRelative)) return null;
     return { fileInfo, path: resolvedFile };
   } catch (error) {
