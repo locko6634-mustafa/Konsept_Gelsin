@@ -37,6 +37,25 @@ test("tüm paket detay sayfaları ortak HTML ve erişilebilirlik sözleşmesini 
   }
 });
 
+test("paket sayfaları geçiş güvenli medya, responsive ve bootstrap dosyalarını yükler", () => {
+  for (const pageName of packagePageNames) {
+    const html = pages.get(pageName);
+    const detailIndex = html.indexOf('href="css/pages/package-detail.css"');
+    const mediaIndex = html.indexOf('href="css/pages/package-media.css"');
+    const sharedResponsiveIndex = html.indexOf('href="css/responsive.css"');
+    const detailResponsiveIndex = html.indexOf('href="css/pages/package-detail-responsive.css"');
+
+    assert.ok(detailIndex >= 0 && mediaIndex > detailIndex, `${pageName}: yeni medya stili detay stilinden sonra yüklenmeli`);
+    assert.notEqual(sharedResponsiveIndex, -1, `${pageName}: ortak responsive stil bağlantısı eksik`);
+    assert.ok(
+      detailResponsiveIndex > sharedResponsiveIndex,
+      `${pageName}: paket responsive stilleri ortak katmandan sonra yüklenmeli`,
+    );
+    assert.match(html, /<script type="module" src="js\/package\/detail-app\.js"><\/script>/);
+    assert.doesNotMatch(html, /<script type="module" src="js\/package\/app\.js"><\/script>/);
+  }
+});
+
 test("paket sayfaları benzersiz SEO başlıkları ve canonical adresleri taşır", () => {
   const titles = packagePageNames.map((pageName) => tagContent(pages.get(pageName), "title"));
   const canonicals = packagePageNames.map((pageName) => canonicalHref(pages.get(pageName)));
@@ -66,13 +85,16 @@ test("her detay sayfası kendi hizmet içeriğini, geri yolunu ve WhatsApp CTA'l
   }
 });
 
-test("video alanları kaynak yokken bozuk oynatıcı yerine açık etiketli placeholder kullanır", () => {
+test("medya alanları sade fotoğraf mozaiği ve iki dikey video kapağı kullanır", () => {
   for (const pageName of packagePageNames) {
     const html = pages.get(pageName);
     assert.doesNotMatch(html, /<(?:audio|iframe|video)\b/i);
-    assert.equal((html.match(/\bclass="package-video-placeholder"/g) ?? []).length, 1);
-    assert.match(html, /Örnek video alanı/);
-    assert.match(html, /Orijinal çekim eklenecek/);
-    assert.doesNotMatch(html, /package-video-placeholder[^>]*(?:href|tabindex|type)=/i);
+    assert.equal((html.match(/\bclass="package-photo-card/g) ?? []).length, 8);
+    assert.equal((html.match(/\bclass="package-video-card"/g) ?? []).length, 2);
+    assert.equal((html.match(/\bclass="package-gallery-toggle"/g) ?? []).length, 1);
+    assert.match(html, /aria-controls="package-photo-gallery"/);
+    assert.match(html, />Tümünü Gör</);
+    assert.doesNotMatch(html, /<figcaption\b/i);
+    assert.doesNotMatch(html, /Örnek|Orijinal|Geçici medya|güncellenecek|gerçek paket videosu/i);
   }
 });

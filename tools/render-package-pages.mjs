@@ -31,7 +31,7 @@ export function renderPackagePage(service) {
   const imageAlt = escapeHtml(service.imageAlt);
   const page = escapeHtml(service.page);
   const canonical = `https://konseptgelsin.com/${page}`;
-  const metaDescription = escapeHtml(`${service.summary} ${service.name} paketinin kapsamını ve örnek medya alanını inceleyin.`);
+  const metaDescription = escapeHtml(`${service.summary} ${service.name} paketinin kapsamını ve detaylarını inceleyin.`);
 
   return `<!doctype html>
 <html lang="tr">
@@ -54,7 +54,9 @@ export function renderPackagePage(service) {
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/pages/package-detail.css">
+    <link rel="stylesheet" href="css/pages/package-media.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/pages/package-detail-responsive.css">
     <link rel="stylesheet" href="css/motion.css">
     <title>${name} | Konsept Gelsin</title>
   </head>
@@ -105,7 +107,6 @@ export function renderPackagePage(service) {
               <source media="(max-width: 36rem)" srcset="/media/images/${mobileImage}" width="960" height="960">
               <img src="/media/images/${image}" alt="${imageAlt}" width="960" height="960" fetchpriority="high" decoding="async">
             </picture>
-            <figcaption>Örnek görsel · Orijinal içerikle güncellenecek</figcaption>
           </figure>
         </div>
       </section>
@@ -132,38 +133,37 @@ ${renderScopeItems(service.contents)}
       </section>
 
       <section class="package-media" aria-labelledby="media-title">
-        <div class="shell">
-          <div class="package-media__heading">
-            <p class="package-detail__eyebrow">Geçici medya seçkisi</p>
-            <h2 id="media-title">Paketi yakından görün</h2>
-            <p>Bu örnek alanlarda şimdilik mevcut görselleri kullanıyoruz. Orijinal fotoğraf ve videolar hazır olduğunda aynı yerleşimde güncellenecek.</p>
+        <div class="package-media__inner shell">
+          <div class="package-media__group">
+            <h2 id="media-title">${shortName} kareleri</h2>
+            <div class="package-photo-gallery" id="package-photo-gallery">
+              <figure class="package-photo-card"><img src="/media/images/${mobileImage}" alt="${imageAlt}" width="960" height="960" loading="lazy" decoding="async"></figure>
+              <figure class="package-photo-card"><img src="/media/images/${image}" alt="" width="960" height="960" loading="lazy" decoding="async"></figure>
+              <figure class="package-photo-card"><img src="/media/images/hero-still-life-mobile-v3.png" alt="Mum ışığında hazırlanmış düğün masası" width="941" height="1672" loading="lazy" decoding="async"></figure>
+              <figure class="package-photo-card"><img src="/media/images/${image}" alt="" width="960" height="960" loading="lazy" decoding="async"></figure>
+              <figure class="package-photo-card"><img src="/media/images/${mobileImage}" alt="" width="960" height="960" loading="lazy" decoding="async"></figure>
+              <figure class="package-photo-card"><img src="/media/images/hero-still-life-v2.png" alt="" width="1672" height="941" loading="lazy" decoding="async"></figure>
+              <figure class="package-photo-card"><img src="/media/images/${image}" alt="" width="960" height="960" loading="lazy" decoding="async"></figure>
+              <figure class="package-photo-card"><img src="/media/images/${mobileImage}" alt="" width="960" height="960" loading="lazy" decoding="async"></figure>
+              <button class="package-gallery-toggle" type="button" aria-expanded="false" aria-controls="package-photo-gallery" data-package-gallery-toggle>
+                <span data-package-gallery-label>Tümünü Gör</span>
+                <svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg>
+              </button>
+            </div>
           </div>
 
-          <div class="package-media__grid">
-            <figure class="package-media-card package-media-card--feature">
-              <img src="/media/images/${image}" alt="" width="960" height="960" loading="lazy" decoding="async">
-              <figcaption>Örnek detay görseli</figcaption>
-            </figure>
-
-            <figure class="package-media-card package-media-card--atmosphere">
-              <picture>
-                <source media="(max-width: 48rem)" srcset="/media/images/hero-still-life-mobile-v3.png" width="941" height="1672">
-                <img src="/media/images/hero-still-life-v2.png" alt="Mum ışığında çiçekler ve Polaroid fotoğrafla hazırlanmış düğün masası" width="1672" height="941" loading="lazy" decoding="async">
-              </picture>
-              <figcaption>Örnek düğün atmosferi</figcaption>
-            </figure>
-
-            <figure class="package-media-card package-media-card--video">
-              <div class="package-video-placeholder" role="img" aria-label="${name} için geçici video ön izleme alanı">
+          <div class="package-media__group">
+            <h2 id="video-title">${shortName} videoları</h2>
+            <div class="package-video-grid">
+              <figure class="package-video-card" role="img" aria-label="${shortName} birinci video kapağı">
                 <img src="/media/images/${image}" alt="" width="960" height="960" loading="lazy" decoding="async">
-                <span class="package-video-placeholder__label">
-                  <svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-video"></use></svg>
-                  <strong>Örnek video alanı</strong>
-                  <small>Orijinal çekim eklenecek</small>
-                </span>
-              </div>
-              <figcaption>Bu alan gerçek paket videosuyla güncellenecek.</figcaption>
-            </figure>
+                <span class="package-video-card__play" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-video"></use></svg></span>
+              </figure>
+              <figure class="package-video-card" role="img" aria-label="${shortName} ikinci video kapağı">
+                <img src="/media/images/${mobileImage}" alt="" width="960" height="960" loading="lazy" decoding="async">
+                <span class="package-video-card__play" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-video"></use></svg></span>
+              </figure>
+            </div>
           </div>
         </div>
       </section>
@@ -202,7 +202,7 @@ ${renderScopeItems(service.contents)}
       </div>
     </footer>
 
-    <script type="module" src="js/package/app.js"></script>
+    <script type="module" src="js/package/detail-app.js"></script>
   </body>
 </html>
 `;

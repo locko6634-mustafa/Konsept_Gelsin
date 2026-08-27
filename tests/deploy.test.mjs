@@ -57,3 +57,16 @@ test("Nginx çok sayfalı statik yüzeyi güvenlik başlıklarıyla sunar", () =
   assert.match(nginx, /alias \/srv\/konsept-gelsin-media\/images\//);
   assert.match(nginx, /limit_except GET HEAD/);
 });
+
+test("Nginx değişebilir kod varlıklarını yeniden doğrular", () => {
+  assert.match(
+    nginx,
+    /location ~\* \\\.\(\?:css\|js\|json\)\$ \{\s*expires -1;\s*limit_except GET HEAD \{ deny all; \}\s*try_files \$uri =404;\s*\}/,
+    "CSS, JS ve JSON yanıtları eski sürümle karışmamalı",
+  );
+  assert.match(
+    nginx,
+    /location ~\* \\\.\(\?:webp\|png\|jpe\?g\|gif\|ico\|svg\|woff2\?\)\$ \{\s*expires 1h;\s*limit_except GET HEAD \{ deny all; \}\s*try_files \$uri =404;\s*\}/,
+    "medya ve font önbelleği ayrı bir location içinde kalmalı",
+  );
+});

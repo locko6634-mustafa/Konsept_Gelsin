@@ -26,6 +26,7 @@ const mimeTypes = new Map([
   [".webp", "image/webp"],
   [".woff2", "font/woff2"],
 ]);
+const revalidatedExtensions = new Set([".html", ".css", ".js", ".json", ".mjs"]);
 
 if (!Number.isInteger(port) || port < 1 || port > 65_535) {
   throw new Error("PORT, 1 ile 65535 arasında bir tam sayı olmalı.");
@@ -122,10 +123,9 @@ const server = createServer(async (request, response) => {
 
     const extension = path.extname(result.path).toLowerCase();
     const contentType = mimeTypes.get(extension) ?? "application/octet-stream";
-    const isHtml = extension === ".html";
     response.writeHead(200, {
       ...securityHeaders(contentType),
-      "Cache-Control": isHtml ? "no-cache" : "public, max-age=3600",
+      "Cache-Control": revalidatedExtensions.has(extension) ? "no-cache" : "public, max-age=3600",
       "Content-Length": result.fileInfo.size,
     });
 

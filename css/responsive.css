@@ -11,10 +11,6 @@
     margin-inline-start: clamp(11rem, 29vw, 19rem);
   }
 
-  .package-detail-hero__inner,
-  .package-overview__grid {
-    gap: clamp(2.5rem, 5vw, 4rem);
-  }
 }
 
 @media (max-width: 48rem) {
@@ -80,110 +76,6 @@
 
   .desktop-nav a::after {
     display: none;
-  }
-
-  .package-detail-hero {
-    padding-block: clamp(2.25rem, 7vw, 3.5rem) clamp(3.5rem, 10vw, 5rem);
-  }
-
-  .package-detail-hero::before {
-    width: 16rem;
-    height: 16rem;
-  }
-
-  .package-detail-hero__inner,
-  .package-overview__grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .package-detail-hero__inner {
-    gap: clamp(1.5rem, 6vw, 2.5rem);
-  }
-
-  .package-detail__back {
-    margin-block-end: clamp(1rem, 4vw, 1.5rem);
-  }
-
-  .package-detail-hero h1 {
-    max-width: 12ch;
-    font-size: clamp(2.8rem, 13.5vw, 4.6rem);
-  }
-
-  .package-detail__lead {
-    font-size: clamp(1rem, 4vw, 1.15rem);
-  }
-
-  .package-detail__actions {
-    align-items: stretch;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .package-detail__actions .button,
-  .package-detail__actions .text-link {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .package-detail-hero__media {
-    width: min(100%, 32rem);
-    margin-inline: auto;
-    padding-block-start: clamp(2.5rem, 11vw, 4rem);
-  }
-
-  .package-detail-hero__number {
-    top: 0;
-    font-size: clamp(7.5rem, 38vw, 12rem);
-  }
-
-  .package-overview {
-    padding-block: clamp(3.5rem, 12vw, 5.5rem);
-  }
-
-  .package-overview__grid {
-    gap: clamp(2.5rem, 9vw, 4rem);
-  }
-
-  .package-media {
-    padding-block: clamp(3.5rem, 12vw, 5.5rem);
-  }
-
-  .package-media__heading,
-  .package-media__grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .package-media__heading {
-    display: block;
-  }
-
-  .package-media__heading h2 {
-    margin-block-end: var(--space-4);
-  }
-
-  .package-media__grid {
-    grid-template-rows: auto;
-  }
-
-  .package-media-card--feature {
-    grid-row: auto;
-  }
-
-  .package-media-card--feature > img {
-    aspect-ratio: 4 / 3;
-  }
-
-  .package-contact {
-    padding-block: clamp(2.5rem, 9vw, 4rem);
-  }
-
-  .package-contact__inner {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-5);
-  }
-
-  .package-contact .button {
-    width: 100%;
   }
 
   .hero {
@@ -503,25 +395,6 @@
 
   .desktop-nav a {
     padding-inline: 0.18rem;
-  }
-
-  .package-detail-hero h1 {
-    font-size: 2.65rem;
-  }
-
-  .package-detail__eyebrow {
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-  }
-
-  .package-video-placeholder__label {
-    right: var(--space-3);
-    bottom: var(--space-3);
-    left: var(--space-3);
-  }
-
-  .package-contact__inner {
-    padding: 1.25rem;
   }
 
   .package {
