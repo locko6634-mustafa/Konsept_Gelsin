@@ -74,7 +74,8 @@ test("paket sayfaları benzersiz SEO başlıkları ve canonical adresleri taşı
 test("her detay sayfası kendi hizmet içeriğini, geri yolunu ve WhatsApp CTA'larını taşır", () => {
   for (const service of services) {
     const html = pages.get(service.page);
-    assert.match(html, new RegExp(`<h1 id="package-title">${escapeRegExp(service.name)}<\\/h1>`));
+    const heroTitle = service.overviewReplacesHero ? `${service.shortName} deneyimi nasıl çalışır?` : service.name;
+    assert.match(html, new RegExp(`<h1 id="package-title">${escapeRegExp(heroTitle)}<\\/h1>`));
     assert.match(html, new RegExp(escapeRegExp(service.description)));
     assert.match(html, new RegExp(escapeRegExp(service.promise)));
     assert.equal((html.match(new RegExp(`data-whatsapp-service="${escapeRegExp(service.name)}"`, "g")) ?? []).length, 3);
@@ -95,9 +96,27 @@ test("tüm paket detay sayfaları sade hero ve birleşik açıklama yapısını 
     assert.doesNotMatch(hero, new RegExp(`Paket ${escapeRegExp(service.number)} ·`));
     assert.doesNotMatch(hero, /<figure\b|package-detail-hero__media/);
     assert.doesNotMatch(overview, />Deneyimin özü<|>Paket kapsamı</);
-    assert.match(overview, new RegExp(`<p>${escapeRegExp(service.description)} ${escapeRegExp(service.promise)}<\\/p>`));
+    const descriptionRegion = service.overviewReplacesHero ? hero : overview;
+    assert.match(descriptionRegion, new RegExp(`${escapeRegExp(service.description)} ${escapeRegExp(service.promise)}`));
     assert.doesNotMatch(overview, /<blockquote\b/);
   }
+});
+
+test("QR paketinin deneyim metni mevcut hero metninin yerini alır", () => {
+  const service = services.find(({ overviewReplacesHero }) => overviewReplacesHero === true);
+  assert.ok(service);
+
+  const html = pages.get(service.page);
+  const hero = html.match(/<section\b[^>]*class="package-detail-hero"[^>]*>([\s\S]*?)<\/section>/i)?.[1] ?? "";
+  const overview = html.match(/<section\b[^>]*class="package-overview"[^>]*>([\s\S]*?)<\/section>/i)?.[1] ?? "";
+
+  assert.match(hero, new RegExp(`<h1 id="package-title">${escapeRegExp(service.shortName)} deneyimi nasıl çalışır\\?<\\/h1>`));
+  assert.match(hero, new RegExp(`<p class="package-detail__lead">${escapeRegExp(service.description)} ${escapeRegExp(service.promise)}<\\/p>`));
+  assert.doesNotMatch(hero, new RegExp(`<h1 id="package-title">${escapeRegExp(service.name)}<\\/h1>`));
+  assert.doesNotMatch(hero, new RegExp(`<p class="package-detail__lead">${escapeRegExp(service.summary)}<\\/p>`));
+  assert.doesNotMatch(overview, /package-overview__copy/);
+  assert.match(overview, /package-overview__grid--scope-only/);
+  assert.match(overview, /<div class="package-scope" aria-labelledby="scope-title">/);
 });
 
 test("medya alanları sade fotoğraf mozaiği ve iki dikey video kapağı kullanır", () => {

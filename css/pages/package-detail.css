@@ -107,6 +107,10 @@
   gap: clamp(2.5rem, 6vw, 5rem);
 }
 
+.package-overview__grid--scope-only {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .package-overview h2,
 .package-media h2,
 .package-contact h2 {

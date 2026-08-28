@@ -23,6 +23,7 @@ const pages = [
     name: service.page.replace(/\.html$/, ""),
     pathname: `/${service.page}`,
     serviceName: service.name,
+    overviewItemCount: service.overviewReplacesHero ? 1 : 2,
   })),
 ];
 
@@ -504,11 +505,13 @@ async function auditPage({ cdp, origin, page, viewport }) {
       assert(audit.videoElementCount === 0, `${page.name}/${viewport.width}: kaynaksız video/iframe bulunuyor.`);
       if (viewport.width <= 768) {
         const minimumDetailItemWidth = Math.min(280, viewport.width - 32);
-        assert(audit.detailOverviewItems.length === 2, `${page.name}/${viewport.width}: overview öğeleri eksik (${JSON.stringify(audit.detailOverviewItems)}).`);
+        assert(audit.detailOverviewItems.length === page.overviewItemCount, `${page.name}/${viewport.width}: overview öğeleri eksik (${JSON.stringify(audit.detailOverviewItems)}).`);
         assert(audit.detailMediaGroups.length === 2, `${page.name}/${viewport.width}: fotoğraf veya video grubu eksik.`);
         assert(audit.detailHeroItems.every((item) => item.width >= minimumDetailItemWidth), `${page.name}/${viewport.width}: hero öğesi kullanılamayacak kadar dar.`);
         assert(audit.detailOverviewItems.every((item) => item.width >= minimumDetailItemWidth), `${page.name}/${viewport.width}: overview öğesi kullanılamayacak kadar dar.`);
-        assert(verticallySeparated(audit.detailOverviewItems), `${page.name}/${viewport.width}: açıklama ve paket kapsamı üst üste biniyor.`);
+        if (page.overviewItemCount > 1) {
+          assert(verticallySeparated(audit.detailOverviewItems), `${page.name}/${viewport.width}: açıklama ve paket kapsamı üst üste biniyor.`);
+        }
         assert(verticallySeparated(audit.detailMediaGroups), `${page.name}/${viewport.width}: fotoğraf ve video grupları üst üste biniyor.`);
         assert(audit.detailGalleryToggleVisible, `${page.name}/${viewport.width}: Tümünü Gör kontrolü görünmüyor.`);
       } else {

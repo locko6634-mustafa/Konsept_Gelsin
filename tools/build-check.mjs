@@ -199,8 +199,9 @@ if (!Array.isArray(services) || services.length !== 6) {
       issues.push(`paket detay sayfası eksik: ${service.page}`);
       continue;
     }
+    const heroTitle = service.overviewReplacesHero ? `${service.shortName} deneyimi nasıl çalışır?` : service.name;
     for (const expected of [
-      `<h1 id="package-title">${service.name}</h1>`,
+      `<h1 id="package-title">${heroTitle}</h1>`,
       service.description,
       service.promise,
       `data-whatsapp-service="${service.name}"`,

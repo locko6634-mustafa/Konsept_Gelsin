@@ -139,7 +139,8 @@ test("landing page altı ayrı paket detayına bağlanır ve iletişim aynı say
   for (const service of services) {
     assert.equal(await projectFileExists(service.page), true, `${service.page} bulunamadı`);
     const detailHtml = packagePages.get(service.page);
-    assert.match(detailHtml, new RegExp(`<h1[^>]*>${escapeRegExp(service.name)}<\\/h1>`));
+    const heroTitle = service.overviewReplacesHero ? `${service.shortName} deneyimi nasıl çalışır?` : service.name;
+    assert.match(detailHtml, new RegExp(`<h1[^>]*>${escapeRegExp(heroTitle)}<\\/h1>`));
     assert.match(detailHtml, new RegExp(escapeRegExp(service.description)));
     assert.match(detailHtml, new RegExp(escapeRegExp(service.promise)));
     assert.match(detailHtml, new RegExp(`data-whatsapp-service="${escapeRegExp(service.name)}"`));
