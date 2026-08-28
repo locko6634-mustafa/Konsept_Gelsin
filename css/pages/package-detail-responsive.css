@@ -37,18 +37,6 @@
     font-size: clamp(1rem, 4vw, 1.15rem);
   }
 
-  .package-detail__actions {
-    align-items: stretch;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .package-detail__actions .button,
-  .package-detail__actions .text-link {
-    width: 100%;
-    justify-content: center;
-  }
-
   .package-overview {
     padding-block: clamp(3.5rem, 12vw, 5.5rem);
   }

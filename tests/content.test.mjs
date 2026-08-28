@@ -139,7 +139,7 @@ test("landing page altı ayrı paket detayına bağlanır ve iletişim aynı say
   for (const service of services) {
     assert.equal(await projectFileExists(service.page), true, `${service.page} bulunamadı`);
     const detailHtml = packagePages.get(service.page);
-    const heroTitle = service.overviewReplacesHero ? `${service.shortName} deneyimi nasıl çalışır?` : service.name;
+    const heroTitle = `${service.shortName} deneyimi nasıl çalışır?`;
     assert.match(detailHtml, new RegExp(`<h1[^>]*>${escapeRegExp(heroTitle)}<\\/h1>`));
     assert.match(detailHtml, new RegExp(escapeRegExp(service.description)));
     assert.match(detailHtml, new RegExp(escapeRegExp(service.promise)));

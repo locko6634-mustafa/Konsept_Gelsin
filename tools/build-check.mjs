@@ -199,7 +199,7 @@ if (!Array.isArray(services) || services.length !== 6) {
       issues.push(`paket detay sayfası eksik: ${service.page}`);
       continue;
     }
-    const heroTitle = service.overviewReplacesHero ? `${service.shortName} deneyimi nasıl çalışır?` : service.name;
+    const heroTitle = `${service.shortName} deneyimi nasıl çalışır?`;
     for (const expected of [
       `<h1 id="package-title">${heroTitle}</h1>`,
       service.description,

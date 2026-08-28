@@ -31,17 +31,7 @@ export function renderPackagePage(service) {
   const imageAlt = escapeHtml(service.imageAlt);
   const page = escapeHtml(service.page);
   const canonical = `https://konseptgelsin.com/${page}`;
-  const overviewReplacesHero = service.overviewReplacesHero === true;
   const metaDescription = escapeHtml(`${service.summary} ${service.name} paketinin kapsamını ve detaylarını inceleyin.`);
-  const overviewCopy = `<h2 id="overview-title">${shortName} deneyimi nasıl çalışır?</h2>
-            <p>${description} ${promise}</p>`;
-  const overviewSectionCopy = overviewReplacesHero
-    ? ""
-    : `          <div class="package-overview__copy">
-            ${overviewCopy}
-          </div>
-
-`;
 
   return `<!doctype html>
 <html lang="tr">
@@ -95,29 +85,8 @@ export function renderPackagePage(service) {
               <svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg>
               Tüm paketlere dön
             </a>
-            <h1 id="package-title">${overviewReplacesHero ? `${shortName} deneyimi nasıl çalışır?` : name}</h1>
-            <p class="package-detail__lead">${overviewReplacesHero ? `${description} ${promise}` : summary}</p>
-            <div class="package-detail__actions">
-              <a class="button button--whatsapp" href="https://wa.me/905386888306" data-whatsapp-service="${name}" target="_blank" rel="noopener noreferrer">
-                <img src="/media/images/ui/whatsapp.svg" alt="" width="23" height="23">
-                WhatsApp'tan Bilgi Al
-              </a>
-              <a class="text-link" href="#paket-kapsami">
-                Paket kapsamını gör
-                <svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-arrow"></use></svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="package-overview" id="paket-kapsami" aria-labelledby="${overviewReplacesHero ? "scope-title" : "overview-title"}">
-        <div class="package-overview__grid${overviewReplacesHero ? " package-overview__grid--scope-only" : ""} shell">
-${overviewSectionCopy}          <div class="package-scope" aria-labelledby="scope-title">
-            <h2 id="scope-title">Neler dahil?</h2>
-            <ul>
-${renderScopeItems(service.contents)}
-            </ul>
+            <h1 id="package-title">${shortName} deneyimi nasıl çalışır?</h1>
+            <p class="package-detail__lead">${description} ${promise}</p>
           </div>
         </div>
       </section>
@@ -154,6 +123,17 @@ ${renderScopeItems(service.contents)}
                 <span class="package-video-card__play" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-video"></use></svg></span>
               </figure>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="package-overview" id="paket-kapsami" aria-labelledby="scope-title">
+        <div class="package-overview__grid shell">
+          <div class="package-scope" aria-labelledby="scope-title">
+            <h2 id="scope-title">Neler dahil?</h2>
+            <ul>
+${renderScopeItems(service.contents)}
+            </ul>
           </div>
         </div>
       </section>

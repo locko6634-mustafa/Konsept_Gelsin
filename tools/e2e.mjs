@@ -23,7 +23,6 @@ const pages = [
     name: service.page.replace(/\.html$/, ""),
     pathname: `/${service.page}`,
     serviceName: service.name,
-    overviewItemCount: service.overviewReplacesHero ? 1 : 2,
   })),
 ];
 
@@ -291,10 +290,6 @@ function pageAuditExpression() {
       directContactCta: document.querySelector("#iletisim [data-whatsapp-general], #iletisim [data-whatsapp-service]")?.href.startsWith("https://wa.me/905386888306?text=") ?? false,
       detailHeroCount: document.querySelectorAll(".package-detail-hero").length,
       detailHeroImageSource: document.querySelector(".package-detail-hero__media img")?.currentSrc || "",
-      detailScopeLinkBorderBottom: (() => {
-        const link = document.querySelector(".package-detail__actions .text-link");
-        return link ? getComputedStyle(link).borderBottomWidth : "";
-      })(),
       detailHeroGridColumns: detailHeroGrid && visible(detailHeroGrid) ? getComputedStyle(detailHeroGrid).gridTemplateColumns.split(" ").length : 0,
       detailPhotoGalleryColumns: detailPhotoGallery && visible(detailPhotoGallery) ? getComputedStyle(detailPhotoGallery).gridTemplateColumns.split(" ").length : 0,
       detailVideoGridColumns: detailVideoGrid && visible(detailVideoGrid) ? getComputedStyle(detailVideoGrid).gridTemplateColumns.split(" ").length : 0,
@@ -489,7 +484,6 @@ async function auditPage({ cdp, origin, page, viewport }) {
       assert(audit.packageCount === 0, `${page.name}/${viewport.width}: ana sayfa paket kartları detay sayfasına taşındı.`);
       assert(audit.detailHeroCount === 1, `${page.name}/${viewport.width}: paket hero alanı bulunamadı.`);
       assert(audit.detailHeroImageSource === "", `${page.name}/${viewport.width}: kaldırılan hero görseli hâlâ görünüyor.`);
-      assert(audit.detailScopeLinkBorderBottom === "0px", `${page.name}/${viewport.width}: paket kapsamı bağlantısının çizgisi kaldırılmadı.`);
       assert(audit.detailHeroGridColumns === 1, `${page.name}/${viewport.width}: hero sütun sayısı ${audit.detailHeroGridColumns}.`);
       assert(audit.detailHeroItems.length === 1, `${page.name}/${viewport.width}: hero öğe sayısı hatalı.`);
       assert(audit.detailPhotoGalleryColumns === 2, `${page.name}/${viewport.width}: fotoğraf mozaiği iki sütun değil (${audit.detailPhotoGalleryColumns}).`);
@@ -501,17 +495,14 @@ async function auditPage({ cdp, origin, page, viewport }) {
       assert(audit.detailPhotoCards.every((card) => card.width >= 120), `${page.name}/${viewport.width}: fotoğraf kartı kullanılamayacak kadar dar.`);
       assert(audit.detailVideoCards.every((card) => card.width >= 120), `${page.name}/${viewport.width}: video kapağı kullanılamayacak kadar dar.`);
       assert(audit.detailScopeItems >= 5, `${page.name}/${viewport.width}: paket kapsamı eksik (${audit.detailScopeItems}).`);
-      assert(audit.detailServiceCtas === 3, `${page.name}/${viewport.width}: hizmete özel CTA sayısı ${audit.detailServiceCtas}.`);
+      assert(audit.detailServiceCtas === 2, `${page.name}/${viewport.width}: hizmete özel CTA sayısı ${audit.detailServiceCtas}.`);
       assert(audit.videoElementCount === 0, `${page.name}/${viewport.width}: kaynaksız video/iframe bulunuyor.`);
       if (viewport.width <= 768) {
         const minimumDetailItemWidth = Math.min(280, viewport.width - 32);
-        assert(audit.detailOverviewItems.length === page.overviewItemCount, `${page.name}/${viewport.width}: overview öğeleri eksik (${JSON.stringify(audit.detailOverviewItems)}).`);
+        assert(audit.detailOverviewItems.length === 1, `${page.name}/${viewport.width}: paket kapsamı öğesi eksik (${JSON.stringify(audit.detailOverviewItems)}).`);
         assert(audit.detailMediaGroups.length === 2, `${page.name}/${viewport.width}: fotoğraf veya video grubu eksik.`);
         assert(audit.detailHeroItems.every((item) => item.width >= minimumDetailItemWidth), `${page.name}/${viewport.width}: hero öğesi kullanılamayacak kadar dar.`);
         assert(audit.detailOverviewItems.every((item) => item.width >= minimumDetailItemWidth), `${page.name}/${viewport.width}: overview öğesi kullanılamayacak kadar dar.`);
-        if (page.overviewItemCount > 1) {
-          assert(verticallySeparated(audit.detailOverviewItems), `${page.name}/${viewport.width}: açıklama ve paket kapsamı üst üste biniyor.`);
-        }
         assert(verticallySeparated(audit.detailMediaGroups), `${page.name}/${viewport.width}: fotoğraf ve video grupları üst üste biniyor.`);
         assert(audit.detailGalleryToggleVisible, `${page.name}/${viewport.width}: Tümünü Gör kontrolü görünmüyor.`);
       } else {

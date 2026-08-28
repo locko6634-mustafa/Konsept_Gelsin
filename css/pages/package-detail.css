@@ -85,30 +85,15 @@
   line-height: 1.65;
 }
 
-.package-detail__actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-5);
-  flex-wrap: wrap;
-}
-
-.package-detail__actions .text-link {
-  border-bottom: 0;
-}
-
 .package-overview {
   padding-block: clamp(3.5rem, 7vw, 6rem);
 }
 
 .package-overview__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.72fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
   gap: clamp(2.5rem, 6vw, 5rem);
-}
-
-.package-overview__grid--scope-only {
-  grid-template-columns: minmax(0, 1fr);
 }
 
 .package-overview h2,
