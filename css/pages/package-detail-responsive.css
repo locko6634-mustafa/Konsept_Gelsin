@@ -20,11 +20,6 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .package-detail-page--minimal .package-overview__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-7);
-  }
-
   .package-detail-hero__inner {
     gap: clamp(1.5rem, 6vw, 2.5rem);
   }
@@ -54,23 +49,12 @@
     justify-content: center;
   }
 
-  .package-detail-hero__media {
-    width: min(100%, 32rem);
-    margin-inline: auto;
-    padding-block-start: clamp(2.5rem, 11vw, 4rem);
-  }
-
-  .package-detail-hero__number {
-    top: 0;
-    font-size: clamp(7.5rem, 38vw, 12rem);
-  }
-
   .package-overview {
     padding-block: clamp(3.5rem, 12vw, 5.5rem);
   }
 
   .package-overview__grid {
-    gap: clamp(2.5rem, 9vw, 4rem);
+    gap: var(--space-7);
   }
 
   .package-media {

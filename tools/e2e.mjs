@@ -19,10 +19,7 @@ const viewports = [
 const pages = [
   { kind: "home", name: "home", pathname: "/" },
   ...services.map((service) => ({
-    detailVariant: service.detailVariant,
-    image: service.image,
     kind: "detail",
-    mobileImage: service.mobileImage,
     name: service.page.replace(/\.html$/, ""),
     pathname: `/${service.page}`,
     serviceName: service.name,
@@ -455,6 +452,17 @@ async function auditPage({ cdp, origin, page, viewport }) {
       );
       assert(audit.featuredCards.length === 2, `${page.name}/${viewport.width}: iki öne çıkan kart görünmüyor.`);
       assert(audit.processSteps.length === 3, `${page.name}/${viewport.width}: üç süreç adımı görünmüyor.`);
+      if (viewport.width <= 576) {
+        assert(
+          audit.processSteps.every((step, index, steps) => index === 0 || step.top > steps[index - 1].top),
+          `${page.name}/${viewport.width}: süreç adımları mobilde dikey sıralanmadı (${JSON.stringify(audit.processSteps)}).`,
+        );
+      } else {
+        assert(
+          audit.processSteps.every((step) => Math.abs(step.top - audit.processSteps[0].top) <= 1),
+          `${page.name}/${viewport.width}: süreç adımları geniş ekranda yatay hizalanmadı (${JSON.stringify(audit.processSteps)}).`,
+        );
+      }
       assert(audit.packageLinks.length === 6, `${page.name}/${viewport.width}: altı paket bağlantısı görünmüyor.`);
       assert(audit.featuredGridColumns === 2, `${page.name}/${viewport.width}: öne çıkan kartlar iki sütun değil.`);
       assert(audit.packageGridColumns === 2, `${page.name}/${viewport.width}: paketler iki sütun değil.`);
@@ -476,20 +484,13 @@ async function auditPage({ cdp, origin, page, viewport }) {
         `${page.name}/${viewport.width}: paket bağlantısı kartın tamamını kaplamıyor (${JSON.stringify(audit.packageCards)}).`,
       );
     } else {
-      const isMinimalDetail = page.detailVariant === "minimal";
-      const expectedColumns = isMinimalDetail || viewport.width <= 768 ? 1 : 2;
-      const expectedDetailImage = viewport.width <= 576 ? page.mobileImage : page.image;
       assert(audit.sectionCount === 4, `${page.name}/${viewport.width}: detay section sayısı ${audit.sectionCount}.`);
       assert(audit.packageCount === 0, `${page.name}/${viewport.width}: ana sayfa paket kartları detay sayfasına taşındı.`);
       assert(audit.detailHeroCount === 1, `${page.name}/${viewport.width}: paket hero alanı bulunamadı.`);
-      if (isMinimalDetail) {
-        assert(audit.detailHeroImageSource === "", `${page.name}/${viewport.width}: kaldırılan hero görseli hâlâ görünüyor.`);
-        assert(audit.detailScopeLinkBorderBottom === "0px", `${page.name}/${viewport.width}: paket kapsamı bağlantısının çizgisi kaldırılmadı.`);
-      } else {
-        assert(audit.detailHeroImageSource.endsWith(`/media/images/${expectedDetailImage}`), `${page.name}/${viewport.width}: doğru paket görseli yüklenmedi (${audit.detailHeroImageSource}).`);
-      }
-      assert(audit.detailHeroGridColumns === expectedColumns, `${page.name}/${viewport.width}: hero sütun sayısı ${audit.detailHeroGridColumns}.`);
-      assert(audit.detailHeroItems.length === (isMinimalDetail ? 1 : 2), `${page.name}/${viewport.width}: hero öğe sayısı hatalı.`);
+      assert(audit.detailHeroImageSource === "", `${page.name}/${viewport.width}: kaldırılan hero görseli hâlâ görünüyor.`);
+      assert(audit.detailScopeLinkBorderBottom === "0px", `${page.name}/${viewport.width}: paket kapsamı bağlantısının çizgisi kaldırılmadı.`);
+      assert(audit.detailHeroGridColumns === 1, `${page.name}/${viewport.width}: hero sütun sayısı ${audit.detailHeroGridColumns}.`);
+      assert(audit.detailHeroItems.length === 1, `${page.name}/${viewport.width}: hero öğe sayısı hatalı.`);
       assert(audit.detailPhotoGalleryColumns === 2, `${page.name}/${viewport.width}: fotoğraf mozaiği iki sütun değil (${audit.detailPhotoGalleryColumns}).`);
       assert(audit.detailVideoGridColumns === 2, `${page.name}/${viewport.width}: video kapakları iki sütun değil (${audit.detailVideoGridColumns}).`);
       assert(audit.detailPhotoCards.length === 8, `${page.name}/${viewport.width}: görünür fotoğraf kartı sayısı ${audit.detailPhotoCards.length}.`);
@@ -507,7 +508,6 @@ async function auditPage({ cdp, origin, page, viewport }) {
         assert(audit.detailMediaGroups.length === 2, `${page.name}/${viewport.width}: fotoğraf veya video grubu eksik.`);
         assert(audit.detailHeroItems.every((item) => item.width >= minimumDetailItemWidth), `${page.name}/${viewport.width}: hero öğesi kullanılamayacak kadar dar.`);
         assert(audit.detailOverviewItems.every((item) => item.width >= minimumDetailItemWidth), `${page.name}/${viewport.width}: overview öğesi kullanılamayacak kadar dar.`);
-        if (!isMinimalDetail) assert(verticallySeparated(audit.detailHeroItems), `${page.name}/${viewport.width}: hero metni ve görseli üst üste biniyor.`);
         assert(verticallySeparated(audit.detailOverviewItems), `${page.name}/${viewport.width}: açıklama ve paket kapsamı üst üste biniyor.`);
         assert(verticallySeparated(audit.detailMediaGroups), `${page.name}/${viewport.width}: fotoğraf ve video grupları üst üste biniyor.`);
         assert(audit.detailGalleryToggleVisible, `${page.name}/${viewport.width}: Tümünü Gör kontrolü görünmüyor.`);

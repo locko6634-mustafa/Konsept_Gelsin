@@ -81,25 +81,23 @@ test("her detay sayfası kendi hizmet içeriğini, geri yolunu ve WhatsApp CTA'l
     assert.match(html, /href="index\.html#paketler"/);
     assert.match(html, /href="index\.html#iletisim"/);
     assert.match(html, new RegExp(`src="/media/images/${escapeRegExp(service.image)}"`));
-    if (service.detailVariant === "minimal") {
-      assert.doesNotMatch(html, new RegExp(`rel="preload"[^>]*${escapeRegExp(service.image)}`));
-    } else {
-      assert.match(html, new RegExp(`srcset="/media/images/${escapeRegExp(service.mobileImage)}"`));
-    }
+    assert.match(html, new RegExp(`src="/media/images/${escapeRegExp(service.mobileImage)}"`));
+    assert.doesNotMatch(html, new RegExp(`rel="preload"[^>]*${escapeRegExp(service.image)}`));
   }
 });
 
-test("QR anı albümü detay sayfası sade hero ve açıklama varyantını kullanır", () => {
-  const html = pages.get("qr-kodlu-dijital-ani-albumu.html");
-  const hero = html.match(/<section\b[^>]*class="package-detail-hero"[^>]*>([\s\S]*?)<\/section>/i)?.[1] ?? "";
-  const overview = html.match(/<section\b[^>]*class="package-overview"[^>]*>([\s\S]*?)<\/section>/i)?.[1] ?? "";
+test("tüm paket detay sayfaları sade hero ve birleşik açıklama yapısını kullanır", () => {
+  for (const service of services) {
+    const html = pages.get(service.page);
+    const hero = html.match(/<section\b[^>]*class="package-detail-hero"[^>]*>([\s\S]*?)<\/section>/i)?.[1] ?? "";
+    const overview = html.match(/<section\b[^>]*class="package-overview"[^>]*>([\s\S]*?)<\/section>/i)?.[1] ?? "";
 
-  assert.match(html, /<body\b[^>]*class="package-detail-page package-detail-page--minimal"/);
-  assert.doesNotMatch(hero, /Paket 01 · QR Anı Albümü/);
-  assert.doesNotMatch(hero, /<figure\b|package-detail-hero__media/);
-  assert.doesNotMatch(overview, />Deneyimin özü<|>Paket kapsamı</);
-  assert.match(overview, /<p>Misafirler düğün boyunca kendi telefonlarıyla çektikleri fotoğraf ve videoları QR kod üzerinden çiftin özel albümüne yükler\. Düğününüzü sadece profesyonel kameradan değil, misafirlerinizin gözünden de görün\.<\/p>/);
-  assert.doesNotMatch(overview, /<blockquote\b/);
+    assert.doesNotMatch(hero, new RegExp(`Paket ${escapeRegExp(service.number)} ·`));
+    assert.doesNotMatch(hero, /<figure\b|package-detail-hero__media/);
+    assert.doesNotMatch(overview, />Deneyimin özü<|>Paket kapsamı</);
+    assert.match(overview, new RegExp(`<p>${escapeRegExp(service.description)} ${escapeRegExp(service.promise)}<\\/p>`));
+    assert.doesNotMatch(overview, /<blockquote\b/);
+  }
 });
 
 test("medya alanları sade fotoğraf mozaiği ve iki dikey video kapağı kullanır", () => {

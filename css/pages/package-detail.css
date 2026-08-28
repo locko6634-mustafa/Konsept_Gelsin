@@ -24,13 +24,9 @@
 .package-detail-hero__inner {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.78fr);
+  grid-template-columns: minmax(0, 48rem);
   align-items: center;
   gap: clamp(2.5rem, 7vw, 6.5rem);
-}
-
-.package-detail-page--minimal .package-detail-hero__inner {
-  grid-template-columns: minmax(0, 48rem);
 }
 
 .package-detail-hero__copy {
@@ -96,69 +92,19 @@
   flex-wrap: wrap;
 }
 
-.package-detail-page--minimal .package-detail__actions .text-link {
+.package-detail__actions .text-link {
   border-bottom: 0;
 }
 
-.package-detail-hero__media {
-  position: relative;
-  z-index: 1;
-  min-width: 0;
-  margin: 0;
-  padding-block-start: clamp(2rem, 5vw, 4.5rem);
-}
-
-.package-detail-hero__media picture,
-.package-detail-hero__media img {
-  width: 100%;
-}
-
-.package-detail-hero__media picture {
-  position: relative;
-  display: block;
-  overflow: hidden;
-  aspect-ratio: 1;
-  border: 0.45rem solid var(--color-white);
-  border-radius: clamp(1rem, 2vw, 1.5rem);
-  box-shadow: var(--shadow-paper);
-}
-
-.package-detail-hero__media img {
-  height: 100%;
-  object-fit: cover;
-}
-
-.package-detail-hero__number {
-  position: absolute;
-  z-index: -1;
-  top: -1.5rem;
-  right: -0.08em;
-  color: hsl(24 92% 39% / 0.15);
-  font-family: var(--font-display);
-  font-size: clamp(8rem, 19vw, 15rem);
-  font-weight: 700;
-  letter-spacing: -0.08em;
-  line-height: 0.75;
-}
-
-.package-detail-hero__media figcaption,
-.package-media-card figcaption {
-  margin-block-start: 0.7rem;
-  color: var(--color-ink-soft);
-  font-size: 0.76rem;
-  font-weight: 650;
-  letter-spacing: 0.035em;
-}
-
 .package-overview {
-  padding-block: clamp(4rem, 9vw, 8rem);
+  padding-block: clamp(3.5rem, 7vw, 6rem);
 }
 
 .package-overview__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(20rem, 0.78fr);
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.72fr);
   align-items: start;
-  gap: clamp(3rem, 8vw, 7.5rem);
+  gap: clamp(2.5rem, 6vw, 5rem);
 }
 
 .package-overview h2,
@@ -168,77 +114,18 @@
   margin-block-end: var(--space-5);
 }
 
-.package-overview__copy > p:not(.package-detail__eyebrow) {
-  margin-block-end: var(--space-6);
-  color: var(--color-ink-soft);
-  font-size: clamp(1rem, 1.25vw, 1.12rem);
-}
-
-.package-overview blockquote {
-  position: relative;
-  margin: 0;
-  padding: clamp(1.25rem, 3vw, 2rem);
-  border-left: 0.28rem solid var(--color-orange);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  background: var(--color-paper-deep);
-}
-
-.package-overview blockquote p {
-  margin: 0;
-  color: var(--color-ink);
-  font-family: var(--font-display);
-  font-size: clamp(1.35rem, 2.4vw, 2rem);
-  line-height: 1.35;
-}
-
-.package-scope {
-  padding: clamp(1.5rem, 4vw, 2.75rem);
-  border: 0.0625rem solid hsl(31 25% 85% / 0.82);
-  border-radius: var(--radius-lg);
-  background: var(--color-white);
-  box-shadow: var(--shadow-raised);
-}
-
-.package-scope h2 {
-  margin-block-end: var(--space-5);
-  font-size: clamp(2rem, 3.5vw, 3rem);
-}
-
-.package-scope ul {
-  display: grid;
-  gap: 0.8rem;
-  margin: 0;
-  padding-inline-start: 1.3rem;
-}
-
-.package-scope li {
-  padding-inline-start: 0.25rem;
-  color: var(--color-ink-soft);
-}
-
-.package-scope li::marker {
-  color: var(--color-orange);
-}
-
-.package-detail-page--minimal .package-overview {
-  padding-block: clamp(3.5rem, 7vw, 6rem);
-}
-
-.package-detail-page--minimal .package-overview__grid {
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.72fr);
-  gap: clamp(2.5rem, 6vw, 5rem);
-}
-
-.package-detail-page--minimal .package-overview h2 {
+.package-overview h2 {
   max-width: 20ch;
   font-size: clamp(1.85rem, 3.4vw, 3rem);
 }
 
-.package-detail-page--minimal .package-overview__copy > p {
+.package-overview__copy > p {
   margin-block-end: var(--space-5);
+  color: var(--color-ink-soft);
+  font-size: clamp(1rem, 1.25vw, 1.12rem);
 }
 
-.package-detail-page--minimal .package-scope {
+.package-scope {
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -246,21 +133,24 @@
   box-shadow: none;
 }
 
-.package-detail-page--minimal .package-scope h2 {
+.package-scope h2 {
   margin-block-end: var(--space-4);
   font-size: clamp(1.85rem, 3.4vw, 3rem);
 }
 
-.package-detail-page--minimal .package-scope ul {
+.package-scope ul {
+  display: grid;
   gap: 0;
+  margin: 0;
   padding: 0;
   border-top: 0.0625rem solid hsl(31 25% 82% / 0.72);
   list-style: none;
 }
 
-.package-detail-page--minimal .package-scope li {
+.package-scope li {
   padding: 0.85rem 0;
   border-bottom: 0.0625rem solid hsl(31 25% 82% / 0.72);
+  color: var(--color-ink-soft);
   line-height: 1.55;
 }
 
