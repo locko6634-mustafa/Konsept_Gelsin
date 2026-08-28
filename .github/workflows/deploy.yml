@@ -25,6 +25,8 @@ jobs:
         with:
           node-version: 22
           cache: ""
+      - name: Bagimliliklari kilitli surumlerle kur
+        run: npm ci --include=dev
       - name: Tum kalite kapilarini calistir
         env:
           CHROME_PATH: /usr/bin/google-chrome
