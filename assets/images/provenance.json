@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-27",
+  "generatedAt": "2026-08-28",
   "generator": "OpenAI ImageGen",
   "sharedReference": "C:/Users/Mustafa/Downloads/WhatsApp Image 2026-08-27 at 00.39.52.jpeg",
   "sharedDirection": "Warm photorealistic candlelit wedding editorial photography with ivory flowers, cream paper, amber highlights and soft depth of field; no UI, readable text, logos or watermarks.",
@@ -47,44 +47,164 @@
     },
     {
       "file": "qr-memory-album-mobile.webp",
-      "source": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-d44c70e2-27a9-40b7-a013-5f4190405040.png",
-      "subject": "Square mobile delivery variant of the QR memory-album photograph."
+      "source": "qr-memory-album.webp",
+      "originalSource": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-d44c70e2-27a9-40b7-a013-5f4190405040.png",
+      "subject": "Optimized 480x480 mobile delivery variant of the QR memory-album photograph.",
+      "dimensions": "480x480",
+      "format": "WebP",
+      "quality": 76,
+      "bytes": 29624
     },
     {
       "file": "polaroid-memory-mobile.webp",
-      "source": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-e208adf4-f6c3-4222-a780-186ba95c3235.png",
-      "subject": "Square mobile delivery variant of the Polaroid memory photograph."
+      "source": "polaroid-memory.webp",
+      "originalSource": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-e208adf4-f6c3-4222-a780-186ba95c3235.png",
+      "subject": "Optimized 480x480 mobile delivery variant of the Polaroid memory photograph.",
+      "dimensions": "480x480",
+      "format": "WebP",
+      "quality": 76,
+      "bytes": 38628
     },
     {
       "file": "video-booth-mobile.webp",
-      "source": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-12157fa5-b5b3-499c-9fc5-db43b8f175df.png",
-      "subject": "Square mobile delivery variant of the Video Booth photograph."
+      "source": "video-booth.webp",
+      "originalSource": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-12157fa5-b5b3-499c-9fc5-db43b8f175df.png",
+      "subject": "Optimized 480x480 mobile delivery variant of the Video Booth photograph.",
+      "dimensions": "480x480",
+      "format": "WebP",
+      "quality": 76,
+      "bytes": 18900
     },
     {
       "file": "guest-interviews-mobile.webp",
-      "source": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-598195ed-9d01-4f45-beab-89478a1dbea6.png",
-      "subject": "Square mobile delivery variant of the guest-interview photograph."
+      "source": "guest-interviews.webp",
+      "originalSource": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-598195ed-9d01-4f45-beab-89478a1dbea6.png",
+      "subject": "Optimized 480x480 mobile delivery variant of the guest-interview photograph.",
+      "dimensions": "480x480",
+      "format": "WebP",
+      "quality": 76,
+      "bytes": 17048
     },
     {
       "file": "live-stream-mobile.webp",
-      "source": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-c7c08eb6-ac7d-47a4-b1f0-39047e41fc3a.png",
-      "subject": "Square mobile delivery variant of the live-stream photograph."
+      "source": "live-stream.webp",
+      "originalSource": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-c7c08eb6-ac7d-47a4-b1f0-39047e41fc3a.png",
+      "subject": "Optimized 480x480 mobile delivery variant of the live-stream photograph.",
+      "dimensions": "480x480",
+      "format": "WebP",
+      "quality": 76,
+      "bytes": 19646
     },
     {
       "file": "audio-phone-mobile.webp",
-      "source": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-37dac173-ef3c-43e2-a138-5a5ac3275624.png",
-      "subject": "Square mobile delivery variant of the audio-memory telephone photograph."
+      "source": "audio-phone.webp",
+      "originalSource": "C:/Users/Mustafa/.codex/generated_images/01a04009-ef07-7ed1-a31f-bd7a611172e1/exec-37dac173-ef3c-43e2-a138-5a5ac3275624.png",
+      "subject": "Optimized 480x480 mobile delivery variant of the audio-memory telephone photograph.",
+      "dimensions": "480x480",
+      "format": "WebP",
+      "quality": 76,
+      "bytes": 29354
     },
     {
       "file": "ui/favicon.svg",
       "source": "C:/Users/Mustafa/Documents/Codex/2026-08-27/bu-2-g-rselin-arkaplan-n-2/outputs/konsept-gelsin-arkaplansiz.svg",
       "reference": "C:/Users/Mustafa/AppData/Local/Packages/MicrosoftWindows.Client.Core_cw5n1h2txyewy/TempState/ScreenClip/{7473347C-B29A-42BE-8ECA-99C5EED316A8}.png",
-      "subject": "Transparent square SVG favicon cropped to the original KG speech-bubble logo mark without the surrounding brand name."
+      "subject": "Native-vector KG speech-bubble logo mark with a warm orange sparkle and no visual text or embedded raster data.",
+      "dimensions": "64x64",
+      "format": "SVG",
+      "bytes": 935,
+      "processing": "Redrawn as compact SVG paths with accessible title and description metadata; no font, text element or embedded image dependency."
+    }
+  ],
+  "responsiveDerivatives": [
+    {
+      "source": "hero-still-life-mobile-v3.png",
+      "sourceDimensions": "941x1672",
+      "outputs": [
+        { "file": "hero-still-life-mobile-v3-480w.avif", "dimensions": "480x853", "format": "AVIF", "quality": 58, "bytes": 11880 },
+        { "file": "hero-still-life-mobile-v3-480w.webp", "dimensions": "480x853", "format": "WebP", "quality": 78, "bytes": 19380 },
+        { "file": "hero-still-life-mobile-v3-768w.avif", "dimensions": "768x1365", "format": "AVIF", "quality": 58, "bytes": 19925 },
+        { "file": "hero-still-life-mobile-v3-768w.webp", "dimensions": "768x1365", "format": "WebP", "quality": 78, "bytes": 35202 }
+      ]
+    },
+    {
+      "source": "hero-still-life-v2.png",
+      "sourceDimensions": "1672x941",
+      "outputs": [
+        { "file": "hero-still-life-v2-960w.avif", "dimensions": "960x540", "format": "AVIF", "quality": 58, "bytes": 18795 },
+        { "file": "hero-still-life-v2-960w.webp", "dimensions": "960x540", "format": "WebP", "quality": 78, "bytes": 29348 },
+        { "file": "hero-still-life-v2-1440w.avif", "dimensions": "1440x810", "format": "AVIF", "quality": 58, "bytes": 29136 },
+        { "file": "hero-still-life-v2-1440w.webp", "dimensions": "1440x810", "format": "WebP", "quality": 78, "bytes": 47842 }
+      ]
+    },
+    {
+      "source": "qr-memory-album.webp",
+      "sourceDimensions": "960x960",
+      "outputs": [
+        { "file": "qr-memory-album.avif", "dimensions": "960x960", "format": "AVIF", "quality": 54, "bytes": 46014 },
+        { "file": "qr-memory-album-mobile.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 29624 },
+        { "file": "qr-memory-album-480w.avif", "dimensions": "480x480", "format": "AVIF", "quality": 54, "bytes": 20433 },
+        { "file": "qr-memory-album-480w.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 29624 }
+      ]
+    },
+    {
+      "source": "polaroid-memory.webp",
+      "sourceDimensions": "960x960",
+      "outputs": [
+        { "file": "polaroid-memory.avif", "dimensions": "960x960", "format": "AVIF", "quality": 54, "bytes": 62007 },
+        { "file": "polaroid-memory-mobile.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 38628 },
+        { "file": "polaroid-memory-480w.avif", "dimensions": "480x480", "format": "AVIF", "quality": 54, "bytes": 27874 },
+        { "file": "polaroid-memory-480w.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 38628 }
+      ]
+    },
+    {
+      "source": "video-booth.webp",
+      "sourceDimensions": "960x960",
+      "outputs": [
+        { "file": "video-booth.avif", "dimensions": "960x960", "format": "AVIF", "quality": 54, "bytes": 22035 },
+        { "file": "video-booth-mobile.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 18900 },
+        { "file": "video-booth-480w.avif", "dimensions": "480x480", "format": "AVIF", "quality": 54, "bytes": 11961 },
+        { "file": "video-booth-480w.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 18900 }
+      ]
+    },
+    {
+      "source": "guest-interviews.webp",
+      "sourceDimensions": "960x960",
+      "outputs": [
+        { "file": "guest-interviews.avif", "dimensions": "960x960", "format": "AVIF", "quality": 54, "bytes": 20839 },
+        { "file": "guest-interviews-mobile.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 17048 },
+        { "file": "guest-interviews-480w.avif", "dimensions": "480x480", "format": "AVIF", "quality": 54, "bytes": 10888 },
+        { "file": "guest-interviews-480w.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 17048 }
+      ]
+    },
+    {
+      "source": "live-stream.webp",
+      "sourceDimensions": "960x960",
+      "outputs": [
+        { "file": "live-stream.avif", "dimensions": "960x960", "format": "AVIF", "quality": 54, "bytes": 25003 },
+        { "file": "live-stream-mobile.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 19646 },
+        { "file": "live-stream-480w.avif", "dimensions": "480x480", "format": "AVIF", "quality": 54, "bytes": 12841 },
+        { "file": "live-stream-480w.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 19646 }
+      ]
+    },
+    {
+      "source": "audio-phone.webp",
+      "sourceDimensions": "960x960",
+      "outputs": [
+        { "file": "audio-phone.avif", "dimensions": "960x960", "format": "AVIF", "quality": 54, "bytes": 39888 },
+        { "file": "audio-phone-mobile.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 29354 },
+        { "file": "audio-phone-480w.avif", "dimensions": "480x480", "format": "AVIF", "quality": 54, "bytes": 20216 },
+        { "file": "audio-phone-480w.webp", "dimensions": "480x480", "format": "WebP", "quality": 76, "bytes": 29354 }
+      ]
     }
   ],
   "processing": {
     "operation": "Reference-guided generation plus mechanical delivery optimization",
-    "output": "Hero PNGs retained at 1672x941 and 941x1672; package photographs exported as 960x960 WebP, quality 86; mobile package variants mirror the square compositions.",
+    "output": "Hero PNG sources retained at 1672x941 and 941x1672; original package photographs retained as 960x960 WebP, quality 86.",
+    "responsiveOutput": "Hero sources exported at mobile 480/768 widths and desktop 960/1440 widths in AVIF and WebP; six package sources retained as 960x960 WebP, supplemented by 960x960 AVIF and 480x480 AVIF/WebP; legacy mobile filenames were re-encoded as real 480x480 WebP compatibility assets.",
+    "tool": "Sharp 0.34.5 with libvips 8.17.3",
+    "resize": "Lanczos3, aspect ratio preserved, without enlargement",
+    "encoding": "Hero AVIF quality 58 and WebP quality 78; package AVIF quality 54 and WebP quality 76; encoder effort 5; AVIF 4:2:0 chroma subsampling; metadata omitted.",
     "creativeChangesAfterGeneration": false
   }
 }

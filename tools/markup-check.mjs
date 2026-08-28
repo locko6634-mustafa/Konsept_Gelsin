@@ -134,7 +134,20 @@ export function validateMarkup(pageName, originalHtml, allPages = new Map([[page
     }
   }
 
-  if (tags(html, "form").length > 0) add("landing page form içermemeli");
+  const forms = tags(html, "form");
+  const dialogs = tags(html, "dialog");
+  if (forms.length !== 1 || forms.some(({ attributes }) => attribute(attributes, "data-quote-form") === null)) {
+    add("sayfa yalnız data-quote-form teklif formunu içermeli");
+  }
+  if (
+    dialogs.length !== 1 ||
+    dialogs.some(
+      ({ attributes }) =>
+        attribute(attributes, "id") !== "quote-dialog" || attribute(attributes, "data-quote-dialog") === null,
+    )
+  ) {
+    add("sayfa tek ve erişilebilir teklif dialogu içermeli");
+  }
   if (/\bconcept-line\b/i.test(html)) add("kaldırılan hizmet geçiş çizgisi bulunmamalı");
   if (/(?:href|src)=["'][^"']*iletisim\.html/i.test(html)) add("ayrı iletişim sayfasına bağlantı bulunmamalı");
 

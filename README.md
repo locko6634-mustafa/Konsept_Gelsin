@@ -1,16 +1,16 @@
 # Konsept Gelsin
 
-Konsept Gelsin; düğün ve etkinlikler için altı hatıra hizmetini tanıtan, ziyaretçiyi doğrudan WhatsApp görüşmesine yönlendiren çok sayfalı statik bir web sitesidir. Vanilla HTML5, CSS ve JavaScript ES Modules kullanır; form, ayrı iletişim sayfası, backend, üyelik ve ödeme sistemi içermez.
+Konsept Gelsin; düğün ve nişanlar için altı hatıra hizmetini tanıtan, ziyaretçiyi tarih, şehir ve paket bilgileriyle hazırlanmış bir WhatsApp görüşmesine yönlendiren çok sayfalı statik bir web sitesidir. Vanilla HTML5, CSS ve JavaScript ES Modules kullanır; ayrı iletişim sayfası, backend, üyelik ve ödeme sistemi içermez. Teklif adımlarına girilen bilgiler yalnız tarayıcıda WhatsApp mesajına dönüştürülür; sunucuya gönderilmez ve saklanmaz.
 
 ## Sayfa ve ana akış
 
 - `index.html`: Landing page tam üç ana bölümden oluşur.
-  1. **Hero:** Solda marka mesajını, sağda ImageGen ile üretilen çiçekli ve mum ışıklı düğün masası ile Polaroid çift kompozisyonunu kullanır.
-  2. **Paketler:** Öne çıkan iki konsepti, altı büyük hizmet kartını ve üç adımlı çalışma akışını hem masaüstünde hem mobilde aynı içerik sırasıyla sunar.
-  3. **WhatsApp iletişim:** Form göstermeden, ziyaretçiyi doğrudan Konsept Gelsin WhatsApp hattına taşır.
-- Altı paket detay sayfası: Her hizmet için tanıtım yazısı, kapsam listesi, mevcut temsili görseller, geçici video ön izleme alanı ve hizmete özel WhatsApp CTA'sı sunar.
+  1. **Hero:** Marka mesajını, çiçekli ve mum ışıklı düğün masası ile modern Polaroid kompozisyonunu ve tek bir “Paketleri keşfet” aksiyonunu kullanır.
+  2. **Paketler:** Altı hizmeti tek bir responsive gridde, iki öne çıkan rozeti ve üç adımlı çalışma akışıyla sunar.
+  3. **Teklif iletişimi:** Tarih, şehir ve paket bilgisini üç kısa adımda alıp hazır WhatsApp mesajı üretir.
+- Altı paket detay sayfası: Her hizmet için önce vaat ve kapsamı, ardından sekiz görsellik temsili galeri, açıkça pasif olarak etiketlenmiş video ön izlemeleri ve hizmete özel teklif CTA'sı sunar.
 
-Hero metinleri görselin içine gömülü değildir; erişilebilir HTML olarak yönetilir. ImageGen masaüstü için yatay, mobil için dikey bir arka plan üretir; `picture/source` doğru varyantı seçerken metin ve CTA'lar her iki kırılımda da görselin üstünde kalır. Paket kartları logo kullanmaz ve yeni, sıcak düğün fotoğraflarını kare kompozisyonda gösterir. Mobilde yalnız hızlı işlem çubuğu cihaza özgüdür; ana sayfa yapısı ve görsel dili masaüstüyle ortaktır. Görseller temsili yaratıcı varlıklardır; gerçek müşteri işi veya etkinlik kaydı oldukları iddia edilmez.
+Hero metinleri görselin içine gömülü değildir; erişilebilir HTML olarak yönetilir. Responsive AVIF/WebP kaynakları cihaz genişliğine uygun hero ve kart görselini seçer. Mobilde paket kartları iki, tablet ve masaüstünde üç sütun kullanır. Hero geçildikten sonra görünen mobil hızlı işlem çubuğu paketlere ve teklif akışına erişim sağlar. Görseller temsili yaratıcı varlıklardır; gerçek müşteri işi veya etkinlik kaydı oldukları iddia edilmez.
 
 ## Çalıştırma
 
@@ -26,11 +26,11 @@ Komut, yerel statik geliştirme sunucusunu başlatır. Terminalde gösterilen ye
 
 Altı hizmete ait ad, açıklama, vaat, medya eşlemesi ve kapsam maddelerinin içerik otoritesi `content/services.json` dosyasıdır. Hizmet içeriği değiştirildiğinde önce bu dosya güncellenmeli, ardından `npm run content:sync` çalıştırılmalıdır. `npm run content:check`, üretilen detay sayfalarıyla içerik kaynağı arasındaki sapmayı yayın öncesi engeller.
 
-Depoda henüz gerçek paket videosu bulunmadığı için detay sayfalarında mevcut görsellerle açıkça etiketlenmiş video ön izleme alanları kullanılır. Bu alanlar gerçek çekimler hazır olduğunda erişilebilir, kontrollü video bileşenleriyle değiştirilmelidir.
+Depoda henüz gerçek paket videosu bulunmadığı için detay sayfalarında mevcut görsellerle açıkça “Temsili video ön izlemesi” olarak etiketlenmiş pasif alanlar kullanılır. Bu alanlar gerçek çekimler hazır olduğunda erişilebilir, kontrollü video bileşenleriyle değiştirilmelidir.
 
 ## WhatsApp iletişimi
 
-Sayfadaki WhatsApp bağlantıları `wa.me` üzerinden doğrudan **+90 538 688 83 06** numarasını açar. Hizmet CTA'ları ilgili hizmet adını içeren hazır bir mesajla görüşmeyi başlatabilir. Sitede kullanıcıdan bilgi toplanmaz ve veri saklanmaz.
+Sayfadaki WhatsApp bağlantıları `wa.me` üzerinden doğrudan **+90 538 688 83 06** numarasını açar. JavaScript kullanılabildiğinde CTA'lar tarih, şehir ve paket adımlarını içeren erişilebilir teklif dialogunu açar; son bağlantı bu alanları hazır mesaja ekler. JavaScript kapalıysa CTA'ların geçerli genel WhatsApp bağlantısı çalışmaya devam eder. Bilgiler tarayıcıda tutulur ve yalnız kullanıcı son bağlantıyı açtığında WhatsApp'a aktarılır.
 
 ## Klasör yapısı
 
@@ -48,7 +48,7 @@ storage/public-media Sunucuda /media URL alanından sunulan görseller
 
 ## Kalite ve testler
 
-Hedeflenen görünüm genişlikleri **320, 375, 768 ve 1440 piksel**dir. Klavye erişimi, görünür odak durumları, azaltılmış hareket tercihi ve yatay taşma kontrolleri kalite kapısının parçasıdır.
+Hedeflenen görünüm sınıfları **320×568, 375×812, 390×844, 430×932, 812×375, 768×1024 ve 1440×900** boyutlarını kapsar. Klavye erişimi, görünür odak durumları, Axe erişilebilirlik taraması, %200 metin büyütme, azaltılmış hareket tercihi, yatay taşma ve görsel performans bütçeleri kalite kapısının parçasıdır.
 
 ```powershell
 npm run test:targeted

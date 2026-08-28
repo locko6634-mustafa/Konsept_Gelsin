@@ -53,13 +53,45 @@
   --color-white: hsl(0 0% 100%);
   --color-error: hsl(3 72% 39%);
 
+  /* Anlamsal renk rolleri */
+  --surface-page: var(--color-paper);
+  --surface-subtle: var(--color-paper-muted);
+  --surface-sunken: var(--color-paper-deep);
+  --surface-raised: var(--color-white);
+  --surface-scrim: hsl(17 32% 6% / 0.64);
+  --text-primary: var(--color-ink);
+  --text-secondary: var(--color-ink-soft);
+  --text-on-action: var(--color-white);
+  --text-error: var(--color-error);
+  --action-primary: var(--color-orange);
+  --action-primary-hover: var(--color-orange-deep);
+  --action-primary-soft: hsl(24 92% 39% / 0.12);
+  --action-whatsapp: var(--color-whatsapp);
+  --action-whatsapp-hover: hsl(148 70% 24%);
+  --border-subtle: hsl(31 25% 82% / 0.72);
+  --border-strong: hsl(21 18% 56%);
+  --border-action: var(--color-orange);
+  --border-focus: hsl(217 92% 35%);
+
   --shadow-paper: 0 1.2rem 2.8rem hsl(18 40% 12% / 0.16);
   --shadow-raised: 0 0.7rem 1.8rem hsl(18 40% 12% / 0.13);
   --shadow-header: 0 0.35rem 1.2rem hsl(18 40% 12% / 0.08);
 
+  /* Yükselti rolleri */
+  --elevation-header: var(--shadow-header);
+  --elevation-card: 0 0.35rem 1.1rem hsl(20 35% 15% / 0.09);
+  --elevation-card-hover: 0 0.75rem 1.7rem hsl(20 35% 15% / 0.14);
+  --elevation-sheet: var(--shadow-paper);
+  --elevation-dock: 0 -0.35rem 1.25rem hsl(20 35% 15% / 0.14);
+
   --radius-sm: 0.5rem;
   --radius-md: 0.875rem;
   --radius-lg: 1rem;
+  --radius-pill: 999px;
+  --radius-sheet: 1.5rem;
+  --radius-control: var(--radius-sm);
+  --radius-card: var(--radius-lg);
+  --radius-overlay: var(--radius-sheet);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -74,6 +106,19 @@
 
   --shell: 76rem;
   --header-height: 4.5rem;
-  --focus-ring: 0 0 0 0.22rem var(--color-yellow), 0 0 0 0.38rem var(--color-ink);
+  --type-body-size: 1rem;
+  --type-body-leading: 1.65;
+  --type-secondary-size: 0.875rem;
+  --type-label-size: 0.875rem;
+  --focus-color: var(--border-focus);
+  --focus-width: 0.1875rem;
+  --focus-offset: 0.1875rem;
+  --motion-fast: 140ms;
+  --motion-standard: 220ms;
+  --motion-slow: 420ms;
+  --motion-feedback: var(--motion-fast);
+  --motion-state: var(--motion-standard);
+  --motion-reveal: var(--motion-slow);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
 }

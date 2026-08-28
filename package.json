@@ -18,5 +18,8 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "axe-core": "4.13.0"
   }
 }
