@@ -20,6 +20,11 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .package-detail-page--minimal .package-overview__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-7);
+  }
+
   .package-detail-hero__inner {
     gap: clamp(1.5rem, 6vw, 2.5rem);
   }

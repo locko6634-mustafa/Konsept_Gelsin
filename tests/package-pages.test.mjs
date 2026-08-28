@@ -28,7 +28,7 @@ test("tüm paket detay sayfaları ortak HTML ve erişilebilirlik sözleşmesini 
   for (const pageName of packagePageNames) {
     const html = pages.get(pageName);
     assert.deepEqual(validateMarkup(pageName, html, pages), []);
-    assert.match(html, /<body\b[^>]*class="package-detail-page"/);
+    assert.match(html, /<body\b[^>]*class="[^"]*\bpackage-detail-page\b[^"]*"/);
     assert.equal((html.match(/<section\b/g) ?? []).length, 4);
     assert.match(html, /<section\b[^>]*class="package-detail-hero"/);
     assert.match(html, /<section\b[^>]*class="package-overview"/);
@@ -81,8 +81,23 @@ test("her detay sayfası kendi hizmet içeriğini, geri yolunu ve WhatsApp CTA'l
     assert.match(html, /href="index\.html#paketler"/);
     assert.match(html, /href="index\.html#iletisim"/);
     assert.match(html, new RegExp(`src="/media/images/${escapeRegExp(service.image)}"`));
-    assert.match(html, new RegExp(`srcset="/media/images/${escapeRegExp(service.mobileImage)}"`));
+    if (service.detailVariant === "minimal") {
+      assert.doesNotMatch(html, new RegExp(`rel="preload"[^>]*${escapeRegExp(service.image)}`));
+    } else {
+      assert.match(html, new RegExp(`srcset="/media/images/${escapeRegExp(service.mobileImage)}"`));
+    }
   }
+});
+
+test("QR anı albümü detay sayfası sade hero ve açıklama varyantını kullanır", () => {
+  const html = pages.get("qr-kodlu-dijital-ani-albumu.html");
+  const hero = html.match(/<section\b[^>]*class="package-detail-hero"[^>]*>([\s\S]*?)<\/section>/i)?.[1] ?? "";
+  const overview = html.match(/<section\b[^>]*class="package-overview"[^>]*>([\s\S]*?)<\/section>/i)?.[1] ?? "";
+
+  assert.match(html, /<body\b[^>]*class="package-detail-page package-detail-page--minimal"/);
+  assert.doesNotMatch(hero, /Paket 01 · QR Anı Albümü/);
+  assert.doesNotMatch(hero, /<figure\b|package-detail-hero__media/);
+  assert.doesNotMatch(overview, />Deneyimin özü<|>Paket kapsamı</);
 });
 
 test("medya alanları sade fotoğraf mozaiği ve iki dikey video kapağı kullanır", () => {

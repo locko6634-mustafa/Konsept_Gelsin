@@ -59,6 +59,7 @@ test("hizmet veri kaynağı altı eksiksiz ve benzersiz kayıt içerir", () => {
     assert.match(service.page, /^[a-z0-9]+(?:-[a-z0-9]+)*\.html$/);
     assert.match(service.image, /^[a-z0-9]+(?:-[a-z0-9]+)*\.webp$/);
     assert.match(service.mobileImage, /^[a-z0-9]+(?:-[a-z0-9]+)*\.webp$/);
+    if ("detailVariant" in service) assert.equal(service.detailVariant, "minimal");
     for (const field of ["name", "shortName", "summary", "description", "promise", "imageAlt"]) {
       assert.equal(typeof service[field], "string", `${service.id}.${field} metin olmalı`);
       assert.ok(service[field].trim().length > 2, `${service.id}.${field} boş bırakılamaz`);

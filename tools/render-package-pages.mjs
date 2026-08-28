@@ -21,6 +21,7 @@ function renderScopeItems(contents) {
 }
 
 export function renderPackagePage(service) {
+  const isMinimal = service.detailVariant === "minimal";
   const name = escapeHtml(service.name);
   const shortName = escapeHtml(service.shortName);
   const summary = escapeHtml(service.summary);
@@ -32,6 +33,24 @@ export function renderPackagePage(service) {
   const page = escapeHtml(service.page);
   const canonical = `https://konseptgelsin.com/${page}`;
   const metaDescription = escapeHtml(`${service.summary} ${service.name} paketinin kapsamını ve detaylarını inceleyin.`);
+  const bodyClass = isMinimal ? "package-detail-page package-detail-page--minimal" : "package-detail-page";
+  const imagePreload = isMinimal
+    ? ""
+    : `\n    <link rel="preload" href="/media/images/${image}" as="image" type="image/webp" fetchpriority="high">`;
+  const heroEyebrow = isMinimal
+    ? ""
+    : `\n            <p class="package-detail__eyebrow">Paket ${escapeHtml(service.number)} · ${shortName}</p>`;
+  const heroMedia = isMinimal
+    ? ""
+    : `\n\n          <figure class="package-detail-hero__media">
+            <span class="package-detail-hero__number" aria-hidden="true">${escapeHtml(service.number)}</span>
+            <picture>
+              <source media="(max-width: 36rem)" srcset="/media/images/${mobileImage}" width="960" height="960">
+              <img src="/media/images/${image}" alt="${imageAlt}" width="960" height="960" fetchpriority="high" decoding="async">
+            </picture>
+          </figure>`;
+  const overviewEyebrow = isMinimal ? "" : `\n            <p class="package-detail__eyebrow">Deneyimin özü</p>`;
+  const scopeEyebrow = isMinimal ? "" : `\n            <p class="package-detail__eyebrow">Paket kapsamı</p>`;
 
   return `<!doctype html>
 <html lang="tr">
@@ -48,8 +67,7 @@ export function renderPackagePage(service) {
     <meta property="og:url" content="${canonical}">
     <meta property="og:image" content="https://konseptgelsin.com/media/images/${image}">
     <link rel="canonical" href="${canonical}">
-    <link rel="icon" href="/media/images/ui/favicon.svg" type="image/svg+xml">
-    <link rel="preload" href="/media/images/${image}" as="image" type="image/webp" fetchpriority="high">
+    <link rel="icon" href="/media/images/ui/favicon.svg" type="image/svg+xml">${imagePreload}
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
@@ -60,7 +78,7 @@ export function renderPackagePage(service) {
     <link rel="stylesheet" href="css/motion.css">
     <title>${name} | Konsept Gelsin</title>
   </head>
-  <body class="package-detail-page">
+  <body class="${bodyClass}">
     <a class="skip-link" href="#main-content">Ana içeriğe geç</a>
 
     <header class="site-header">
@@ -85,8 +103,7 @@ export function renderPackagePage(service) {
             <a class="package-detail__back" href="index.html#paketler">
               <svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg>
               Tüm paketlere dön
-            </a>
-            <p class="package-detail__eyebrow">Paket ${escapeHtml(service.number)} · ${shortName}</p>
+            </a>${heroEyebrow}
             <h1 id="package-title">${name}</h1>
             <p class="package-detail__lead">${summary}</p>
             <div class="package-detail__actions">
@@ -99,22 +116,13 @@ export function renderPackagePage(service) {
                 <svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-arrow"></use></svg>
               </a>
             </div>
-          </div>
-
-          <figure class="package-detail-hero__media">
-            <span class="package-detail-hero__number" aria-hidden="true">${escapeHtml(service.number)}</span>
-            <picture>
-              <source media="(max-width: 36rem)" srcset="/media/images/${mobileImage}" width="960" height="960">
-              <img src="/media/images/${image}" alt="${imageAlt}" width="960" height="960" fetchpriority="high" decoding="async">
-            </picture>
-          </figure>
+          </div>${heroMedia}
         </div>
       </section>
 
       <section class="package-overview" id="paket-kapsami" aria-labelledby="overview-title">
         <div class="package-overview__grid shell">
-          <div class="package-overview__copy">
-            <p class="package-detail__eyebrow">Deneyimin özü</p>
+          <div class="package-overview__copy">${overviewEyebrow}
             <h2 id="overview-title">${shortName} deneyimi nasıl çalışır?</h2>
             <p>${description}</p>
             <blockquote>
@@ -122,8 +130,7 @@ export function renderPackagePage(service) {
             </blockquote>
           </div>
 
-          <div class="package-scope" aria-labelledby="scope-title">
-            <p class="package-detail__eyebrow">Paket kapsamı</p>
+          <div class="package-scope" aria-labelledby="scope-title">${scopeEyebrow}
             <h2 id="scope-title">Neler dahil?</h2>
             <ul>
 ${renderScopeItems(service.contents)}

@@ -2,6 +2,7 @@
   {
     "id": "qr-anı-albumu",
     "number": "01",
+    "detailVariant": "minimal",
     "page": "qr-kodlu-dijital-ani-albumu.html",
     "image": "qr-memory-album.webp",
     "mobileImage": "qr-memory-album-mobile.webp",
