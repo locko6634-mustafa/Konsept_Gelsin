@@ -307,9 +307,20 @@ function pageAuditExpression() {
       rootScrollWidth: root.scrollWidth,
       bodyScrollWidth: body.scrollWidth,
       viewportWidth: innerWidth,
+      viewportHeight: innerHeight,
       packageCards,
       featuredCards: visibleRects(".featured-card"),
       processSteps: visibleRects(".process-step"),
+      processMarkers: [...document.querySelectorAll(".process-step__top")].map((top) => {
+        const index = top.querySelector(".process-step__index")?.getBoundingClientRect();
+        const icon = top.querySelector(".process-step__icon")?.getBoundingClientRect();
+        return index && icon
+          ? {
+              index: { top: index.top, right: index.right, bottom: index.bottom, left: index.left },
+              icon: { top: icon.top, right: icon.right, bottom: icon.bottom, left: icon.left },
+            }
+          : null;
+      }),
       packageLinks: visibleRects(".package__link"),
       visibleHeaderLinks: visibleRects(".desktop-nav a"),
       featuredGridColumns: (() => {
@@ -458,6 +469,18 @@ async function auditPage({ cdp, origin, page, viewport }) {
           audit.processSteps.every((step) => Math.abs(step.top - audit.processSteps[0].top) <= 1),
           `${page.name}/${viewport.width}: süreç adımları geniş ekranda yatay hizalanmadı (${JSON.stringify(audit.processSteps)}).`,
         );
+        assert(
+          audit.processMarkers.every(
+            (marker) =>
+              marker &&
+              marker.index.right > marker.icon.left &&
+              marker.index.left < marker.icon.right &&
+              marker.index.bottom > marker.icon.top &&
+              marker.index.top < marker.icon.bottom &&
+              marker.index.left + marker.index.right < marker.icon.left + marker.icon.right,
+          ),
+          `${page.name}/${viewport.width}: süreç numaraları ikonların sol üst kenarına hizalanmadı (${JSON.stringify(audit.processMarkers)}).`,
+        );
       }
       assert(audit.packageLinks.length === 6, `${page.name}/${viewport.width}: altı paket bağlantısı görünmüyor.`);
       assert(audit.featuredGridColumns === 2, `${page.name}/${viewport.width}: öne çıkan kartlar iki sütun değil.`);
@@ -513,7 +536,10 @@ async function auditPage({ cdp, origin, page, viewport }) {
     if (viewport.width <= 768) {
       assert(audit.mobileActionBar.visible, `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu görünmüyor.`);
       assert(audit.mobileActionBar.position === "fixed", `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu sabit değil.`);
-      assert(Math.abs(audit.mobileActionBar.bottom - viewport.height) <= 1, `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu viewport altına oturmuyor (${audit.mobileActionBar.bottom}).`);
+      assert(
+        Math.abs(audit.mobileActionBar.bottom - audit.viewportHeight) <= 1,
+        `${page.name}/${viewport.width}: mobil hızlı işlem çubuğu viewport altına oturmuyor (${audit.mobileActionBar.bottom}/${audit.viewportHeight}).`,
+      );
       assert(audit.bodyPaddingBottom >= audit.mobileActionBar.height, `${page.name}/${viewport.width}: alt çubuk için içerik rezervi yetersiz (${audit.bodyPaddingBottom} < ${audit.mobileActionBar.height}).`);
       if (page.kind === "home") {
         assert(audit.heroImageSource.endsWith("/media/images/hero-still-life-mobile-v3.png"), `${page.name}/${viewport.width}: mobil hero görseli yüklenmedi (${audit.heroImageSource}).`);

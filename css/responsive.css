@@ -249,9 +249,10 @@
   }
 
   .process-step__index {
-    top: clamp(0.65rem, 3vw, 1rem);
+    top: clamp(0.15rem, 0.8vw, 0.35rem);
     width: clamp(1.35rem, 5.8vw, 1.7rem);
     height: clamp(1.35rem, 5.8vw, 1.7rem);
+    transform: translateX(calc(-50% - clamp(1.35rem, 3vw, 1.8rem)));
     font-size: clamp(0.68rem, 2.8vw, 0.78rem);
   }
 
@@ -408,6 +409,7 @@
     left: -0.2rem;
     width: 1.45rem;
     height: 1.45rem;
+    transform: none;
     font-size: 0.72rem;
   }
 

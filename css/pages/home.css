@@ -362,11 +362,13 @@
 
 .process-step__index {
   position: absolute;
-  top: 1.45rem;
-  left: 0;
+  z-index: 1;
+  top: 0.25rem;
+  left: 50%;
   display: grid;
   width: 1.9rem;
   height: 1.9rem;
+  transform: translateX(calc(-50% - 2rem));
   place-items: center;
   border-radius: 50%;
   background: var(--color-orange);
