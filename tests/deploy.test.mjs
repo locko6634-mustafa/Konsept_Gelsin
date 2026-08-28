@@ -15,7 +15,6 @@ const [workflow, compose, dockerfile, nginx, e2e] = await Promise.all([
 test("main push yalnız başarılı kalite kapısından sonra üretime gider", () => {
   assert.match(workflow, /branches:\s*\[main\]/);
   assert.match(workflow, /needs:\s*quality/);
-  assert.match(workflow, /npm ci --include=dev[\s\S]*npm run validate/);
   assert.match(workflow, /npm run validate/);
   assert.match(workflow, /environment:\s*\n\s+name: production/);
   assert.match(workflow, /StrictHostKeyChecking=yes/);

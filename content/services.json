@@ -2,7 +2,6 @@
   {
     "id": "qr-anı-albumu",
     "number": "01",
-    "featured": true,
     "page": "qr-kodlu-dijital-ani-albumu.html",
     "image": "qr-memory-album.webp",
     "mobileImage": "qr-memory-album-mobile.webp",
@@ -23,7 +22,6 @@
   {
     "id": "polaroid-hatira-kosesi",
     "number": "02",
-    "featured": false,
     "page": "polaroid-hatira-kosesi.html",
     "image": "polaroid-memory.webp",
     "mobileImage": "polaroid-memory-mobile.webp",
@@ -46,7 +44,6 @@
   {
     "id": "video-booth",
     "number": "03",
-    "featured": false,
     "page": "video-booth.html",
     "image": "video-booth.webp",
     "mobileImage": "video-booth-mobile.webp",
@@ -69,7 +66,6 @@
   {
     "id": "misafir-roportajlari",
     "number": "04",
-    "featured": false,
     "page": "misafir-roportajlari.html",
     "image": "guest-interviews.webp",
     "mobileImage": "guest-interviews-mobile.webp",
@@ -90,7 +86,6 @@
   {
     "id": "canli-yayin-paketi",
     "number": "05",
-    "featured": false,
     "page": "canli-yayin-paketi.html",
     "image": "live-stream.webp",
     "mobileImage": "live-stream-mobile.webp",
@@ -111,7 +106,6 @@
   {
     "id": "sesli-ani-telefonu",
     "number": "06",
-    "featured": true,
     "page": "sesli-ani-telefonu.html",
     "image": "audio-phone.webp",
     "mobileImage": "audio-phone-mobile.webp",

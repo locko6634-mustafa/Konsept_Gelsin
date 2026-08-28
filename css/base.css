@@ -12,12 +12,14 @@ html {
 }
 
 body {
+  min-width: 20rem;
   margin: 0;
-  background: var(--surface-page);
-  color: var(--text-primary);
+  overflow-x: clip;
+  background: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-body);
-  font-size: var(--type-body-size);
-  line-height: var(--type-body-leading);
+  font-size: 1rem;
+  line-height: 1.65;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -66,15 +68,9 @@ a {
   text-underline-offset: 0.22em;
 }
 
-:where(a, button, input, select, textarea, summary):focus {
-  outline-color: var(--focus-color) !important;
-  outline-offset: var(--focus-offset);
-  outline-style: solid !important;
-  outline-width: var(--focus-width) !important;
-}
-
-:where(a, button, input, select, textarea, summary) {
-  touch-action: manipulation;
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 h1,
@@ -117,11 +113,6 @@ p {
 .shell {
   width: min(calc(100% - 3rem), var(--shell));
   margin-inline: auto;
-}
-
-main,
-footer {
-  overflow-wrap: anywhere;
 }
 
 .skip-link {

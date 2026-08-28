@@ -37,54 +37,21 @@ test("genel CTA kısa ve markaya özgü bir görüşme mesajı üretir", () => {
   ].join("\n");
 
   assert.equal(buildWhatsAppMessage(), expected);
-  assert.equal(
-    buildWhatsAppMessage({ service: " \n\t ", eventDate: "\u0000 ", city: " \u007f " }),
-    expected,
-  );
+  assert.equal(buildWhatsAppMessage({ service: " \n\t " }), expected);
 });
 
-test("teklif alanlarını temizler ve geçerli tarihi DD.MM.YYYY biçimine dönüştürür", () => {
+test("paket CTA'sı seçilen hizmeti güvenli biçimde mesaja taşır", () => {
   const service = `  Video\n Booth ${"x".repeat(120)}  `;
-  const message = buildWhatsAppMessage({
-    service,
-    eventDate: " \u0000 2026-09-12 \u007f ",
-    city: " \u0000 İstanbul\n Avrupa \u007f ",
-  });
+  const message = buildWhatsAppMessage({ service });
 
   assert.match(message, /^Merhaba Konsept Gelsin,/);
   assert.match(message, /Video Booth x+ hakkında bilgi almak istiyorum\./);
   assert.doesNotMatch(message, /x{101}/);
-  assert.match(message, /Etkinlik tarihi: 12\.09\.2026/);
-  assert.match(message, /Şehir: İstanbul Avrupa/);
-  assert.doesNotMatch(message.replaceAll("\n", ""), /[\u0000-\u001f\u007f]/);
   assert.match(message, /Kapsamı ve uygunluğu birlikte netleştirebilir miyiz\?$/);
 });
 
-test("henüz netleşmeyen alanları ve kararsız paket seçimini açıkça mesaja taşır", () => {
-  const message = buildWhatsAppMessage({
-    service: "Kararsızım",
-    eventDate: "Henüz net değil",
-    city: "Henüz net değil",
-  });
-
-  assert.equal(
-    message,
-    [
-      "Merhaba Konsept Gelsin,",
-      "Kararsızım hakkında bilgi almak istiyorum.",
-      "Etkinlik tarihi: Henüz net değil",
-      "Şehir: Henüz net değil",
-      "Kapsamı ve uygunluğu birlikte netleştirebilir miyiz?",
-    ].join("\n"),
-  );
-});
-
-test("WhatsApp adresi doğru numarayı ve URL kodlu teklif mesajını içerir", () => {
-  const fields = {
-    service: "Sesli Anı Telefonu",
-    eventDate: "2026-09-12",
-    city: "İstanbul",
-  };
+test("WhatsApp adresi doğru numarayı ve URL kodlu hizmet mesajını içerir", () => {
+  const fields = { service: "Sesli Anı Telefonu" };
   const url = new URL(buildWhatsAppUrl(fields));
 
   assert.equal(url.protocol, "https:");

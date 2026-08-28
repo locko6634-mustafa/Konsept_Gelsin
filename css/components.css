@@ -3,8 +3,8 @@
   z-index: 40;
   top: 0;
   min-height: var(--header-height);
-  background: var(--surface-page);
-  box-shadow: var(--elevation-header);
+  background: var(--color-paper);
+  box-shadow: var(--shadow-header);
 }
 
 .site-header__inner {
@@ -16,9 +16,7 @@
 
 .brand {
   display: inline-flex;
-  max-width: 100%;
   flex: 0 0 auto;
-  flex-wrap: wrap;
   min-height: 2.75rem;
   align-items: center;
   justify-content: center;
@@ -29,7 +27,6 @@
   font-weight: 700;
   letter-spacing: -0.045em;
   line-height: 1;
-  text-align: center;
   text-decoration: none;
 }
 
@@ -74,6 +71,7 @@
   transition: transform 220ms var(--ease-out);
 }
 
+.desktop-nav a:hover::after,
 .desktop-nav a[aria-current="page"]::after {
   transform: scaleX(1);
   transform-origin: left;
@@ -85,20 +83,17 @@
 
 .button {
   display: inline-flex;
-  max-width: 100%;
   min-height: 3.25rem;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
   padding: 0.85rem 1.15rem;
   border: 0;
   border-radius: var(--radius-sm);
-  font-weight: 700;
+  font-weight: 750;
   line-height: 1.2;
-  text-align: center;
   text-decoration: none;
-  transition: background-color var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out), transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast) var(--ease-out);
+  transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out), transform 180ms var(--ease-out), box-shadow 180ms var(--ease-out);
 }
 
 .button svg,
@@ -109,8 +104,12 @@
   flex: 0 0 auto;
 }
 
+.button:hover {
+  transform: translateY(-0.12rem);
+}
+
 .button:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 
 .button[aria-busy="true"] {
@@ -124,16 +123,8 @@
   color: var(--color-white);
 }
 
-.button--orange {
-  background: var(--action-primary);
-  box-shadow: 0 0.6rem 1.3rem hsl(16 88% 32% / 0.2);
-  color: var(--text-on-action);
-}
-
-.button--paper {
-  border: 0.0625rem solid var(--border-subtle);
-  background: var(--surface-raised);
-  color: var(--text-primary);
+.button--whatsapp:hover {
+  background: var(--color-orange-deep);
 }
 
 .button--light {
@@ -141,9 +132,17 @@
   color: var(--color-ink);
 }
 
+.button--light:hover {
+  background: var(--color-yellow);
+}
+
 .button--ink {
   background: var(--color-ink);
   color: var(--color-paper);
+}
+
+.button--ink:hover {
+  background: var(--color-orange-deep);
 }
 
 .text-link {
@@ -153,13 +152,18 @@
   gap: 0.55rem;
   border-bottom: 0.12rem solid currentColor;
   font-size: 0.92rem;
-  font-weight: 700;
+  font-weight: 750;
   text-decoration: none;
+}
+
+.text-link:hover svg,
+.package__cta:hover svg {
+  transform: translateX(0.2rem);
 }
 
 .text-link svg,
 .package__cta svg {
-  transition: transform var(--motion-fast) var(--ease-out);
+  transition: transform 180ms var(--ease-out);
 }
 
 .contact-form {
@@ -192,7 +196,7 @@
 
 .field label span {
   color: var(--color-ink-soft);
-  font-size: var(--type-secondary-size);
+  font-size: 0.78rem;
   font-weight: 500;
 }
 
@@ -209,6 +213,10 @@
 .field textarea {
   min-height: 7.2rem;
   resize: vertical;
+}
+
+.field :where(input, select, textarea):hover {
+  border-color: var(--color-ink-soft);
 }
 
 .field :where(input, select, textarea):user-invalid {
@@ -229,7 +237,7 @@
 .form-footer p {
   margin: 0;
   color: var(--color-ink-soft);
-  font-size: var(--type-secondary-size);
+  font-size: 0.78rem;
   line-height: 1.5;
 }
 
@@ -237,327 +245,8 @@
   min-height: 1.5rem;
   margin: calc(var(--space-3) * -1) 0 0;
   color: var(--color-sage-deep);
-  font-size: var(--type-secondary-size);
+  font-size: 0.86rem;
   font-weight: 650;
-}
-
-.quote-dialog {
-  position: fixed;
-  inset: 0;
-  width: min(calc(100% - 2rem), 36rem);
-  max-width: 100%;
-  max-height: min(44rem, calc(100dvh - 2rem));
-  margin: auto;
-  padding: 0;
-  overflow: hidden;
-  border: 0.0625rem solid var(--border-subtle);
-  border-radius: var(--radius-overlay);
-  background: var(--surface-raised);
-  box-shadow: var(--elevation-sheet);
-  color: var(--text-primary);
-  overflow-wrap: anywhere;
-}
-
-.quote-dialog[open] {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-}
-
-.quote-dialog:not([open]) {
-  display: none;
-}
-
-.quote-dialog::backdrop {
-  background: var(--surface-scrim);
-  backdrop-filter: blur(0.22rem);
-}
-
-.quote-dialog [data-quote-form],
-.quote-dialog__form {
-  position: relative;
-  display: grid;
-  min-height: 0;
-  gap: var(--space-5);
-  padding: clamp(1.25rem, 4vw, 2rem);
-  padding-block-start: var(--space-5);
-  overflow: auto;
-  overscroll-behavior: contain;
-}
-
-.quote-dialog__header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
-  gap: var(--space-2);
-  padding: clamp(1.25rem, 4vw, 2rem);
-  border-bottom: 0.0625rem solid var(--border-subtle);
-  background: var(--surface-subtle);
-}
-
-.quote-dialog__header :where(h2, p),
-.quote-dialog__step :where(p) {
-  margin: 0;
-}
-
-.quote-dialog__header h2 {
-  max-width: 18ch;
-  font-size: clamp(1.75rem, 5vw, 2.6rem);
-}
-
-.quote-dialog__header p,
-.quote-dialog__hint {
-  color: var(--text-secondary);
-  font-size: var(--type-secondary-size);
-}
-
-.quote-dialog__eyebrow {
-  color: var(--action-primary-hover) !important;
-  font-size: var(--type-label-size) !important;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.quote-dialog__close,
-.quote-dialog [data-quote-close] {
-  position: static;
-  display: grid;
-  width: auto;
-  min-width: 4.75rem;
-  min-height: 2.75rem;
-  padding: 0.55rem 0.75rem;
-  place-items: center;
-  border: 0.0625rem solid var(--border-subtle);
-  border-radius: 50%;
-  background: var(--surface-raised);
-  color: var(--text-primary);
-  font-size: var(--type-label-size);
-  font-weight: 700;
-  justify-self: end;
-}
-
-.quote-dialog__close svg,
-.quote-dialog [data-quote-close] svg {
-  width: 1.2rem;
-  height: 1.2rem;
-}
-
-.quote-dialog__progress-wrap {
-  display: grid;
-  gap: var(--space-2);
-}
-
-.quote-dialog__progress-label {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: var(--type-label-size);
-  font-weight: 650;
-}
-
-.quote-dialog progress,
-.quote-dialog [data-quote-progress] {
-  width: 100%;
-  height: 0.5rem;
-  overflow: hidden;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: var(--surface-sunken);
-  color: var(--action-primary);
-  accent-color: var(--action-primary);
-}
-
-.quote-dialog progress::-webkit-progress-bar {
-  border-radius: inherit;
-  background: var(--surface-sunken);
-}
-
-.quote-dialog progress::-webkit-progress-value {
-  border-radius: inherit;
-  background: var(--action-primary);
-}
-
-.quote-dialog progress::-moz-progress-bar {
-  border-radius: inherit;
-  background: var(--action-primary);
-}
-
-.quote-dialog__step {
-  display: none;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.quote-dialog__step[data-active]:not([hidden]) {
-  display: grid;
-  gap: var(--space-4);
-}
-
-.quote-dialog__step legend {
-  width: 100%;
-  margin-block-end: var(--space-2);
-  padding: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.35rem, 4vw, 1.8rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  line-height: 1.15;
-}
-
-.quote-dialog__field {
-  display: grid;
-  min-width: 0;
-  gap: var(--space-2);
-}
-
-.quote-dialog__field > label,
-.quote-dialog__label {
-  font-size: var(--type-label-size);
-  font-weight: 700;
-}
-
-.quote-dialog__field > span {
-  font-size: var(--type-label-size);
-  font-weight: 700;
-}
-
-.quote-dialog :where(input:not([type="checkbox"]), select) {
-  width: 100%;
-  min-width: 0;
-  min-height: 3.25rem;
-  padding: 0.75rem 0.9rem;
-  border: 0.0625rem solid var(--border-strong);
-  border-radius: var(--radius-control);
-  background: var(--surface-raised);
-  color: var(--text-primary);
-}
-
-.quote-dialog :where(input:not([type="checkbox"]), select):disabled {
-  cursor: not-allowed;
-  background: var(--surface-subtle);
-  opacity: 0.7;
-}
-
-.quote-dialog__unknown,
-.quote-dialog__unknown-option,
-.quote-dialog__choice,
-.quote-dialog label:has(> [data-quote-date-unknown]),
-.quote-dialog label:has(> [data-quote-city-unknown]) {
-  display: grid;
-  min-height: 2.75rem;
-  grid-template-columns: 1.25rem minmax(0, 1fr);
-  align-items: center;
-  gap: var(--space-3);
-  padding: 0.55rem 0.75rem;
-  border: 0.0625rem solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  background: var(--surface-subtle);
-  font-size: var(--type-secondary-size);
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.quote-dialog :where([data-quote-date-unknown], [data-quote-city-unknown]) {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin: 0;
-  accent-color: var(--action-primary);
-}
-
-.quote-dialog__choice > input[type="checkbox"] {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin: 0;
-  accent-color: var(--action-primary);
-}
-
-.quote-dialog__choice:has(input:checked) {
-  border-color: var(--border-action);
-  background: var(--action-primary-soft);
-}
-
-.quote-dialog__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  justify-content: flex-end;
-  padding-block-start: var(--space-2);
-}
-
-.quote-dialog__actions--end {
-  justify-content: flex-end;
-}
-
-.quote-dialog :where([data-quote-next], [data-quote-back], [data-quote-whatsapp]) {
-  display: inline-flex;
-  min-height: 3rem;
-  flex: 1 1 10rem;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: 0.75rem 1rem;
-  border: 0.0625rem solid transparent;
-  border-radius: var(--radius-sm);
-  font-weight: 700;
-  line-height: 1.25;
-  text-align: center;
-  text-decoration: none;
-}
-
-.quote-dialog :where([data-quote-next], [data-quote-back], [data-quote-whatsapp]):active {
-  transform: scale(0.98);
-}
-
-.quote-dialog :where([data-quote-next], [data-quote-back]):disabled {
-  cursor: not-allowed;
-  opacity: 0.48;
-}
-
-.quote-dialog [data-quote-next] {
-  background: var(--action-primary);
-  color: var(--text-on-action);
-}
-
-.quote-dialog [data-quote-back] {
-  border-color: var(--border-subtle);
-  background: var(--surface-raised);
-  color: var(--text-primary);
-}
-
-.quote-dialog__whatsapp,
-.quote-dialog [data-quote-whatsapp] {
-  background: var(--action-whatsapp);
-  color: var(--text-on-action);
-}
-
-.quote-dialog__error,
-.quote-dialog [data-quote-error] {
-  margin: 0;
-  color: var(--text-error);
-  font-size: var(--type-secondary-size);
-  font-weight: 650;
-}
-
-.quote-dialog :where(input, select)[aria-invalid="true"] {
-  border-color: var(--color-error);
-}
-
-[data-quote-date]:focus,
-[data-quote-date]:focus-visible,
-[data-quote-date]:focus-within {
-  outline: var(--focus-width) solid var(--focus-color) !important;
-  outline-offset: var(--focus-offset);
-}
-
-.quote-dialog__summary,
-.quote-dialog__result {
-  display: grid;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  border: 0.0625rem solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  background: var(--surface-subtle);
 }
 
 .site-footer {
@@ -575,87 +264,9 @@
 .site-footer p {
   margin: 0;
   color: var(--color-ink-soft);
-  font-size: var(--type-secondary-size);
+  font-size: 0.84rem;
 }
 
 .site-footer p:last-child {
   font-variant-numeric: tabular-nums;
-}
-
-@media (max-height: 30rem) {
-  .quote-dialog {
-    height: 100dvh;
-    max-height: 100dvh;
-    border-radius: 0;
-  }
-
-  .quote-dialog__header {
-    gap: 0.25rem;
-    padding: clamp(0.5rem, 2vh, 0.75rem) clamp(0.75rem, 2vw, 1rem);
-  }
-
-  .quote-dialog[open] {
-    display: block;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  .quote-dialog__header h2 {
-    max-width: none;
-    font-size: clamp(1.25rem, calc(0.5rem + 4vh), 2rem);
-    line-height: 1.08;
-  }
-
-  .quote-dialog [data-quote-form],
-  .quote-dialog__form {
-    max-height: none;
-    gap: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    overflow: visible;
-  }
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .desktop-nav a:hover::after {
-    transform: scaleX(1);
-    transform-origin: left;
-  }
-
-  .button:hover {
-    transform: translateY(-0.12rem);
-  }
-
-  .button--whatsapp:hover,
-  .button--ink:hover,
-  .button--orange:hover {
-    background: var(--action-primary-hover);
-  }
-
-  .button--paper:hover {
-    border-color: var(--border-strong);
-    background: var(--surface-subtle);
-  }
-
-  .button--light:hover {
-    background: var(--color-yellow);
-  }
-
-  .text-link:hover svg,
-  .package__cta:hover svg {
-    transform: translateX(0.2rem);
-  }
-
-  .field :where(input, select, textarea):hover,
-  .quote-dialog :where(input:not([type="checkbox"]), select):hover {
-    border-color: var(--text-secondary);
-  }
-
-  .quote-dialog [data-quote-next]:hover {
-    background: var(--action-primary-hover);
-  }
-
-  .quote-dialog__whatsapp:hover,
-  .quote-dialog [data-quote-whatsapp]:hover {
-    background: var(--action-whatsapp-hover);
-  }
 }

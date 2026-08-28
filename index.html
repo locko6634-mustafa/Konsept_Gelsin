@@ -13,8 +13,8 @@
     <meta property="og:url" content="https://konseptgelsin.com/">
     <link rel="canonical" href="https://konseptgelsin.com/">
     <link rel="icon" href="/media/images/ui/favicon.svg" type="image/svg+xml">
-    <link rel="preload" href="/media/images/hero-still-life-mobile-v3-480w.avif" imagesrcset="/media/images/hero-still-life-mobile-v3-480w.avif 480w, /media/images/hero-still-life-mobile-v3-768w.avif 768w" imagesizes="100vw" as="image" type="image/avif" media="(max-width: 47.999rem)" fetchpriority="high">
-    <link rel="preload" href="/media/images/hero-still-life-v2-960w.avif" imagesrcset="/media/images/hero-still-life-v2-960w.avif 960w, /media/images/hero-still-life-v2-1440w.avif 1440w" imagesizes="100vw" as="image" type="image/avif" media="(min-width: 48rem)" fetchpriority="high">
+    <link rel="preload" href="/media/images/hero-still-life-v2.png" as="image" type="image/png" media="(min-width: 48.0625rem)" fetchpriority="high">
+    <link rel="preload" href="/media/images/hero-still-life-mobile-v3.png" as="image" type="image/png" media="(max-width: 48rem)" fetchpriority="high">
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
@@ -42,13 +42,10 @@
       </div>
     </header>
 
-    <main id="main-content" tabindex="-1">
+    <main id="main-content">
       <section class="hero" aria-labelledby="hero-title">
         <picture>
-          <source media="(max-width: 47.999rem)" type="image/avif" srcset="/media/images/hero-still-life-mobile-v3-480w.avif 480w, /media/images/hero-still-life-mobile-v3-768w.avif 768w" sizes="100vw">
-          <source media="(max-width: 47.999rem)" type="image/webp" srcset="/media/images/hero-still-life-mobile-v3-480w.webp 480w, /media/images/hero-still-life-mobile-v3-768w.webp 768w" sizes="100vw">
-          <source media="(min-width: 48rem)" type="image/avif" srcset="/media/images/hero-still-life-v2-960w.avif 960w, /media/images/hero-still-life-v2-1440w.avif 1440w" sizes="100vw">
-          <source media="(min-width: 48rem)" type="image/webp" srcset="/media/images/hero-still-life-v2-960w.webp 960w, /media/images/hero-still-life-v2-1440w.webp 1440w" sizes="100vw">
+          <source media="(max-width: 48rem)" srcset="/media/images/hero-still-life-mobile-v3.png" width="941" height="1672">
           <img class="hero__background" src="/media/images/hero-still-life-v2.png" alt="" width="1672" height="941" fetchpriority="high" decoding="async">
         </picture>
         <div class="hero__stage shell">
@@ -66,112 +63,99 @@
               Paketleri Keşfet
               <svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-arrow"></use></svg>
             </a>
+            <a class="button button--hero-secondary" href="https://wa.me/905386888306" data-whatsapp-general target="_blank" rel="noopener noreferrer">
+              <img src="/media/images/ui/whatsapp.svg" alt="" width="23" height="23">
+              WhatsApp'tan Bilgi Al
+            </a>
           </div>
         </div>
       </section>
 
       <section class="packages" id="paketler" aria-labelledby="packages-title">
         <div class="shell">
-          <div class="section-title-row">
-            <h2 id="packages-title">Düğün ve nişan anı paketleri</h2>
-            <p>Gecenize en uygun deneyimi seçin; tarih, şehir ve kurulum ayrıntılarını birlikte netleştirelim.</p>
+          <div class="featured-concepts">
+            <div class="section-title-row">
+              <h2 id="packages-title">En Çok Tercih Edilen Konseptler</h2>
+            </div>
+
+            <div class="featured-grid">
+              <a class="featured-card" href="qr-kodlu-dijital-ani-albumu.html">
+                <div class="featured-card__visual featured-card__visual--qr" role="img" aria-label="Düğün masasında QR kodlu dijital anı albümü kartı"></div>
+                <div class="featured-card__content">
+                  <h3>QR Anı Albümü</h3>
+                  <p>Tüm fotoğraf ve videolar tek albümde toplansın.</p>
+                </div>
+              </a>
+
+              <a class="featured-card" href="sesli-ani-telefonu.html">
+                <div class="featured-card__visual featured-card__visual--phone" role="img" aria-label="Düğün masasında sesli anı telefonu"></div>
+                <div class="featured-card__content">
+                  <h3>Sesli Anı Telefonu</h3>
+                  <p>Misafirleriniz sesli mesajlarını bıraksın, siz dinleyin.</p>
+                </div>
+              </a>
+            </div>
           </div>
 
-          <!-- services-grid:start -->
+          <div class="all-packages-heading" id="tum-paketler">
+            <h2>Tüm Paketler</h2>
+          </div>
+
           <div class="package-layout">
-            <a class="package" id="qr-anı-albumu" href="qr-kodlu-dijital-ani-albumu.html" aria-label="QR Kodlu Dijital Anı Albümü detaylarını inceleyin">
-              <div class="package__visual">
-                <picture>
-                  <source type="image/avif" srcset="/media/images/qr-memory-album-480w.avif 480w, /media/images/qr-memory-album.avif 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <source type="image/webp" srcset="/media/images/qr-memory-album-480w.webp 480w, /media/images/qr-memory-album.webp 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <img src="/media/images/qr-memory-album.webp" alt="Düğün masasında QR kodlu dijital anı albümü kartı ve telefon" width="960" height="960" loading="lazy" decoding="async">
-                </picture>
-                <span class="package__badge">Öne çıkan</span>
-              </div>
+            <div class="package" id="qr-anı-albumu">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="/media/images/qr-memory-album-mobile.webp" width="960" height="960"><img src="/media/images/qr-memory-album.webp" alt="QR kodlu dijital anı albümü kartı" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
-                <h3><span class="package__title--short">QR Anı Albümü</span><span class="package__title--full">QR Kodlu Dijital Anı Albümü</span></h3>
-                <p class="package__summary">Misafirleriniz fotoğraf ve videolarını tek QR kodla özel albümünüze yükler.</p>
-                <span class="package__arrow" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></span>
+                <h3>QR Kodlu Dijital Anı Albümü</h3>
+                <p>Misafirleriniz fotoğraf ve videolarını tek QR kodla özel albümünüze yükler.</p>
               </div>
-            </a>
+              <a class="package__link" href="qr-kodlu-dijital-ani-albumu.html" aria-label="QR Kodlu Dijital Anı Albümü detaylarını inceleyin"><svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></a>
+            </div>
 
-            <a class="package" id="polaroid-hatira-kosesi" href="polaroid-hatira-kosesi.html" aria-label="Polaroid Hatıra Köşesi detaylarını inceleyin">
-              <div class="package__visual">
-                <picture>
-                  <source type="image/avif" srcset="/media/images/polaroid-memory-480w.avif 480w, /media/images/polaroid-memory.avif 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <source type="image/webp" srcset="/media/images/polaroid-memory-480w.webp 480w, /media/images/polaroid-memory.webp 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <img src="/media/images/polaroid-memory.webp" alt="Polaroid fotoğraflar ve kamera ile hazırlanmış düğün hatıra köşesi" width="960" height="960" loading="lazy" decoding="async">
-                </picture>
-              </div>
+            <div class="package" id="polaroid-hatira-kosesi">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="/media/images/polaroid-memory-mobile.webp" width="960" height="960"><img src="/media/images/polaroid-memory.webp" alt="Polaroid hatıra köşesi için düğün baskısı" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
-                <h3><span class="package__title--short">Polaroid Hatırası</span><span class="package__title--full">Polaroid Hatıra Köşesi</span></h3>
-                <p class="package__summary">Anında baskılar ve misafir notlarıyla dokunulabilir bir düğün hatırası oluşturur.</p>
-                <span class="package__arrow" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></span>
+                <h3>Polaroid Hatıra Köşesi</h3>
+                <p>Anında baskılar ve misafir notlarıyla dokunulabilir bir düğün hatırası oluşturur.</p>
               </div>
-            </a>
+              <a class="package__link" href="polaroid-hatira-kosesi.html" aria-label="Polaroid Hatıra Köşesi detaylarını inceleyin"><svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></a>
+            </div>
 
-            <a class="package" id="video-booth" href="video-booth.html" aria-label="Video Booth detaylarını inceleyin">
-              <div class="package__visual">
-                <picture>
-                  <source type="image/avif" srcset="/media/images/video-booth-480w.avif 480w, /media/images/video-booth.avif 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <source type="image/webp" srcset="/media/images/video-booth-480w.webp 480w, /media/images/video-booth.webp 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <img src="/media/images/video-booth.webp" alt="Kısa düğün videoları için hazırlanmış Video Booth kamerası" width="960" height="960" loading="lazy" decoding="async">
-                </picture>
-              </div>
+            <div class="package" id="video-booth">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="/media/images/video-booth-mobile.webp" width="960" height="960"><img src="/media/images/video-booth.webp" alt="Kısa düğün videoları için Video Booth kamerası" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
-                <h3><span class="package__title--short">Video Booth</span><span class="package__title--full">Video Booth</span></h3>
-                <p class="package__summary">Misafirlerinizin eğlenceli kısa videolarını tek bir dijital koleksiyonda toplar.</p>
-                <span class="package__arrow" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></span>
+                <h3>Video Booth</h3>
+                <p>Misafirlerinizin eğlenceli kısa videolarını tek bir dijital koleksiyonda toplar.</p>
               </div>
-            </a>
+              <a class="package__link" href="video-booth.html" aria-label="Video Booth detaylarını inceleyin"><svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></a>
+            </div>
 
-            <a class="package" id="misafir-roportajlari" href="misafir-roportajlari.html" aria-label="Misafir Röportajları detaylarını inceleyin">
-              <div class="package__visual">
-                <picture>
-                  <source type="image/avif" srcset="/media/images/guest-interviews-480w.avif 480w, /media/images/guest-interviews.avif 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <source type="image/webp" srcset="/media/images/guest-interviews-480w.webp 480w, /media/images/guest-interviews.webp 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <img src="/media/images/guest-interviews.webp" alt="Düğünde el mikrofonuyla mesaj veren gelin ve misafir röportajı anı" width="960" height="960" loading="lazy" decoding="async">
-                </picture>
-              </div>
+            <div class="package" id="misafir-roportajlari">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="/media/images/guest-interviews-mobile.webp" width="960" height="960"><img src="/media/images/guest-interviews.webp" alt="Misafir röportajlarını kaydetmek için mikrofon" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
-                <h3><span class="package__title--short">Misafir Röportajı</span><span class="package__title--full">Misafir Röportajları</span></h3>
-                <p class="package__summary">Misafirlerinizin samimi, komik ve duygusal mesajlarını sizin için kaydeder.</p>
-                <span class="package__arrow" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></span>
+                <h3>Misafir Röportajları</h3>
+                <p>Misafirlerinizin samimi, komik ve duygusal mesajlarını sizin için kaydeder.</p>
               </div>
-            </a>
+              <a class="package__link" href="misafir-roportajlari.html" aria-label="Misafir Röportajları detaylarını inceleyin"><svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></a>
+            </div>
 
-            <a class="package" id="canli-yayin-paketi" href="canli-yayin-paketi.html" aria-label="Canlı Yayın Paketi detaylarını inceleyin">
-              <div class="package__visual">
-                <picture>
-                  <source type="image/avif" srcset="/media/images/live-stream-480w.avif 480w, /media/images/live-stream.avif 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <source type="image/webp" srcset="/media/images/live-stream-480w.webp 480w, /media/images/live-stream.webp 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <img src="/media/images/live-stream.webp" alt="Düğün çiftini kaydeden profesyonel canlı yayın kamerası" width="960" height="960" loading="lazy" decoding="async">
-                </picture>
-              </div>
+            <div class="package" id="canli-yayin-paketi">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="/media/images/live-stream-mobile.webp" width="960" height="960"><img src="/media/images/live-stream.webp" alt="Düğün canlı yayını için profesyonel kamera" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
-                <h3><span class="package__title--short">Canlı Yayın</span><span class="package__title--full">Canlı Yayın Paketi</span></h3>
-                <p class="package__summary">Düğüne gelemeyen yakınlarınız özel yayın linkiyle anlara canlı eşlik eder.</p>
-                <span class="package__arrow" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></span>
+                <h3>Canlı Yayın Paketi</h3>
+                <p>Düğüne gelemeyen yakınlarınız özel yayın linkiyle anlara canlı eşlik eder.</p>
               </div>
-            </a>
+              <a class="package__link" href="canli-yayin-paketi.html" aria-label="Canlı Yayın Paketi detaylarını inceleyin"><svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></a>
+            </div>
 
-            <a class="package" id="sesli-ani-telefonu" href="sesli-ani-telefonu.html" aria-label="Sesli Anı Telefonu detaylarını inceleyin">
-              <div class="package__visual">
-                <picture>
-                  <source type="image/avif" srcset="/media/images/audio-phone-480w.avif 480w, /media/images/audio-phone.avif 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <source type="image/webp" srcset="/media/images/audio-phone-480w.webp 480w, /media/images/audio-phone.webp 960w" sizes="(max-width: 47.99rem) calc((100vw - 3rem) / 2), (max-width: 74rem) calc((100vw - 4rem) / 3), 22rem">
-                  <img src="/media/images/audio-phone.webp" alt="Çiçekler ve mumlarla hazırlanan krem renkli retro sesli anı telefonu" width="960" height="960" loading="lazy" decoding="async">
-                </picture>
-                <span class="package__badge">Öne çıkan</span>
-              </div>
+            <div class="package" id="sesli-ani-telefonu">
+              <div class="package__visual"><picture><source media="(max-width: 36rem)" srcset="/media/images/audio-phone-mobile.webp" width="960" height="960"><img src="/media/images/audio-phone.webp" alt="Sesli anı mesajları için krem renkli retro telefon" width="960" height="960" loading="lazy" decoding="async"></picture></div>
               <div class="package__content">
-                <h3><span class="package__title--short">Sesli Anı Telefonu</span><span class="package__title--full">Sesli Anı Telefonu</span></h3>
-                <p class="package__summary">Misafirleriniz retro telefondan size kalıcı sesli mesajlar bırakır.</p>
-                <span class="package__arrow" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></span>
+                <h3>Sesli Anı Telefonu</h3>
+                <p>Misafirleriniz retro telefondan size kalıcı sesli mesajlar bırakır.</p>
               </div>
-            </a>
+              <a class="package__link" href="sesli-ani-telefonu.html" aria-label="Sesli Anı Telefonu detaylarını inceleyin"><svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-chevron"></use></svg></a>
+            </div>
           </div>
-          <!-- services-grid:end -->
 
           <div class="how-it-works" aria-labelledby="process-title">
             <h2 id="process-title">Nasıl Çalışır?</h2>
@@ -181,24 +165,24 @@
                   <span class="process-step__index" aria-hidden="true">1</span>
                   <span class="process-step__icon" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-bag"></use></svg></span>
                 </div>
-                <h3>Konsepti seçin</h3>
-                <p>Gecenizde yaşatmak istediğiniz anı deneyimini belirleyin.</p>
+                <h3>Paketinizi seçin</h3>
+                <p>İhtiyacınıza en uygun paketi seçin.</p>
               </li>
               <li class="process-step">
                 <div class="process-step__top">
                   <span class="process-step__index" aria-hidden="true">2</span>
                   <span class="process-step__icon" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-gear"></use></svg></span>
                 </div>
-                <h3>Tarih ve kurulumu netleştirelim</h3>
-                <p>Şehir, tarih ve kurulum ayrıntılarını birlikte planlayalım.</p>
+                <h3>Kurulumu biz yapalım</h3>
+                <p>Ekibimiz her şeyi kurar, siz sadece anın tadını çıkarın.</p>
               </li>
               <li class="process-step">
                 <div class="process-step__top">
                   <span class="process-step__index" aria-hidden="true">3</span>
                   <span class="process-step__icon" aria-hidden="true"><svg><use href="/media/images/ui/icons.svg#icon-heart"></use></svg></span>
                 </div>
-                <h3>Anılarınızı teslim edelim</h3>
-                <p>Toplanan anıları seçtiğiniz pakete göre size ulaştıralım.</p>
+                <h3>Anılarınız size kalsın</h3>
+                <p>Tüm anılarınız size özel albümde saklansın.</p>
               </li>
             </ol>
           </div>
@@ -212,8 +196,8 @@
               <h2 id="contact-title">Bir geceden,<br>yüzlerce anı.</h2>
               <svg class="contact-banner__spark" aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-sparkle"></use></svg>
             </div>
-            <a class="button contact-banner__button" href="https://wa.me/905386888306?text=Merhaba%20Konsept%20Gelsin%2C%20D%C3%BC%C4%9F%C3%BCn%20veya%20ni%C5%9Fan%20etkinli%C4%9Fim%20i%C3%A7in%20fiyat%20ve%20uygunluk%20bilgisi%20almak%20istiyorum." data-quote-trigger data-quote-service="" target="_blank" rel="noopener noreferrer">
-              Fiyat ve uygunluk sor
+            <a class="button contact-banner__button" href="https://wa.me/905386888306" data-whatsapp-general target="_blank" rel="noopener noreferrer">
+              Hemen Bilgi Al
               <svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-arrow"></use></svg>
             </a>
           </div>
@@ -226,89 +210,16 @@
       </section>
     </main>
 
-    <nav class="mobile-action-bar" aria-label="Mobil hızlı işlemler" data-mobile-dock>
+    <nav class="mobile-action-bar" aria-label="Mobil hızlı işlemler">
       <a class="mobile-action-bar__packages" href="#paketler">
         <svg aria-hidden="true"><use href="/media/images/ui/icons.svg#icon-grid"></use></svg>
         Paketler
       </a>
-      <a class="mobile-action-bar__whatsapp" href="https://wa.me/905386888306?text=Merhaba%20Konsept%20Gelsin%2C%20D%C3%BC%C4%9F%C3%BCn%20veya%20ni%C5%9Fan%20etkinli%C4%9Fim%20i%C3%A7in%20fiyat%20ve%20uygunluk%20bilgisi%20almak%20istiyorum." data-quote-trigger data-quote-service="" target="_blank" rel="noopener noreferrer">
-        Fiyat ve uygunluk sor
+      <a class="mobile-action-bar__whatsapp" href="https://wa.me/905386888306" data-whatsapp-general target="_blank" rel="noopener noreferrer">
+        <img src="/media/images/ui/whatsapp.svg" alt="" width="28" height="28">
+        WhatsApp
       </a>
     </nav>
-
-    <!-- quote-dialog:start -->
-    <dialog class="quote-dialog" id="quote-dialog" data-quote-dialog data-default-service="" aria-labelledby="quote-dialog-title" aria-describedby="quote-dialog-description">
-      <div class="quote-dialog__header">
-        <div>
-          <p class="quote-dialog__eyebrow">Kısa teklif formu</p>
-          <h2 id="quote-dialog-title">Fiyat ve uygunluğu birlikte netleştirelim.</h2>
-          <p id="quote-dialog-description">Üç kısa bilgiyle WhatsApp mesajınızı hazırlayalım.</p>
-        </div>
-        <button class="quote-dialog__close" type="button" data-quote-close aria-label="Teklif formunu kapat">Kapat</button>
-      </div>
-
-      <form class="quote-dialog__form" data-quote-form novalidate>
-        <p class="quote-dialog__progress-label" aria-live="polite">Adım <span data-quote-progress-label>1 / 3</span></p>
-        <progress class="quote-dialog__progress" data-quote-progress max="3" value="1" aria-label="Teklif adımı">1 / 3</progress>
-
-        <fieldset class="quote-dialog__step" data-quote-step="date">
-          <legend>Etkinlik tarihiniz ne zaman?</legend>
-          <p class="quote-dialog__hint" id="quote-date-hint">Tarihi biliyorsanız seçin; henüz netleşmediyse bunu belirtin.</p>
-          <p class="quote-dialog__error" id="quote-date-error" data-quote-error role="alert" hidden></p>
-          <label class="quote-dialog__field" for="quote-event-date">
-            <span>Etkinlik tarihi</span>
-            <input id="quote-event-date" name="eventDate" type="date" aria-describedby="quote-date-hint quote-date-error" data-quote-date>
-          </label>
-          <label class="quote-dialog__choice" for="quote-event-date-unknown">
-            <input id="quote-event-date-unknown" name="eventDateUnknown" type="checkbox" value="true" data-quote-date-unknown>
-            <span>Henüz net değil</span>
-          </label>
-          <div class="quote-dialog__actions quote-dialog__actions--end">
-            <button class="button button--orange" type="button" data-quote-next>Devam et</button>
-          </div>
-        </fieldset>
-
-        <fieldset class="quote-dialog__step" data-quote-step="city" hidden>
-          <legend>Etkinlik hangi şehirde?</legend>
-          <p class="quote-dialog__hint" id="quote-city-hint">Kurulum uygunluğunu şehir bilgisine göre teyit ediyoruz.</p>
-          <p class="quote-dialog__error" id="quote-city-error" data-quote-error role="alert" hidden></p>
-          <label class="quote-dialog__field" for="quote-city">
-            <span>Şehir</span>
-            <input id="quote-city" name="city" type="text" maxlength="80" autocomplete="address-level2" aria-describedby="quote-city-hint quote-city-error" data-quote-city>
-          </label>
-          <label class="quote-dialog__choice" for="quote-city-unknown">
-            <input id="quote-city-unknown" name="cityUnknown" type="checkbox" value="true" data-quote-city-unknown>
-            <span>Henüz net değil</span>
-          </label>
-          <div class="quote-dialog__actions">
-            <button class="button button--paper" type="button" data-quote-back>Geri</button>
-            <button class="button button--orange" type="button" data-quote-next>Devam et</button>
-          </div>
-        </fieldset>
-
-        <fieldset class="quote-dialog__step" data-quote-step="package" hidden>
-          <legend>Hangi paketle ilgileniyorsunuz?</legend>
-          <p class="quote-dialog__error" id="quote-service-error" data-quote-error role="alert" hidden></p>
-          <label class="quote-dialog__field" for="quote-service">
-            <span>Paket</span>
-            <select id="quote-service" name="service" aria-describedby="quote-service-error" data-quote-service>
-                  <option value="QR Kodlu Dijital Anı Albümü">QR Kodlu Dijital Anı Albümü</option>
-                  <option value="Polaroid Hatıra Köşesi">Polaroid Hatıra Köşesi</option>
-                  <option value="Video Booth">Video Booth</option>
-                  <option value="Misafir Röportajları">Misafir Röportajları</option>
-                  <option value="Canlı Yayın Paketi">Canlı Yayın Paketi</option>
-                  <option value="Sesli Anı Telefonu">Sesli Anı Telefonu</option>
-                  <option value="Kararsızım" selected>Kararsızım</option>
-            </select>
-          </label>
-          <div class="quote-dialog__actions">
-            <button class="button button--paper" type="button" data-quote-back>Geri</button>
-            <a class="button button--whatsapp quote-dialog__whatsapp" href="https://wa.me/905386888306?text=Merhaba%20Konsept%20Gelsin%2C%20D%C3%BC%C4%9F%C3%BCn%20veya%20ni%C5%9Fan%20etkinli%C4%9Fim%20i%C3%A7in%20fiyat%20ve%20uygunluk%20bilgisi%20almak%20istiyorum." data-quote-whatsapp target="_blank" rel="noopener noreferrer">WhatsApp'ta devam et</a>
-          </div>
-        </fieldset>
-      </form>
-    </dialog>
-    <!-- quote-dialog:end -->
 
     <footer class="site-footer">
       <div class="site-footer__inner shell">
