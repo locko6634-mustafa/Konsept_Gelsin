@@ -98,6 +98,8 @@ test("QR anı albümü detay sayfası sade hero ve açıklama varyantını kulla
   assert.doesNotMatch(hero, /Paket 01 · QR Anı Albümü/);
   assert.doesNotMatch(hero, /<figure\b|package-detail-hero__media/);
   assert.doesNotMatch(overview, />Deneyimin özü<|>Paket kapsamı</);
+  assert.match(overview, /<p>Misafirler düğün boyunca kendi telefonlarıyla çektikleri fotoğraf ve videoları QR kod üzerinden çiftin özel albümüne yükler\. Düğününüzü sadece profesyonel kameradan değil, misafirlerinizin gözünden de görün\.<\/p>/);
+  assert.doesNotMatch(overview, /<blockquote\b/);
 });
 
 test("medya alanları sade fotoğraf mozaiği ve iki dikey video kapağı kullanır", () => {

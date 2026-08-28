@@ -51,6 +51,12 @@ export function renderPackagePage(service) {
           </figure>`;
   const overviewEyebrow = isMinimal ? "" : `\n            <p class="package-detail__eyebrow">Deneyimin özü</p>`;
   const scopeEyebrow = isMinimal ? "" : `\n            <p class="package-detail__eyebrow">Paket kapsamı</p>`;
+  const overviewBody = isMinimal
+    ? `<p>${description} ${promise}</p>`
+    : `<p>${description}</p>
+            <blockquote>
+              <p>${promise}</p>
+            </blockquote>`;
 
   return `<!doctype html>
 <html lang="tr">
@@ -124,10 +130,7 @@ export function renderPackagePage(service) {
         <div class="package-overview__grid shell">
           <div class="package-overview__copy">${overviewEyebrow}
             <h2 id="overview-title">${shortName} deneyimi nasıl çalışır?</h2>
-            <p>${description}</p>
-            <blockquote>
-              <p>${promise}</p>
-            </blockquote>
+            ${overviewBody}
           </div>
 
           <div class="package-scope" aria-labelledby="scope-title">${scopeEyebrow}
