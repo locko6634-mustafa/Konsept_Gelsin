@@ -87,6 +87,9 @@
 
 .package-overview {
   padding-block: clamp(3.5rem, 7vw, 6rem);
+  background:
+    radial-gradient(circle at 12% 18%, hsl(41 100% 65% / 0.2), transparent 18rem),
+    var(--color-paper);
 }
 
 .package-overview__grid {
@@ -115,32 +118,62 @@
 }
 
 .package-scope {
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
+  position: relative;
+  overflow: hidden;
+  width: min(100%, 64rem);
+  margin-inline: auto;
+  padding: clamp(2rem, 5vw, 4rem);
+  border: 0.0625rem solid hsl(31 25% 82% / 0.78);
+  border-radius: clamp(1.25rem, 3vw, 2rem);
+  background: hsl(39 100% 99% / 0.9);
+  box-shadow: var(--shadow-paper);
+  text-align: center;
+}
+
+.package-scope::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(12rem, 42%);
+  height: 0.3rem;
+  transform: translateX(-50%);
+  border-radius: 0 0 999px 999px;
+  background: var(--color-orange);
+  content: "";
 }
 
 .package-scope h2 {
-  margin-block-end: var(--space-4);
-  font-size: clamp(1.85rem, 3.4vw, 3rem);
+  margin-block-end: clamp(1.5rem, 4vw, 2.5rem);
+  margin-inline: auto;
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  white-space: nowrap;
 }
 
 .package-scope ul {
   display: grid;
-  gap: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1rem);
   margin: 0;
   padding: 0;
-  border-top: 0.0625rem solid hsl(31 25% 82% / 0.72);
   list-style: none;
 }
 
 .package-scope li {
-  padding: 0.85rem 0;
-  border-bottom: 0.0625rem solid hsl(31 25% 82% / 0.72);
+  display: grid;
+  min-height: 4.5rem;
+  place-items: center;
+  padding: 1rem 1.25rem;
+  border: 0.0625rem solid hsl(31 25% 82% / 0.7);
+  border-radius: var(--radius-md);
+  background: var(--color-paper);
   color: var(--color-ink-soft);
+  font-weight: 600;
   line-height: 1.55;
+  text-align: center;
+}
+
+.package-scope li:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
 }
 
 .package-media {

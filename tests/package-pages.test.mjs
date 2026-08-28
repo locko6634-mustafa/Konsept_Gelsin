@@ -119,6 +119,8 @@ test("tüm paketlerin deneyim metni hero içeriğinin yerini alır ve hero buton
 test("medya alanları sade fotoğraf mozaiği ve iki dikey video kapağı kullanır", () => {
   for (const pageName of packagePageNames) {
     const html = pages.get(pageName);
+    assert.match(html, /<h2 id="media-title">Fotoğraflar<\/h2>/);
+    assert.match(html, /<h2 id="video-title">Videolar<\/h2>/);
     assert.doesNotMatch(html, /<(?:audio|iframe|video)\b/i);
     assert.equal((html.match(/\bclass="package-photo-card/g) ?? []).length, 8);
     assert.equal((html.match(/\bclass="package-video-card"/g) ?? []).length, 2);
@@ -127,5 +129,12 @@ test("medya alanları sade fotoğraf mozaiği ve iki dikey video kapağı kullan
     assert.match(html, />Tümünü Gör</);
     assert.doesNotMatch(html, /<figcaption\b/i);
     assert.doesNotMatch(html, /Örnek|Orijinal|Geçici medya|güncellenecek|gerçek paket videosu/i);
+  }
+});
+
+test("paket kapsamı ortalanmış başlık ve ortak kart yapısını kullanır", () => {
+  for (const pageName of packagePageNames) {
+    const html = pages.get(pageName);
+    assert.match(html, /<h2 id="scope-title">Neler dahil\?<\/h2>/);
   }
 });

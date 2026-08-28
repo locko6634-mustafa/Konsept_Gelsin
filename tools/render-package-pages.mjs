@@ -94,7 +94,7 @@ export function renderPackagePage(service) {
       <section class="package-media" aria-labelledby="media-title">
         <div class="package-media__inner shell">
           <div class="package-media__group">
-            <h2 id="media-title">${shortName} kareleri</h2>
+            <h2 id="media-title">Fotoğraflar</h2>
             <div class="package-photo-gallery" id="package-photo-gallery">
               <figure class="package-photo-card"><img src="/media/images/${mobileImage}" alt="${imageAlt}" width="960" height="960" loading="lazy" decoding="async"></figure>
               <figure class="package-photo-card"><img src="/media/images/${image}" alt="" width="960" height="960" loading="lazy" decoding="async"></figure>
@@ -112,7 +112,7 @@ export function renderPackagePage(service) {
           </div>
 
           <div class="package-media__group">
-            <h2 id="video-title">${shortName} videoları</h2>
+            <h2 id="video-title">Videolar</h2>
             <div class="package-video-grid">
               <figure class="package-video-card" role="img" aria-label="${shortName} birinci video kapağı">
                 <img src="/media/images/${image}" alt="" width="960" height="960" loading="lazy" decoding="async">
