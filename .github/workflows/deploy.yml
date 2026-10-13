@@ -65,7 +65,7 @@ jobs:
           scan_file="$(mktemp)"
           trap 'rm -f "$scan_file"' EXIT
           for attempt in 1 2 3; do
-            if ssh-keyscan -p "$SERVER_PORT" -t ed25519 "$SERVER_HOST" > "$scan_file" 2>/dev/null && [ -s "$scan_file" ]; then
+            if ssh-keyscan -T 10 -p "$SERVER_PORT" -t ed25519 "$SERVER_HOST" > "$scan_file" 2>/dev/null && [ -s "$scan_file" ]; then
               break
             fi
             [ "$attempt" -lt 3 ] && sleep 2
@@ -92,8 +92,8 @@ jobs:
             --exclude=test-results \
             -czf "$ARCHIVE" .
           TARGET="${SERVER_USER}@${SERVER_HOST}"
-          SSH_ARGS=(-i "$HOME/.ssh/id_ed25519" -p "$SERVER_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
-          SCP_ARGS=(-i "$HOME/.ssh/id_ed25519" -P "$SERVER_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
+          SSH_ARGS=(-i "$HOME/.ssh/id_ed25519" -p "$SERVER_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=3)
+          SCP_ARGS=(-i "$HOME/.ssh/id_ed25519" -P "$SERVER_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=3)
           ssh "${SSH_ARGS[@]}" "$TARGET" "install -d -m 750 '$DEPLOY_BASE/incoming' '$DEPLOY_BASE/releases'"
           scp "${SCP_ARGS[@]}" "$ARCHIVE" "$TARGET:$DEPLOY_BASE/incoming/$RELEASE_ID.tgz"
 
@@ -103,7 +103,7 @@ jobs:
           set -Eeuo pipefail
           RELEASE_ID="${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           TARGET="${SERVER_USER}@${SERVER_HOST}"
-          SSH_ARGS=(-i "$HOME/.ssh/id_ed25519" -p "$SERVER_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes)
+          SSH_ARGS=(-i "$HOME/.ssh/id_ed25519" -p "$SERVER_PORT" -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=30 -o ServerAliveInterval=15 -o ServerAliveCountMax=3)
           ssh "${SSH_ARGS[@]}" "$TARGET" \
             "BUILD_REVISION='$GITHUB_SHA' RELEASE_ID='$RELEASE_ID' DEPLOY_BASE='$DEPLOY_BASE' bash -s" <<'REMOTE'
           set -Eeuo pipefail
