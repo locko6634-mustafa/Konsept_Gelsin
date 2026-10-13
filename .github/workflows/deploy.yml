@@ -1,4 +1,4 @@
-name: Kalite ve uretim dagitimi
+name: Quality and Production Deployment
 
 on:
   push:
@@ -14,24 +14,24 @@ permissions:
 
 jobs:
   quality:
-    name: Yerel kalite kapilari
+    name: Quality Gates
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - name: Kaynak kodu al
+      - name: Checkout repository
         uses: actions/checkout@v5
-      - name: Node.js 22 kullan
+      - name: Setup Node.js 22
         uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: ""
-      - name: Tum kalite kapilarini calistir
+      - name: Run quality gates
         env:
           CHROME_PATH: /usr/bin/google-chrome
         run: npm run validate
 
   deploy:
-    name: Uretime dagit
+    name: Deploy to Production
     needs: quality
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -46,17 +46,17 @@ jobs:
       SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
       SERVER_USER: ${{ secrets.SERVER_USER }}
     steps:
-      - name: Kaynak kodu al
+      - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: SSH baglantisini hazirla
+      - name: Setup SSH connection
         shell: bash
         run: |
           set -Eeuo pipefail
-          case "$SERVER_HOST" in ""|*[!A-Za-z0-9.:-]*) echo "SERVER_HOST gecersiz." >&2; exit 1;; esac
-          case "$SERVER_USER" in ""|*[!A-Za-z0-9._-]*) echo "SERVER_USER gecersiz." >&2; exit 1;; esac
-          case "$SERVER_PORT" in ""|*[!0-9]*) echo "SERVER_PORT gecersiz." >&2; exit 1;; esac
-          case "$SERVER_HOST_FINGERPRINT" in SHA256:*) ;; *) echo "SERVER_HOST_FINGERPRINT gecersiz." >&2; exit 1;; esac
+          case "$SERVER_HOST" in ""|*[!A-Za-z0-9.:-]*) echo "SERVER_HOST is invalid." >&2; exit 1;; esac
+          case "$SERVER_USER" in ""|*[!A-Za-z0-9._-]*) echo "SERVER_USER is invalid." >&2; exit 1;; esac
+          case "$SERVER_PORT" in ""|*[!0-9]*) echo "SERVER_PORT is invalid." >&2; exit 1;; esac
+          case "$SERVER_HOST_FINGERPRINT" in SHA256:*) ;; *) echo "SERVER_HOST_FINGERPRINT is invalid." >&2; exit 1;; esac
           install -d -m 700 "$HOME/.ssh"
           printf '%s\n' "$SERVER_SSH_KEY" > "$HOME/.ssh/id_ed25519"
           chmod 600 "$HOME/.ssh/id_ed25519"
@@ -70,15 +70,15 @@ jobs:
             fi
             [ "$attempt" -lt 3 ] && sleep 2
           done
-          [ -s "$scan_file" ] || { echo "Sunucu host key alinamadi." >&2; exit 1; }
+          [ -s "$scan_file" ] || { echo "Failed to retrieve server host key." >&2; exit 1; }
           actual_fingerprint="$(ssh-keygen -lf "$scan_file" -E sha256 | awk 'NR == 1 { print $2 }')"
           if [ "$actual_fingerprint" != "$SERVER_HOST_FINGERPRINT" ]; then
-            echo "Sunucu fingerprint dogrulamasi basarisiz." >&2
+            echo "Server fingerprint verification failed." >&2
             exit 1
           fi
           install -m 644 "$scan_file" "$HOME/.ssh/known_hosts"
 
-      - name: Surum paketini sunucuya aktar
+      - name: Transfer release package to server
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -97,7 +97,7 @@ jobs:
           ssh "${SSH_ARGS[@]}" "$TARGET" "install -d -m 750 '$DEPLOY_BASE/incoming' '$DEPLOY_BASE/releases'"
           scp "${SCP_ARGS[@]}" "$ARCHIVE" "$TARGET:$DEPLOY_BASE/incoming/$RELEASE_ID.tgz"
 
-      - name: Docker surumunu etkinlestir ve dogrula
+      - name: Deploy and verify Docker release
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -144,11 +144,11 @@ jobs:
               cd "$previous"
               BUILD_REVISION="$previous_revision" docker compose -f deploy/compose.production.yaml -p konsept-gelsin up -d --no-deps frontend
             fi
-            echo "Yeni container saglikli olmadi: $status" >&2
+            echo "New container failed health check: $status" >&2
             exit 1
           fi
 
           ln -sfn "$release" "$DEPLOY_BASE/current"
           rm -f "$archive"
-          echo "Dagitilan commit: $BUILD_REVISION"
+          echo "Deployed commit: $BUILD_REVISION"
           REMOTE
