@@ -7,13 +7,14 @@
     "start": "node tools/server.mjs",
     "content:sync": "node tools/render-package-pages.mjs --write",
     "content:check": "node tools/render-package-pages.mjs --check",
+    "build:css": "node tools/build-css.mjs",
     "format:check": "node tools/format-check.mjs",
     "lint:js": "node tools/check-js.mjs",
     "lint:html-contract": "node tools/markup-check.mjs",
     "test:targeted": "node --test tests/contact.test.mjs tests/content.test.mjs tests/deploy.test.mjs tests/package-pages.test.mjs",
     "test:quick": "node --test --experimental-test-coverage --test-coverage-include=js/shared/contact.js --test-coverage-lines=90 --test-coverage-functions=90 --test-coverage-branches=80 tests/*.test.mjs",
     "test:e2e": "node tools/e2e.mjs",
-    "build": "npm run content:check && node tools/build-check.mjs",
+    "build": "npm run content:check && npm run build:css && node tools/build-check.mjs",
     "validate": "npm run format:check && npm run lint:js && npm run lint:html-contract && npm run build && npm run test:quick && npm run test:e2e"
   },
   "engines": {

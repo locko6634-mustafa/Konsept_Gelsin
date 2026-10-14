@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import { existsSync } from "node:fs";
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { createServer as createNetServer } from "node:net";
 import os from "node:os";
@@ -8,7 +9,28 @@ import { setTimeout as delay } from "node:timers/promises";
 import { services } from "./page-manifest.mjs";
 
 const projectRoot = process.cwd();
-const chromePath = process.env.CHROME_PATH || "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+
+function resolveChromePath() {
+  if (process.env.CHROME_PATH && existsSync(process.env.CHROME_PATH)) {
+    return process.env.CHROME_PATH;
+  }
+  const candidates = [
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    "/usr/bin/google-chrome",
+    "/usr/bin/google-chrome-stable",
+    "/usr/bin/chromium",
+    "/usr/bin/chromium-browser",
+    path.join(os.homedir(), ".cache/ms-playwright/chromium-1243/chrome-linux64/chrome"),
+    path.join(os.homedir(), ".cache/ms-playwright/chromium-1234/chrome-linux64/chrome"),
+  ];
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) return candidate;
+  }
+  return process.env.CHROME_PATH || candidates[0];
+}
+
+const chromePath = resolveChromePath();
 const resultDirectory = path.join(projectRoot, "test-results");
 const viewports = [
   { width: 320, height: 800 },

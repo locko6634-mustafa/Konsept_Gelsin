@@ -57,6 +57,7 @@ export function renderPackagePage(service) {
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/pages/package-detail-responsive.css">
     <link rel="stylesheet" href="css/motion.css">
+    <link rel="modulepreload" href="js/package/detail-app.js">
     <title>${name} | Konsept Gelsin</title>
   </head>
   <body class="package-detail-page">
